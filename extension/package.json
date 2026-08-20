@@ -15,6 +15,7 @@
     "test": "vitest run",
     "pretest": "wxt prepare",
     "test:coverage": "vitest run --coverage",
+    "pretest:coverage": "wxt prepare",
     "lint:firefox": "web-ext lint --source-dir .output/firefox-mv3"
   },
   "dependencies": {

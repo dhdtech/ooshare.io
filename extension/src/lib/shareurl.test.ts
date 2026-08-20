@@ -36,4 +36,14 @@ describe("shareurl", () => {
       /secret id/i,
     );
   });
+
+  it("rejects a malformed URL", () => {
+    expect(() => parseShareUrl("not a url")).toThrow(/invalid url/i);
+  });
+
+  it("rejects a master key that is not 32 bytes", () => {
+    expect(() =>
+      parseShareUrl("https://ooshare.io/s/AbCdEf12#AAAA"),
+    ).toThrow(/master key/i);
+  });
 });
