@@ -64,7 +64,6 @@ export default defineContentScript({
     };
 
     const scan = () => {
-      if (frame?.isConnected) return; // overlay open: don't re-badge
       for (const a of findShareLinks(document.body)) {
         if (!a.querySelector(".ooshare-badge")) a.appendChild(badgeFor(a));
       }
