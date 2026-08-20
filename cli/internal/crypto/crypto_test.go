@@ -137,3 +137,80 @@ func TestDecodeTruncatedImagePayloads(t *testing.T) {
 		}
 	}
 }
+
+func TestEncryptDecryptRoundTrip(t *testing.T) {
+	key := bytes.Repeat([]byte{0x5a}, 32)
+	id := "10000000-1000-4000-8000-100000000000"
+	for _, text := range []string{"Hello, World!", "日本語テスト 🎉", ""} {
+		payload, err := EncodePayload(text, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		ct, err := Encrypt(payload, key, id)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if ct[0] != 'A' { // base64 of 0x01 is 'A' as the leading char
+			t.Fatalf("ciphertext %q does not start with version 0x01", ct)
+		}
+		decrypted, err := Decrypt(ct, key, id)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(decrypted, payload) {
+			t.Fatalf("round trip mismatch: %q", text)
+		}
+	}
+}
+
+func TestDecryptWrongSecretIDFails(t *testing.T) {
+	key := bytes.Repeat([]byte{0x5a}, 32)
+	payload, _ := EncodePayload("secret", nil)
+	ct, err := Encrypt(payload, key, "10000000-1000-4000-8000-100000000000")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Decrypt(ct, key, "20000000-1000-4000-8000-100000000000"); err == nil {
+		t.Fatal("expected AAD mismatch error")
+	}
+}
+
+func TestDecryptWrongKeyFails(t *testing.T) {
+	payload, _ := EncodePayload("secret", nil)
+	ct, err := Encrypt(payload, bytes.Repeat([]byte{0x01}, 32), "10000000-1000-4000-8000-100000000000")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Decrypt(ct, bytes.Repeat([]byte{0x02}, 32), "10000000-1000-4000-8000-100000000000"); err == nil {
+		t.Fatal("expected wrong-key error")
+	}
+}
+
+func TestDecryptBadVersionFails(t *testing.T) {
+	payload, _ := EncodePayload("test", nil)
+	ct, err := Encrypt(payload, bytes.Repeat([]byte{0x01}, 32), "10000000-1000-4000-8000-100000000000")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, _ := b64Decode(ct)
+	raw[0] = 0xff
+	if _, err := Decrypt(b64Encode(raw), bytes.Repeat([]byte{0x01}, 32), "10000000-1000-4000-8000-100000000000"); err == nil {
+		t.Fatal("expected bad-version error")
+	}
+}
+
+func TestGenerateKeyIs256BitAndZeroize(t *testing.T) {
+	key, err := GenerateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(key) != 32 {
+		t.Fatalf("key length = %d", len(key))
+	}
+	Zeroize(key)
+	for _, b := range key {
+		if b != 0 {
+			t.Fatal("Zeroize did not wipe buffer")
+		}
+	}
+}

@@ -8,10 +8,17 @@
 package crypto
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"io"
+
+	"golang.org/x/crypto/hkdf"
 )
 
 const (
@@ -107,3 +114,98 @@ func Base64urlEncode(b []byte) string { return base64.RawURLEncoding.EncodeToStr
 
 // Base64urlDecode decodes a URL-fragment master key.
 func Base64urlDecode(s string) ([]byte, error) { return base64.RawURLEncoding.DecodeString(s) }
+
+// --- keys ---
+
+// GenerateKey returns a random 256-bit master key.
+func GenerateKey() ([]byte, error) {
+	key := make([]byte, 32)
+	if _, err := rand.Read(key); err != nil {
+		return nil, err
+	}
+	return key, nil
+}
+
+// deriveKey derives the per-secret AES-256-GCM key via HKDF-SHA-256.
+// info = secretID, salt = "only-once-share-v1" — mirrors ui/src/lib/crypto.ts.
+func deriveKey(masterKey []byte, secretID string) ([]byte, error) {
+	derived := make([]byte, 32)
+	r := hkdf.New(sha256.New, masterKey, []byte(hkdfSalt), []byte(secretID))
+	if _, err := io.ReadFull(r, derived); err != nil {
+		return nil, err
+	}
+	return derived, nil
+}
+
+// --- encrypt / decrypt ---
+
+// Encrypt seals a payload with AES-256-GCM using a fresh random IV and returns
+// base64( [version 1B][iv 12B][ciphertext + tag] ).
+func Encrypt(payload, masterKey []byte, secretID string) (string, error) {
+	iv := make([]byte, ivBytes)
+	if _, err := rand.Read(iv); err != nil {
+		return "", err
+	}
+	return encryptWithIV(payload, masterKey, secretID, iv)
+}
+
+// encryptWithIV is the IV-injectable core used by Encrypt and the golden tests.
+func encryptWithIV(payload, masterKey []byte, secretID string, iv []byte) (string, error) {
+	derived, err := deriveKey(masterKey, secretID)
+	if err != nil {
+		return "", err
+	}
+	defer Zeroize(derived)
+	block, err := aes.NewCipher(derived)
+	if err != nil {
+		return "", err
+	}
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+	ct := gcm.Seal(nil, iv, payload, []byte(secretID))
+	combined := make([]byte, 1+len(iv)+len(ct))
+	combined[0] = version
+	copy(combined[1:], iv)
+	copy(combined[1+len(iv):], ct)
+	return b64Encode(combined), nil
+}
+
+// Decrypt opens base64 ciphertext, verifying the GCM tag against secretID as AAD.
+func Decrypt(b64 string, masterKey []byte, secretID string) ([]byte, error) {
+	combined, err := b64Decode(b64)
+	if err != nil {
+		return nil, err
+	}
+	if len(combined) < 1+ivBytes || combined[0] != version {
+		return nil, errors.New("Unsupported encryption version")
+	}
+	iv := combined[1 : 1+ivBytes]
+	ct := combined[1+ivBytes:]
+	derived, err := deriveKey(masterKey, secretID)
+	if err != nil {
+		return nil, err
+	}
+	defer Zeroize(derived)
+	block, err := aes.NewCipher(derived)
+	if err != nil {
+		return nil, err
+	}
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+	pt, err := gcm.Open(nil, iv, ct, []byte(secretID))
+	if err != nil {
+		return nil, errors.New("decryption failed: wrong key or tampered secret")
+	}
+	return pt, nil
+}
+
+// Zeroize wipes a buffer (memory hygiene for keys and plaintext).
+func Zeroize(b []byte) {
+	for i := range b {
+		b[i] = 0
+	}
+}
