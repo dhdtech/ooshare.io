@@ -136,7 +136,9 @@ func Create(out, errw io.Writer, args []string) int {
 	shareURL := shareurl.Build(originStr, pathID, *lang, crypto.Base64urlEncode(key))
 
 	if *asJSON {
-		json.NewEncoder(out).Encode(map[string]any{
+		enc := json.NewEncoder(out)
+		enc.SetIndent("", "  ")
+		enc.Encode(map[string]any{
 			"schema":         1,
 			"id":             res.ID,
 			"alias":          res.Alias,

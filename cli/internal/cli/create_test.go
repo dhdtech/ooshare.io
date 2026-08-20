@@ -423,3 +423,24 @@ func TestCreateQuietOnTTYPrintsBareURL(t *testing.T) {
 		t.Fatalf("--quiet on TTY should print the bare URL, got %q", trimmed)
 	}
 }
+
+func TestCreateJSONPrettyPrinted(t *testing.T) {
+	api := createServer(t, 24)
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--text", "s3cr3t", "--json"})
+	if code != 0 {
+		t.Fatalf("exit = %d", code)
+	}
+	s := out.String()
+	if !strings.Contains(s, "\n  \"schema\": 1") {
+		t.Fatalf("create --json should be 2-space indented, got:\n%s", s)
+	}
+	// Still valid JSON.
+	var parsed map[string]any
+	if err := json.Unmarshal(out.Bytes(), &parsed); err != nil {
+		t.Fatalf("pretty JSON does not parse: %v", err)
+	}
+	if parsed["ttl_hours"] != float64(24) {
+		t.Fatalf("ttl_hours = %v", parsed["ttl_hours"])
+	}
+}

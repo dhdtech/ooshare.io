@@ -118,7 +118,9 @@ func View(out, errw io.Writer, args []string) int {
 				"size": len(decoded.Image.Data),
 			}
 		}
-		json.NewEncoder(out).Encode(obj)
+		enc := json.NewEncoder(out)
+		enc.SetIndent("", "  ")
+		enc.Encode(obj)
 		return 0
 	}
 

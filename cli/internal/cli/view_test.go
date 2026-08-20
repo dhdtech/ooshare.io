@@ -391,3 +391,28 @@ func TestViewMalformedURLExits2(t *testing.T) {
 		t.Fatalf("exit = %d, want 2", code)
 	}
 }
+
+func TestViewJSONPrettyPrinted(t *testing.T) {
+	ct, u, _ := makeSecret(t, "hello")
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, `{"ciphertext":%q,"id":"10000000-1000-4000-8000-100000000000"}`, ct)
+	}))
+	defer srv.Close()
+	var out, errw bytes.Buffer
+	code := View(&out, &errw, []string{"--api-url", srv.URL, "--json", u})
+	if code != 0 {
+		t.Fatalf("exit = %d", code)
+	}
+	if !strings.Contains(out.String(), "\n  \"schema\": 1") {
+		t.Fatalf("view --json should be 2-space indented, got:\n%s", out.String())
+	}
+	var parsed struct {
+		Text string `json:"text"`
+	}
+	if err := json.Unmarshal(out.Bytes(), &parsed); err != nil {
+		t.Fatalf("pretty JSON does not parse: %v", err)
+	}
+	if parsed.Text != "hello" {
+		t.Fatalf("text = %q", parsed.Text)
+	}
+}
