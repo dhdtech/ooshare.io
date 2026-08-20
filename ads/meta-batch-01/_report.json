@@ -1,0 +1,112 @@
+[
+  {
+    "n": 1,
+    "slug": "one-view-then-gone",
+    "size": "1080x1920",
+    "theme": "dark",
+    "style": "surreal 3D render, dusk city",
+    "hl_px": 110,
+    "coverage": 0.0627,
+    "lines": 2,
+    "lines_intended": 2
+  },
+  {
+    "n": 2,
+    "slug": "stays-forever-until-now",
+    "size": "1080x1080",
+    "theme": "dark",
+    "style": "cinematic moody photoreal",
+    "hl_px": 82,
+    "coverage": 0.1522,
+    "lines": 3,
+    "lines_intended": 3
+  },
+  {
+    "n": 3,
+    "slug": "that-sinking-feeling",
+    "size": "1080x1350",
+    "theme": "dark",
+    "style": "candid UGC, shot on iPhone",
+    "hl_px": 90,
+    "coverage": 0.0992,
+    "lines": 2,
+    "lines_intended": 2
+  },
+  {
+    "n": 4,
+    "slug": "not-in-email",
+    "size": "1080x1350",
+    "theme": "light",
+    "style": "flat vector illustration",
+    "hl_px": 90,
+    "coverage": 0.1549,
+    "lines": 3,
+    "lines_intended": 3
+  },
+  {
+    "n": 5,
+    "slug": "help-family",
+    "size": "1080x1920",
+    "theme": "dark",
+    "style": "warm documentary",
+    "hl_px": 110,
+    "coverage": 0.1741,
+    "lines": 4,
+    "lines_intended": 4
+  },
+  {
+    "n": 6,
+    "slug": "just-for-two",
+    "size": "1080x1350",
+    "theme": "dark",
+    "style": "soft editorial photography",
+    "hl_px": 90,
+    "coverage": 0.1296,
+    "lines": 2,
+    "lines_intended": 2
+  },
+  {
+    "n": 7,
+    "slug": "contracts-ids-tax-forms",
+    "size": "1080x1080",
+    "theme": "light",
+    "style": "isometric 3D illustration",
+    "hl_px": 82,
+    "coverage": 0.1149,
+    "lines": 2,
+    "lines_intended": 2
+  },
+  {
+    "n": 8,
+    "slug": "already-deleted-itself",
+    "size": "1080x1080",
+    "theme": "light",
+    "style": "bright lifestyle photoreal",
+    "hl_px": 82,
+    "coverage": 0.1432,
+    "lines": 3,
+    "lines_intended": 3
+  },
+  {
+    "n": 9,
+    "slug": "free-no-account",
+    "size": "1080x1350",
+    "theme": "light",
+    "style": "minimalist premium product shot",
+    "hl_px": 90,
+    "coverage": 0.1352,
+    "lines": 2,
+    "lines_intended": 2
+  },
+  {
+    "n": 10,
+    "slug": "couples-families-teams",
+    "size": "1080x1920",
+    "theme": "dark",
+    "style": "warm lifestyle photography",
+    "hl_px": 110,
+    "coverage": 0.1578,
+    "lines": 3,
+    "lines_intended": 3
+  }
+]
