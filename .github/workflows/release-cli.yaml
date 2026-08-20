@@ -131,7 +131,7 @@ jobs:
           TAG: ${{ github.ref_name }}
           SHA: ${{ steps.rel.outputs.sha }}
         run: |
-          cat > /tmp/ooshare.rb <<'EOF'
+          cat > /tmp/ooshare.rb <<EOF
           class Ooshare < Formula
             desc "Only Once Share CLI — one-time secret sharing from the terminal"
             homepage "https://ooshare.io"
