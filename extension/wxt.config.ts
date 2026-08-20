@@ -27,7 +27,7 @@ export default defineConfig({
     ],
     web_accessible_resources: [
       {
-        resources: ["overlay.html", "assets/*", "fonts/*"],
+        resources: ["overlay.html", "chunks/*", "assets/*", "fonts/*"],
         matches: ["<all_urls>"],
       },
     ],

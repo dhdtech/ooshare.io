@@ -13,6 +13,7 @@
     "zip:chrome": "wxt zip -b chrome",
     "icons": "node scripts/gen-icons.mjs",
     "test": "vitest run",
+    "pretest": "wxt prepare",
     "test:coverage": "vitest run --coverage",
     "lint:firefox": "web-ext lint --source-dir .output/firefox-mv3"
   },
