@@ -143,12 +143,12 @@ jobs:
             end
           end
           EOF
-      - name: Push to homebrew-tap
+      - name: Push to homebrew-ooshare
         env:
           GH_TOKEN: ${{ secrets.TAP_REPO_TOKEN }}
         run: |
           rm -rf tap && git clone --depth 1 \
-            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/homebrew-tap" tap
+            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/homebrew-ooshare" tap
           cp /tmp/ooshare.rb tap/ooshare.rb
           cd tap
           git config user.name "ooshare-bot"
@@ -193,12 +193,12 @@ jobs:
             "bin": "ooshare.exe"
           }
           EOF
-      - name: Push to scoop-bucket
+      - name: Push to scoop-ooshare
         env:
           GH_TOKEN: ${{ secrets.BUCKET_REPO_TOKEN }}
         run: |
           rm -rf bucket && git clone --depth 1 \
-            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/scoop-bucket" bucket
+            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/scoop-ooshare" bucket
           cp /tmp/ooshare.json bucket/ooshare.json
           cd bucket
           git config user.name "ooshare-bot"
@@ -233,7 +233,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf repo && git clone --depth 1 \
-            "https://x-access-token:${PACKAGES_TOKEN}@github.com/dhdtech/ooshare-packages" repo
+            "https://x-access-token:${PACKAGES_TOKEN}@github.com/dhdtech/packages-ooshare" repo
           mkdir -p repo/apt/stable/main/binary-amd64
           cp /tmp/rel/ooshare_*_linux_amd64.deb repo/apt/stable/main/binary-amd64/
           cd repo/apt/stable/main/binary-amd64
@@ -283,7 +283,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf repo && git clone --depth 1 \
-            "https://x-access-token:${PACKAGES_TOKEN}@github.com/dhdtech/ooshare-packages" repo
+            "https://x-access-token:${PACKAGES_TOKEN}@github.com/dhdtech/packages-ooshare" repo
           mkdir -p repo/rpm
           cp /tmp/rel/ooshare_*_linux_amd64.rpm repo/rpm/
           cd repo/rpm

@@ -7,11 +7,11 @@ Create and view one-time secrets from the terminal, exactly like the web
 
 | Method | Command | Verify |
 |---|---|---|
-| Homebrew | `brew tap dhdtech/tap && brew install ooshare` | `ooshare version` |
-| Scoop | `scoop bucket add ooshare https://github.com/dhdtech/scoop-bucket && scoop install ooshare` | `ooshare version` |
+| Homebrew | `brew tap dhdtech/ooshare && brew install ooshare` | `ooshare version` |
+| Scoop | `scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare` | `ooshare version` |
 | winget | `winget install dhdtech.ooshare` | `ooshare version` |
-| apt (Debian/Ubuntu) | `sudo install -Dm644 <(curl -Ls https://dhdtech.github.io/ooshare-packages/apt/ooshare.gpg) /usr/share/keyrings/ooshare.gpg` then add `deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/ooshare-packages/apt stable main` | `apt update && apt install ooshare` |
-| yum/dnf (RHEL/Fedora) | add a `.repo` with `baseurl=https://dhdtech.github.io/ooshare-packages/rpm` and `gpgkey=https://dhdtech.github.io/ooshare-packages/rpm/ooshare.gpg` | `dnf install ooshare` |
+| apt (Debian/Ubuntu) | `sudo install -Dm644 <(curl -Ls https://dhdtech.github.io/packages-ooshare/apt/ooshare.gpg) /usr/share/keyrings/ooshare.gpg` then add `deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main` | `apt update && apt install ooshare` |
+| yum/dnf (RHEL/Fedora) | add a `.repo` with `baseurl=https://dhdtech.github.io/packages-ooshare/rpm` and `gpgkey=https://dhdtech.github.io/packages-ooshare/rpm/ooshare.gpg` | `dnf install ooshare` |
 | Release binary | download from [releases](https://github.com/dhdtech/ooshare.io/releases) | `sha256sum -c SHA256SUMS` |
 
 Supply-chain verification: `cosign verify-blob --certificate-identity-regexp '…ooshare…' <artifact> --signature <artifact>.sig --certificate <artifact>.pem` and `slsa-verifier verify-artifact --source-builder 'https://github.com/dhdtech/ooshare.io/.github/workflows/release-cli.yaml@refs/tags/v*' --source-uri github.com/dhdtech/ooshare.io <artifact>`.

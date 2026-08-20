@@ -11,9 +11,9 @@ section only if the corresponding resource needs to be recreated.
 ## Repos (run once)
 
 ```bash
-gh repo create dhdtech/homebrew-tap     --public --confirm
-gh repo create dhdtech/scoop-bucket     --public --confirm
-gh repo create dhdtech/ooshare-packages --public --confirm
+gh repo create dhdtech/homebrew-ooshare     --public --confirm
+gh repo create dhdtech/scoop-ooshare     --public --confirm
+gh repo create dhdtech/packages-ooshare --public --confirm
 ```
 
 ## Enable GitHub Pages on the packages repo (serves /apt and /rpm)
@@ -21,7 +21,7 @@ gh repo create dhdtech/ooshare-packages --public --confirm
 The repo must already have a commit on `main` before Pages can be enabled.
 
 ```bash
-gh api -X POST repos/dhdtech/ooshare-packages/pages \
+gh api -X POST repos/dhdtech/packages-ooshare/pages \
   -f "source[branch]=main" -f "source[path]=/" --silent
 ```
 
@@ -35,7 +35,7 @@ gpg --batch --passphrase "$(openssl rand -hex 16)" \
 gpg --batch --pinentry-mode loopback --passphrase "$PASSPHRASE" \
   --armor --export-secret-keys ooshare@ooshare.io | base64
 
-# Public key → commit to dhdtech/ooshare-packages (as ooshare.gpg)
+# Public key → commit to dhdtech/packages-ooshare (as ooshare.gpg)
 gpg --armor --export ooshare@ooshare.io > ooshare.gpg
 
 # Fingerprint
@@ -46,9 +46,9 @@ gpg --with-colons --list-keys ooshare@ooshare.io | grep '^fpr' | cut -d: -f10
 
 Create three PATs, each scope = `contents:write` on EXACTLY one repo:
 
-- `TAP_REPO_TOKEN`      → `dhdtech/homebrew-tap`
-- `BUCKET_REPO_TOKEN`   → `dhdtech/scoop-bucket`
-- `PACKAGES_REPO_TOKEN` → `dhdtech/ooshare-packages`
+- `TAP_REPO_TOKEN`      → `dhdtech/homebrew-ooshare`
+- `BUCKET_REPO_TOKEN`   → `dhdtech/scoop-ooshare`
+- `PACKAGES_REPO_TOKEN` → `dhdtech/packages-ooshare`
 
 ## Store CI secrets (on dhdtech/ooshare.io)
 
@@ -64,5 +64,5 @@ gh secret set PACKAGES_REPO_TOKEN      --repo dhdtech/ooshare.io
 
 ```bash
 gh secret list --repo dhdtech/ooshare.io
-gh repo view dhdtech/ooshare-packages --json name,url
+gh repo view dhdtech/packages-ooshare --json name,url
 ```
