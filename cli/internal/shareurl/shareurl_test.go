@@ -54,6 +54,24 @@ func TestParseMissingIDFails(t *testing.T) {
 	}
 }
 
+func TestParseShellEscapedURL(t *testing.T) {
+	// A URL pasted with backslash-escaped shell metacharacters must parse cleanly.
+	raw := "https://ooshare.io/s/TUl9U2JF\\?lng\\=en\\#" + keyB64url
+	u, err := Parse(raw)
+	if err != nil {
+		t.Fatalf("Parse escaped URL: %v", err)
+	}
+	if u.ID != "TUl9U2JF" {
+		t.Fatalf("id = %q, want TUl9U2JF", u.ID)
+	}
+	if u.Lang != "en" {
+		t.Fatalf("lang = %q", u.Lang)
+	}
+	if len(u.Key) != 32 {
+		t.Fatalf("key length = %d", len(u.Key))
+	}
+}
+
 func TestParseInvalidURLErrors(t *testing.T) {
 	// A malformed URL triggers url.Parse to fail.
 	if _, err := Parse("https://%zz"); err == nil {

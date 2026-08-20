@@ -32,6 +32,10 @@ func Build(origin, id, lang, keyB64url string) string {
 
 // Parse decodes a full share URL.
 func Parse(raw string) (*ShareURL, error) {
+	// Strip stray backslashes: shell-quoted pastes like \? \= \# are common and
+	// would otherwise corrupt the path id (a backslash is never valid in a share
+	// URL, so this is safe).
+	raw = strings.ReplaceAll(raw, "\\", "")
 	u, err := url.Parse(raw)
 	if err != nil {
 		return nil, fmt.Errorf("invalid URL: %w", err)
