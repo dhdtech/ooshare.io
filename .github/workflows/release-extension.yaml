@@ -5,12 +5,14 @@ on:
     tags: ["ext-v*"]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     name: Build all targets
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,11 +31,13 @@ jobs:
       - name: Package
         working-directory: extension
         run: |
+          set -euo pipefail
           npm run zip:chrome
+          npm run zip:firefox
           mkdir -p dist-artifacts
           cp .output/chrome-mv3/*.zip dist-artifacts/ooshare-chrome-${GITHUB_REF_NAME#ext-v}.zip
-          cp .output/firefox-mv3/*.zip dist-artifacts/ooshare-firefox-${GITHUB_REF_NAME#ext-v}.zip 2>/dev/null || true
-          (cd .output && tar -czf ../dist-artifacts/source.tar.gz --exclude node_modules .) || true
+          cp .output/firefox-mv3/*.zip dist-artifacts/ooshare-firefox-${GITHUB_REF_NAME#ext-v}.zip
+          tar -czf dist-artifacts/source.tar.gz -C .output --exclude node_modules .
           (cd dist-artifacts && sha256sum * > SHA256SUMS)
       - uses: actions/upload-artifact@v4
         with:
@@ -43,7 +47,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: extension
-        run: gh release create "$GITHUB_REF_NAME" dist-artifacts/* --generate-notes --title "$GITHUB_REF_NAME"
+        run: |
+          set -euo pipefail
+          gh release delete "$GITHUB_REF_NAME" --yes 2>/dev/null || true
+          gh release create "$GITHUB_REF_NAME" dist-artifacts/* --generate-notes --title "$GITHUB_REF_NAME"
 
   publish-chrome:
     name: Publish Chrome Web Store
@@ -56,6 +63,7 @@ jobs:
       GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
       EXTENSION_ITEM_ID: ${{ secrets.EXTENSION_ITEM_ID }}
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: extension-builds
@@ -63,9 +71,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - name: Install pinned uploader
+        working-directory: extension
+        run: npm ci
       - name: Upload + publish to CWS
         working-directory: extension
         run: |
+          set -euo pipefail
           npx chrome-webstore-upload-cli upload --source ../dist/ooshare-chrome-*.zip
           npx chrome-webstore-upload-cli publish --target default
 
@@ -78,23 +92,31 @@ jobs:
       AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
       AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: extension-builds
-          path: dist
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - name: Install + build firefox target
+        working-directory: extension
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build:firefox
       - name: Sign + submit to AMO (unlisted)
         working-directory: extension
         run: |
+          set -euo pipefail
           npx web-ext sign --source-dir .output/firefox-mv3 \
-            --artifacts-dir ../dist \
+            --artifacts-dir dist \
             --api-key "$AMO_API_KEY" --api-secret "$AMO_API_SECRET" \
             --channel unlisted
-        # Produces ../dist/ooshare-firefox-<id>.xpi — a signed, installable build.
-        # NOTE: for a public *listed* submission, use the AMO submit API with the
-        # extension ID registered on addons.mozilla.org. See docs/release-bootstrap.md.
+        # Produces extension/dist/ooshare-firefox-<id>.xpi — a signed, installable
+        # build. This xpi is NOT attached to the GitHub release (the release was
+        # already created by the build job); the unsigned .zip build artifact IS in
+        # the release. For a public *listed* submission use the AMO submit API with
+        # the extension ID registered on addons.mozilla.org — see docs/release-bootstrap.md.
 
   publish-safari:
     name: Build + publish Safari wrapper
@@ -107,19 +129,48 @@ jobs:
       APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - name: Install
+        working-directory: extension
+        run: |
+          set -euo pipefail
+          npm ci
       - name: Prepare Safari wrapper
         working-directory: extension
-        run: npx wxt prepare -b safari
-      - name: Build wrapper app
+        run: |
+          set -euo pipefail
+          npx wxt prepare -b safari
+      - name: Build wrapper app (Release)
         working-directory: extension/.output/safari
-        run: xcodebuild -project ooshare.xcodeproj -scheme ooshare -configuration Release archive -archivePath dist/ooshare.xcarchive
-      - name: Notarize + upload (App Store Connect)
+        env:
+          CONFIGURATION_BUILD_DIR: build/Release
+        run: |
+          set -euo pipefail
+          xcodebuild -project ooshare.xcodeproj -scheme ooshare \
+            -configuration Release CONFIGURATION_BUILD_DIR=build/Release build
+      - name: Package + notarize Safari app
+        working-directory: extension/.output/safari
         env:
           APPLE_API_KEY_PATH: /tmp/AuthKey.p8
         run: |
+          set -euo pipefail
           echo "$APPLE_API_KEY" | base64 -d > /tmp/AuthKey.p8
-          xcrun notarytool submit extension/.output/safari/dist/ooshare.xcarchive --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER" --wait
-          xcrun altool --upload-app -f extension/.output/safari/dist/ooshare.app -t macos --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER"
+          ditto -c -k --keepParent build/Release/ooshare.app ooshare-safari.zip
+          xcrun notarytool submit ooshare-safari.zip \
+            --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER" --wait
+      - name: Upload to App Store Connect
+        working-directory: extension/.output/safari
+        env:
+          APPLE_API_KEY_PATH: /tmp/AuthKey.p8
+        run: |
+          set -euo pipefail
+          echo "$APPLE_API_KEY" | base64 -d > /tmp/AuthKey.p8
+          xcrun altool --upload-app -f build/Release/ooshare.app -t macos \
+            --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER"
 
   publish-edge:
     name: Publish Edge Add-ons
