@@ -64,3 +64,96 @@ jobs:
           cp "${{ github.workspace }}/attestation.intoto.jsonl" dist/
           gh release create "$GITHUB_REF_NAME" dist/* --generate-notes \
             --title "$GITHUB_REF_NAME"
+
+  deploy-brew:
+    name: Deploy Homebrew
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download darwin_arm64 archive + checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release download "$TAG" \
+            -p 'ooshare_*_darwin_arm64.tar.gz' -p 'SHA256SUMS' -D /tmp/rel
+          echo "sha=$(grep 'darwin_arm64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+        id: rel
+      - name: Generate formula
+        env:
+          TAG: ${{ github.ref_name }}
+          SHA: ${{ steps.rel.outputs.sha }}
+        run: |
+          cat > /tmp/ooshare.rb <<'EOF'
+          class Ooshare < Formula
+            desc "Only Once Share CLI — one-time secret sharing from the terminal"
+            homepage "https://ooshare.io"
+            url "https://github.com/dhdtech/ooshare.io/releases/download/${TAG}/ooshare_${TAG#v}_darwin_arm64.tar.gz"
+            sha256 "${SHA}"
+            license "MIT"
+            def install
+              bin.install "ooshare"
+            end
+          end
+          EOF
+      - name: Push to homebrew-tap
+        env:
+          GH_TOKEN: ${{ secrets.TAP_REPO_TOKEN }}
+        run: |
+          rm -rf tap && git clone --depth 1 \
+            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/homebrew-tap" tap
+          cp /tmp/ooshare.rb tap/ooshare.rb
+          cd tap
+          git config user.name "ooshare-bot"
+          git config user.email "bot@ooshare.io"
+          git add ooshare.rb
+          git commit -m "ooshare ${GITHUB_REF_NAME}"
+          git push
+
+  deploy-scoop:
+    name: Deploy Scoop
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download windows_amd64 zip + checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release download "$TAG" \
+            -p 'ooshare_*_windows_amd64.zip' -p 'SHA256SUMS' -D /tmp/rel
+          echo "sha=$(grep 'windows_amd64.zip' /tmp/rel/SHA256SUMS | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+        id: rel
+      - name: Generate scoop manifest
+        env:
+          TAG: ${{ github.ref_name }}
+          SHA: ${{ steps.rel.outputs.sha }}
+        run: |
+          cat > /tmp/ooshare.json <<EOF
+          {
+            "version": "${TAG#v}",
+            "description": "Only Once Share CLI",
+            "homepage": "https://ooshare.io",
+            "license": "MIT",
+            "url": "https://github.com/dhdtech/ooshare.io/releases/download/${TAG}/ooshare_${TAG#v}_windows_amd64.zip",
+            "hash": "${SHA}",
+            "bin": "ooshare.exe"
+          }
+          EOF
+      - name: Push to scoop-bucket
+        env:
+          GH_TOKEN: ${{ secrets.BUCKET_REPO_TOKEN }}
+        run: |
+          rm -rf bucket && git clone --depth 1 \
+            "https://x-access-token:${GH_TOKEN}@github.com/dhdtech/scoop-bucket" bucket
+          cp /tmp/ooshare.json bucket/ooshare.json
+          cd bucket
+          git config user.name "ooshare-bot"
+          git config user.email "bot@ooshare.io"
+          git add ooshare.json
+          git commit -m "ooshare ${GITHUB_REF_NAME}"
+          git push
