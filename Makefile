@@ -1,4 +1,4 @@
-.PHONY: up down build logs test ui-test test-all
+.PHONY: up down build logs test ui-test cli-test cli-build test-all
 
 # --------------- Docker ---------------
 
@@ -24,9 +24,17 @@ test: ## Run API tests with coverage
 ui-test: ## Run UI tests with coverage
 	cd ui && npx vitest run --coverage
 
+# --------------- CLI Tests ---------------
+
+cli-test: ## Run CLI tests
+	cd cli && go test ./internal/... -coverprofile=coverage.out
+
+cli-build: ## Build the ooshare CLI binary
+	cd cli && go build -o bin/ooshare ./cmd/ooshare
+
 # --------------- All Tests ---------------
 
-test-all: test ui-test ## Run all tests
+test-all: test ui-test cli-test ## Run all tests
 
 # --------------- Help ---------------
 

@@ -1,0 +1,63 @@
+// Package cli implements the ooshare command surface.
+package cli
+
+import (
+	"fmt"
+	"io"
+	"os"
+)
+
+// Version is stamped at release build time via -ldflags "-X …/internal/cli.Version=…".
+var Version = "dev"
+
+// stdin is the text/URL input source; overridable in tests.
+var stdin io.Reader = os.Stdin
+
+func Run(args []string, out, errw io.Writer) int {
+	if len(args) == 0 {
+		usage(errw)
+		return 2
+	}
+	switch args[0] {
+	case "create":
+		return Create(out, errw, args[1:])
+	case "view":
+		return View(out, errw, args[1:])
+	case "version":
+		fmt.Fprintf(out, "ooshare %s\n", Version)
+		return 0
+	case "help", "-h", "--help":
+		usage(out)
+		return 0
+	default:
+		fmt.Fprintf(errw, "ooshare: unknown command %q\n\n", args[0])
+		usage(errw)
+		return 2
+	}
+}
+
+// Create creates a one-time secret and prints its URL. Implemented in a later task.
+func Create(out, errw io.Writer, args []string) int {
+	return runNotImplemented(out, errw, "create")
+}
+
+// View reveals a secret from its URL. Implemented in a later task.
+func View(out, errw io.Writer, args []string) int {
+	return runNotImplemented(out, errw, "view")
+}
+
+func runNotImplemented(out, errw io.Writer, cmd string) int {
+	fmt.Fprintf(errw, "ooshare: %q not implemented yet\n", cmd)
+	return 1
+}
+
+func usage(w io.Writer) {
+	fmt.Fprintln(w, `ooshare — only-once secret sharing CLI
+
+Usage:
+  ooshare create [flags]   Create a one-time secret and print its URL
+  ooshare view <url>       Reveal a secret from its URL
+  ooshare version          Print version info
+
+Run 'ooshare create --help' or 'ooshare view --help' for command flags.`)
+}
