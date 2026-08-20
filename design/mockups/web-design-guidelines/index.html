@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ooshare — Create page · Dark / Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ Presentation stage (theme-neutral) ============ */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#EEF1F6;color:#1A2233;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:44px 20px 72px;
+  }
+  .stage{max-width:940px;margin:0 auto}
+  .stage-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .stage-head .mark{display:block;flex:none}
+  .stage-title{font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .stage-title .sep{color:#9AA4B6;font-weight:400}
+  .stage-title .mode{color:#6366F1}
+  .stage-note{font-size:13px;color:#5A6378;margin-bottom:34px;max-width:660px;line-height:1.55}
+  .stage-note code{font-family:"JetBrains Mono",monospace;font-size:11.5px;background:#E6EAF2;border-radius:5px;padding:1px 5px}
+
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+  .panel{display:flex;flex-direction:column;align-items:center;gap:16px;min-width:0}
+  .phone-label{
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+    font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:#5A6378;padding:5px 14px;border:1px solid #D3D9E4;border-radius:999px;background:#F7F9FC;
+  }
+
+  /* ============ Phone + theme tokens ============ */
+  .phone{
+    width:min(392px,100%);background:var(--bg);color:var(--text);
+    border:10px solid var(--bezel);border-radius:44px;
+    box-shadow:0 34px 80px -24px rgba(18,26,46,.42),0 0 0 1px rgba(18,26,46,.06);
+    overflow:hidden;
+  }
+  .phone[data-theme="dark"]{
+    --bg:#0B0E15;--surface:#11151E;--surface-2:#171C27;
+    --line:rgba(148,163,184,.15);
+    --text:#E9ECF4;--text-soft:#A3ACBF;--text-muted:#68728A;
+    --accent:#6366F1;--accent-hover:#7E81F6;--accent-ink:#FFFFFF;
+    --accent-soft:rgba(99,102,241,.16);--accent-soft-2:rgba(99,102,241,.07);
+    --focus:#8B90F8;--bezel:#05070C;
+    --wash:radial-gradient(560px 360px at 50% -120px, rgba(99,102,241,.14), transparent 70%);
+    --shadow-btn:0 10px 26px -10px rgba(99,102,241,.55);
+    --shadow-note:0 1px 0 rgba(0,0,0,.2),0 14px 30px -20px rgba(0,0,0,.55);
+    --rail:rgba(148,163,184,.22);
+  }
+  .phone[data-theme="light"]{
+    --bg:#FAFAFE;--surface:#FFFFFF;--surface-2:#F3F4FA;
+    --line:rgba(15,23,42,.10);
+    --text:#131629;--text-soft:#4A5168;--text-muted:#8A91A6;
+    --accent:#6366F1;--accent-hover:#4F46E5;--accent-ink:#FFFFFF;
+    --accent-soft:rgba(99,102,241,.10);--accent-soft-2:rgba(99,102,241,.055);
+    --focus:#4F46E5;--bezel:#0E111A;
+    --wash:radial-gradient(560px 360px at 50% -120px, rgba(99,102,241,.08), transparent 70%);
+    --shadow-btn:0 10px 22px -10px rgba(79,70,229,.45);
+    --shadow-note:0 1px 0 rgba(15,23,42,.03),0 14px 30px -22px rgba(15,23,42,.35);
+    --rail:rgba(15,23,42,.14);
+  }
+
+  .statusbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 26px 6px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--text);
+  }
+  .statusbar .sig{display:flex;gap:5px;align-items:center}
+  .statusbar .sig svg{display:block;color:var(--text)}
+
+  .screen{display:flex;flex-direction:column;padding:0 20px;background:var(--wash)}
+
+  /* ============ Header ============ */
+  .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 13px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);flex:none}
+  .brand .mark{display:block;flex:none}
+  .wordmark{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .head-actions{display:flex;align-items:center;gap:8px}
+  .pill{
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:700;letter-spacing:.04em;
+    color:var(--text-soft);background:transparent;border:1px solid var(--line);border-radius:999px;
+    padding:5px 10px;cursor:pointer;
+  }
+  .pill:hover{color:var(--accent);border-color:var(--accent)}
+  .pill svg{width:12px;height:12px;stroke:currentColor}
+
+  /* ============ Shared ============ */
+  .section{padding-top:38px}
+  .eyebrow{
+    display:flex;align-items:center;gap:8px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--accent);flex:none}
+  h2.s-title{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:18px}
+
+  .ic{width:21px;height:21px;stroke-width:1.7;flex:none}
+
+  /* ============ Composer (the hero) ============ */
+  .composer{padding-top:30px}
+  .composer h1{font-size:27px;line-height:1.15;font-weight:700;letter-spacing:-.025em;margin-bottom:8px}
+  .composer .sub{font-size:13.5px;line-height:1.55;color:var(--text-soft);margin-bottom:20px}
+
+  .note{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow-note);position:relative;transition:border-color .16s ease;
+  }
+  .note:focus-within{border-color:var(--accent)}
+  .ta-wrap{position:relative}
+  textarea{
+    width:100%;min-height:158px;resize:none;border:0;background:transparent;display:block;
+    color:var(--text);font-family:"Inter",sans-serif;font-size:15px;line-height:1.55;
+    padding:17px 17px 40px;outline:none;
+  }
+  textarea::placeholder{color:var(--text-muted)}
+  .chars{
+    position:absolute;right:14px;bottom:11px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--text-muted);
+    background:var(--surface);padding:0 4px;
+  }
+  .attach{
+    margin-top:12px;display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+    border:1.5px dashed var(--line);border-radius:13px;padding:12px 14px;
+    font-family:"Inter",sans-serif;font-size:13px;color:var(--text-soft);
+    background:transparent;cursor:pointer;
+  }
+  .attach:hover{border-color:var(--accent);color:var(--text)}
+  .attach .plus{display:flex;color:var(--accent);flex:none}
+  .attach .plus svg{width:16px;height:16px;stroke:currentColor;stroke-width:2}
+  .attach .max{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--text-muted);white-space:nowrap}
+
+  .expires{margin-top:20px}
+  .expires .field-label{
+    font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:9px;
+  }
+  .seg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+  .seg button{
+    font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
+    color:var(--text-soft);background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:9px 0;cursor:pointer;white-space:nowrap;
+  }
+  .seg button:hover{color:var(--text)}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+  .btn{
+    margin-top:22px;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;height:52px;border-radius:13px;
+    background:var(--accent);color:var(--accent-ink);
+    font-family:"Inter",sans-serif;font-size:15.5px;font-weight:600;letter-spacing:-.01em;
+    text-decoration:none;box-shadow:var(--shadow-btn);cursor:pointer;
+  }
+  .btn:hover{background:var(--accent-hover)}
+  .btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2}
+  .micro{font-size:12px;color:var(--text-muted);text-align:center;margin:14px 0 18px}
+
+  .badges{display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:500;letter-spacing:.06em;
+    color:var(--text-soft);border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:var(--surface);
+    white-space:nowrap;
+  }
+  .badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none}
+
+  /* ============ What you can share ============ */
+  .share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .share-item{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:16px 8px 12px;
+  }
+  .share-item .ic{color:var(--accent)}
+  .share-item span{font-size:11px;font-weight:500;color:var(--text-soft);text-align:center;line-height:1.25}
+
+  /* ============ How it works ============ */
+  .steps{list-style:none;display:flex;flex-direction:column;gap:0;position:relative}
+  .steps::before{content:"";position:absolute;left:14px;top:18px;bottom:18px;width:1px;background:var(--rail)}
+  .step{position:relative;display:flex;gap:14px;padding:14px 0 22px}
+  .step:last-child{padding-bottom:6px}
+  .step .node{
+    position:relative;z-index:1;flex:none;width:29px;height:29px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface);border:1px solid var(--accent);color:var(--accent);
+    font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;
+  }
+  .step .body{padding-top:1px}
+  .step .st-title{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-bottom:2px}
+  .step .st-meta{
+    font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:6px;
+  }
+  .step .st-desc{font-size:12.5px;line-height:1.55;color:var(--text-soft);max-width:26em}
+
+  /* ============ Security ============ */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;
+    display:flex;flex-direction:column;gap:7px;
+  }
+  .card .ic{color:var(--accent)}
+  .card .c-meta{
+    font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.12em;
+    color:var(--text-muted);text-transform:uppercase;
+  }
+  .card .c-title{font-size:13px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+  .card .c-desc{font-size:11.5px;line-height:1.5;color:var(--text-soft)}
+
+  /* ============ Final reassurance ============ */
+  .final{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    margin-top:42px;padding:30px 6px 32px;border-top:1px solid var(--line);
+  }
+  .final .loss{font-size:15.5px;font-weight:600;letter-spacing:-.015em;line-height:1.4;max-width:25em}
+  .final .loss em{font-style:normal;color:var(--accent)}
+
+  /* ============ Footer ============ */
+  .foot{border-top:1px solid var(--line);margin-top:8px;padding:26px 0 30px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .foot-brand{display:flex;align-items:center;gap:8px;color:var(--text)}
+  .foot-brand .wordmark{font-size:14px}
+  .foot .badges{column-gap:10px}
+  .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:12px}
+  .foot-links a{color:var(--text-soft);text-decoration:none}
+  .foot-links a:hover{color:var(--accent)}
+  .foot .copy{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.03em;color:var(--text-muted)}
+
+  /* ============ Focus + motion + responsive ============ */
+  a:focus-visible,button:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--focus);outline-offset:2px;border-radius:10px;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .btn,.pill,.attach,.seg button,.nav a,.foot-links a,.badge,.card{transition:background-color .16s ease,border-color .16s ease,color .16s ease}
+  }
+  @media (max-width:880px){
+    .pair{grid-template-columns:1fr}
+    .phone{width:min(392px,100%);margin:0 auto}
+  }
+
+  /* ============ Trust-choices note ============ */
+  .note-final{
+    margin:44px auto 0;max-width:640px;background:#FFFFFF;border:1px solid #D9DFEA;border-radius:16px;
+    padding:22px 24px;
+  }
+  .note-final h3{font-size:13px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .note-final h3::before{content:"";width:6px;height:6px;border-radius:1px;background:#6366F1}
+  .note-final ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .note-final li{font-size:13px;line-height:1.55;color:#3A4256}
+  .note-final li b{color:#1A2233}
+  .note-final code{font-family:"JetBrains Mono",monospace;font-size:11.5px;background:#F2F4F9;border:1px solid #E3E7F0;border-radius:5px;padding:1px 5px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="stage-head">
+    <svg class="mark" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+    <div class="stage-title">ooshare <span class="sep">·</span> Create page <span class="sep">—</span> <span class="mode">Dark / Light</span></div>
+  </div>
+  <p class="stage-note">The landing page <b>is</b> the create page — visitors land and paste, no marketing wall in front. Dark left, light right; both fully designed. The shield keeps its fixed <code>#6366F1</code>; only the theme adapts.</p>
+
+  <div class="pair">
+
+    <!-- ================= DARK ================= -->
+    <div class="panel">
+      <div class="phone-label">Dark</div>
+      <div class="phone" data-theme="dark">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <div class="head-actions">
+              <button class="pill" type="button" aria-label="Language: English">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                EN
+              </button>
+            </div>
+          </header>
+
+          <main>
+            <section class="composer" aria-label="Create a secret">
+              <h1>Paste your secret.</h1>
+              <p class="sub">Encrypted in your browser. Gone after one read.</p>
+
+              <div class="note">
+                <div class="ta-wrap">
+                  <textarea rows="6" aria-label="Secret text" placeholder="A password, an API key, a private message…"></textarea>
+                  <span class="chars">0 / 50,000</span>
+                </div>
+              </div>
+
+              <button class="attach" type="button">
+                <span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
+                Attach image, PDF, or archive
+                <span class="max">max 10 MB</span>
+              </button>
+
+              <div class="expires">
+                <p class="field-label">Expires</p>
+                <div class="seg" role="group" aria-label="Expiration">
+                  <button type="button" aria-pressed="false">1h</button>
+                  <button type="button" aria-pressed="false">4h</button>
+                  <button type="button" aria-pressed="false">12h</button>
+                  <button type="button" aria-pressed="true">24h</button>
+                  <button type="button" aria-pressed="false">48h</button>
+                  <button type="button" aria-pressed="false">72h</button>
+                </div>
+              </div>
+
+              <a class="btn" href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Create a secret link
+              </a>
+              <p class="micro">Encrypted in your browser · opens once · then it's gone</p>
+              <div class="badges">
+                <span class="badge">AES-256-GCM</span>
+                <span class="badge">Zero-knowledge</span>
+                <span class="badge">One-time self-destruct</span>
+                <span class="badge">Open source</span>
+              </div>
+            </section>
+
+            <section class="section" aria-label="What you can share">
+              <p class="eyebrow">What you can share</p>
+              <div class="share-grid">
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                  <span>Password</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  <span>API key</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span>Message</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                  <span>Image</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                  <span>PDF</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+                  <span>Archive</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="how" aria-labelledby="how-title">
+              <p class="eyebrow">How it works</p>
+              <h2 class="s-title" id="how-title">Three steps, then it's gone.</h2>
+              <ol class="steps">
+                <li class="step">
+                  <span class="node" aria-hidden="true">01</span>
+                  <div class="body">
+                    <p class="st-title">Write</p>
+                    <p class="st-meta">Encrypted in your browser</p>
+                    <p class="st-desc">Type or paste your secret. AES-256-GCM encrypts it on your device, before a single byte is sent.</p>
+                  </div>
+                </li>
+                <li class="step">
+                  <span class="node" aria-hidden="true">02</span>
+                  <div class="body">
+                    <p class="st-title">Share</p>
+                    <p class="st-meta">Send the one-time link</p>
+                    <p class="st-desc">Only encrypted bytes reach us. The key travels in the link, never through our servers.</p>
+                  </div>
+                </li>
+                <li class="step">
+                  <span class="node" aria-hidden="true">03</span>
+                  <div class="body">
+                    <p class="st-title">Gone</p>
+                    <p class="st-meta">Opens once, then destroyed</p>
+                    <p class="st-desc">The first view atomically deletes the secret. One read, then it's permanently gone.</p>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <section class="section" id="sec" aria-labelledby="sec-title">
+              <p class="eyebrow">Security</p>
+              <h2 class="s-title" id="sec-title">Security without the jargon.</h2>
+              <div class="cards">
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <p class="c-meta">Cipher · AES-256-GCM</p>
+                  <p class="c-title">Encrypted in your browser</p>
+                  <p class="c-desc">Your secret is encrypted on your device before it ever leaves.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                  <p class="c-meta">Storage · Encrypted bytes</p>
+                  <p class="c-title">The server never sees your data</p>
+                  <p class="c-desc">Only ciphertext is stored. Even we can't read it.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  <p class="c-meta">Lifecycle · One read</p>
+                  <p class="c-title">Opens once, then self-destructs</p>
+                  <p class="c-desc">One view atomically deletes the secret. Permanently gone.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.082-.73.082-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.815 1.102.815 2.222 0 1.606-.015 2.896-.015 3.293 0 .322.216.697.825.577C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                  <p class="c-meta">License · MIT</p>
+                  <p class="c-title">Open source, auditable</p>
+                  <p class="c-desc">Every line is public. Audit it, or self-host it yourself.</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="final">
+              <p class="loss">Don't send passwords through email or SMS — <em>they're stored forever.</em></p>
+            </section>
+          </main>
+
+          <footer class="foot">
+            <div class="foot-brand">
+              <svg class="mark" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </div>
+            <div class="badges">
+              <span class="badge">AES-256-GCM</span>
+              <span class="badge">Zero-knowledge</span>
+              <span class="badge">One-time self-destruct</span>
+              <span class="badge">Open source</span>
+            </div>
+            <nav class="foot-links" aria-label="Footer">
+              <a href="#sec">Security</a><a href="#how">How it works</a><a href="#">FAQ</a><a href="#">Blog</a><a href="#">About</a><a href="#" aria-label="GitHub">GitHub</a>
+            </nav>
+            <p class="copy">© 2026 ooshare · MIT licensed · self-hostable</p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= LIGHT ================= -->
+    <div class="panel">
+      <div class="phone-label">Light</div>
+      <div class="phone" data-theme="light">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <div class="head-actions">
+              <button class="pill" type="button" aria-label="Language: English">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                EN
+              </button>
+            </div>
+          </header>
+
+          <main>
+            <section class="composer" aria-label="Create a secret">
+              <h1>Paste your secret.</h1>
+              <p class="sub">Encrypted in your browser. Gone after one read.</p>
+
+              <div class="note">
+                <div class="ta-wrap">
+                  <textarea rows="6" aria-label="Secret text" placeholder="A password, an API key, a private message…"></textarea>
+                  <span class="chars">0 / 50,000</span>
+                </div>
+              </div>
+
+              <button class="attach" type="button">
+                <span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
+                Attach image, PDF, or archive
+                <span class="max">max 10 MB</span>
+              </button>
+
+              <div class="expires">
+                <p class="field-label">Expires</p>
+                <div class="seg" role="group" aria-label="Expiration">
+                  <button type="button" aria-pressed="false">1h</button>
+                  <button type="button" aria-pressed="false">4h</button>
+                  <button type="button" aria-pressed="false">12h</button>
+                  <button type="button" aria-pressed="true">24h</button>
+                  <button type="button" aria-pressed="false">48h</button>
+                  <button type="button" aria-pressed="false">72h</button>
+                </div>
+              </div>
+
+              <a class="btn" href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Create a secret link
+              </a>
+              <p class="micro">Encrypted in your browser · opens once · then it's gone</p>
+              <div class="badges">
+                <span class="badge">AES-256-GCM</span>
+                <span class="badge">Zero-knowledge</span>
+                <span class="badge">One-time self-destruct</span>
+                <span class="badge">Open source</span>
+              </div>
+            </section>
+
+            <section class="section" aria-label="What you can share">
+              <p class="eyebrow">What you can share</p>
+              <div class="share-grid">
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                  <span>Password</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  <span>API key</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span>Message</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                  <span>Image</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                  <span>PDF</span>
+                </div>
+                <div class="share-item">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+                  <span>Archive</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="how" aria-labelledby="how-title">
+              <p class="eyebrow">How it works</p>
+              <h2 class="s-title" id="how-title">Three steps, then it's gone.</h2>
+              <ol class="steps">
+                <li class="step">
+                  <span class="node" aria-hidden="true">01</span>
+                  <div class="body">
+                    <p class="st-title">Write</p>
+                    <p class="st-meta">Encrypted in your browser</p>
+                    <p class="st-desc">Type or paste your secret. AES-256-GCM encrypts it on your device, before a single byte is sent.</p>
+                  </div>
+                </li>
+                <li class="step">
+                  <span class="node" aria-hidden="true">02</span>
+                  <div class="body">
+                    <p class="st-title">Share</p>
+                    <p class="st-meta">Send the one-time link</p>
+                    <p class="st-desc">Only encrypted bytes reach us. The key travels in the link, never through our servers.</p>
+                  </div>
+                </li>
+                <li class="step">
+                  <span class="node" aria-hidden="true">03</span>
+                  <div class="body">
+                    <p class="st-title">Gone</p>
+                    <p class="st-meta">Opens once, then destroyed</p>
+                    <p class="st-desc">The first view atomically deletes the secret. One read, then it's permanently gone.</p>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <section class="section" id="sec" aria-labelledby="sec-title">
+              <p class="eyebrow">Security</p>
+              <h2 class="s-title" id="sec-title">Security without the jargon.</h2>
+              <div class="cards">
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <p class="c-meta">Cipher · AES-256-GCM</p>
+                  <p class="c-title">Encrypted in your browser</p>
+                  <p class="c-desc">Your secret is encrypted on your device before it ever leaves.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                  <p class="c-meta">Storage · Encrypted bytes</p>
+                  <p class="c-title">The server never sees your data</p>
+                  <p class="c-desc">Only ciphertext is stored. Even we can't read it.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  <p class="c-meta">Lifecycle · One read</p>
+                  <p class="c-title">Opens once, then self-destructs</p>
+                  <p class="c-desc">One view atomically deletes the secret. Permanently gone.</p>
+                </div>
+                <div class="card">
+                  <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.082-.73.082-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.815 1.102.815 2.222 0 1.606-.015 2.896-.015 3.293 0 .322.216.697.825.577C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                  <p class="c-meta">License · MIT</p>
+                  <p class="c-title">Open source, auditable</p>
+                  <p class="c-desc">Every line is public. Audit it, or self-host it yourself.</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="final">
+              <p class="loss">Don't send passwords through email or SMS — <em>they're stored forever.</em></p>
+            </section>
+          </main>
+
+          <footer class="foot">
+            <div class="foot-brand">
+              <svg class="mark" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </div>
+            <div class="badges">
+              <span class="badge">AES-256-GCM</span>
+              <span class="badge">Zero-knowledge</span>
+              <span class="badge">One-time self-destruct</span>
+              <span class="badge">Open source</span>
+            </div>
+            <nav class="foot-links" aria-label="Footer">
+              <a href="#sec">Security</a><a href="#how">How it works</a><a href="#">FAQ</a><a href="#">Blog</a><a href="#">About</a><a href="#" aria-label="GitHub">GitHub</a>
+            </nav>
+            <p class="copy">© 2026 ooshare · MIT licensed · self-hostable</p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note-final">
+    <h3>Design decisions</h3>
+    <ul>
+      <li><b>Zero friction — the paste box is the hero.</b> No marketing wall before the tool: the textarea, file attach, TTL and the single CTA sit above the fold. A visitor can land, paste, and create in under five seconds.</li>
+      <li><b>Trust moved below the fold.</b> The evidence badges, 3-step lifecycle and plain-language security cards still exist for skeptics — they scroll down to them instead of clicking past a landing page.</li>
+      <li><b>Mirrors the real product.</b> Character counter, <code>10 MB</code> file limit and <code>1h–72h</code> TTL pills match <code>CreateSecret</code> exactly, so the page is the tool — honest, not an ad.</li>
+      <li><b>One accent, one action.</b> A single indigo CTA and the fixed-<code>#6366F1</code> shield are the only color; calm slate/paper, hairlines and a 4/8px rhythm hold both themes to the same disciplined register.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  // Segmented TTL control on both phones
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.addEventListener('click', function(e){
+      var btn = e.target.closest('button');
+      if(!btn) return;
+      seg.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+    });
+  });
+  // Live character count on both phones
+  document.querySelectorAll('textarea').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      var wrap = ta.closest('.ta-wrap');
+      var c = wrap.querySelector('.chars');
+      c.textContent = ta.value.length.toLocaleString('en-US') + ' / 50,000';
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B · Precision — Sealed | ooshare.io</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ SHARED SHELL ============ */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #EEF0F3;
+    color: #1C212B;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: 48px 24px 72px;
+  }
+  .stage { max-width: 980px; margin: 0 auto; }
+  .stage-title {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    color: #14181F;
+  }
+  .stage-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #6B7385;
+    margin: 0 0 36px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .pair { grid-template-columns: 1fr; }
+    .stage-title { font-size: 19px; }
+  }
+  .panel { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .phone-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8A92A3;
+  }
+  .phone {
+    width: 100%;
+    max-width: 392px;
+    border: 10px solid #0B0E13;
+    border-radius: 44px;
+    box-shadow: 0 30px 70px -18px rgba(0,0,0,.45);
+    overflow: hidden;
+    background: var(--bg);
+    transition: background .2s ease;
+  }
+  .screen {
+    min-height: 760px;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    position: relative;
+  }
+
+  /* ---------- Status Bar ---------- */
+  .statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 18px;
+    flex: 0 0 auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
+  .status-icons svg { display: block; }
+  .status-icons .bar { fill: var(--text); }
+  .status-icons .level { fill: var(--text); }
+  .status-icons svg .stroke { stroke: var(--text); }
+
+  /* ---------- THEMES (tokens) ---------- */
+  .phone[data-theme="dark"] {
+    --bg: #0A0C10;
+    --surface: #12151B;
+    --surface-2: #1A1E26;
+    --line: #242A35;
+    --line-soft: #1C212B;
+    --text: #F2F4F8;
+    --text-soft: #A6ADBB;
+    --text-muted: #6B7385;
+    --accent: #7C8CFF;
+    --accent-hover: #93A0FF;
+    --on-accent: #FFFFFF;
+    --accent-soft: rgba(124,140,255,.12);
+    --success: #3DD68C;
+    --success-soft: rgba(61,214,140,.12);
+    --danger: #FF8A8A;
+  }
+  .phone[data-theme="light"] {
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface-2: #F1F2F5;
+    --line: #E3E6EC;
+    --line-soft: #EAECF1;
+    --text: #14181F;
+    --text-soft: #4C5566;
+    --text-muted: #8A92A3;
+    --accent: #4F5CF0;
+    --accent-hover: #3E4AD9;
+    --on-accent: #FFFFFF;
+    --accent-soft: rgba(79,92,240,.08);
+    --success: #1F9D63;
+    --success-soft: rgba(31,157,99,.10);
+    --danger: #B4232A;
+  }
+
+  /* ============ LOGO ============ */
+  .logo { display: inline-flex; align-items: center; gap: 9px; user-select: none; }
+  .logo svg { display: block; width: 23px; height: 23px; }
+  .logo .wordmark {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  /* ============ LAYOUT ============ */
+  .screen-content { flex: 1 1 auto; padding: 8px 16px 14px; display: flex; flex-direction: column; }
+  .app-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px 14px; flex: 0 0 auto;
+  }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .lang-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--text-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 8px;
+    height: 32px; padding: 0 11px; cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .lang-btn:hover { background: var(--surface-2); color: var(--text); }
+  .info-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--line); background: transparent;
+    color: var(--text-soft); cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .info-btn:hover { background: var(--surface-2); color: var(--text); }
+  .info-btn svg { display: block; }
+
+  .body-wrap { padding: 0 6px; display: flex; flex-direction: column; flex: 1 1 auto; }
+
+  /* ---------- Success indicator ---------- */
+  .success-row {
+    display: flex; align-items: center; gap: 10px;
+    margin: 10px 2px 22px;
+  }
+  .success-check {
+    display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--success-soft);
+    flex: 0 0 auto;
+  }
+  .success-check svg { display: block; color: var(--success); }
+  .success-title {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  /* ---------- Link card ---------- */
+  .link-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 16px 16px 14px;
+  }
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.10em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .link-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; line-height: 1.6;
+    color: var(--text);
+    word-break: break-all;
+    user-select: all;
+    margin-bottom: 16px;
+  }
+  .link-value .seg { color: var(--accent); font-weight: 700; }
+
+  /* ---------- Copy button (flips to success) ---------- */
+  .copy-btn {
+    width: 100%; height: 52px; border: none; border-radius: 14px;
+    background: var(--accent); color: var(--on-accent);
+    font-family: 'Inter Tight', sans-serif; font-size: 16px; font-weight: 600;
+    letter-spacing: -0.01em; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    box-shadow: 0 12px 24px -12px var(--accent);
+    transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+  .copy-btn svg { display: block; }
+  .copy-btn[data-copied="true"] {
+    background: var(--success-soft);
+    color: var(--success);
+    box-shadow: none;
+  }
+  .copy-btn[data-copied="true"] svg { color: var(--success); }
+
+  /* ---------- Copy note ---------- */
+  .copy-note {
+    font-size: 12px; line-height: 1.5;
+    color: var(--text-muted);
+    margin: 12px 2px 26px;
+  }
+
+  /* ---------- Share via ---------- */
+  .share-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.10em;
+    color: var(--text-muted);
+    margin: 0 2px 8px;
+  }
+  .share-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-bottom: 24px;
+  }
+  .share-btn {
+    height: 46px; border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .15s ease, border-color .15s ease, transform .06s ease;
+  }
+  .share-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .share-btn:active { transform: translateY(1px); }
+  .share-btn svg { display: block; }
+  .share-btn .w { fill: var(--text); }
+  .share-btn span { white-space: nowrap; }
+
+  /* ---------- Create another ---------- */
+  .create-another {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: transparent; border: none;
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+    color: var(--accent); cursor: pointer;
+    padding: 8px; margin: 0 auto;
+    transition: color .15s ease;
+  }
+  .create-another:hover { color: var(--accent-hover); }
+  .create-another svg { display: block; }
+
+  /* ---------- Micro-line + trust ---------- */
+  .microline {
+    text-align: center; font-size: 12px; color: var(--text-muted);
+    margin: 20px 0 auto; padding: 6px 8px;
+  }
+  .microline b { font-weight: 600; color: var(--text-soft); }
+  .trust-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; flex-wrap: wrap; margin-top: 18px; flex: 0 0 auto;
+  }
+  .trust-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 5px 9px; white-space: nowrap;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px;
+  }
+  .phone:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 44px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="stage-title">B · Precision — Sealed</p>
+  <p class="stage-note">The sender gets the one-time link · click Copy to see the "Copied ✓" flip · dark &nbsp;|&nbsp; light</p>
+
+  <div class="pair">
+    <!-- ==================== DARK ==================== -->
+    <div class="panel">
+      <div class="phone-label">Dark</div>
+      <div class="phone" data-theme="dark" tabindex="0" aria-label="Dark theme sealed preview">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="status-icons" aria-hidden="true">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+              <rect x="0" y="7" width="3" height="5" rx="1" class="bar"/>
+              <rect x="5" y="5" width="3" height="7" rx="1" class="bar"/>
+              <rect x="10" y="3" width="3" height="9" rx="1" class="bar"/>
+              <rect x="15" y="0.5" width="3" height="11" rx="1" class="bar"/>
+            </svg>
+            <svg width="17" height="12" viewBox="0 0 17 12">
+              <path d="M8.5 3.5A6.2 6.2 0 0 1 13 5L12 6.4A4.4 4.4 0 0 0 8.5 5.2 4.4 4.4 0 0 0 5 6.4L4 5a6.2 6.2 0 0 1 4.5-1.5Zm0 3A2.8 2.8 0 0 1 10 7.2l-1 1.4a1 1 0 0 0-1 0L7 7.2a2.8 2.8 0 0 1 1.5-.7Z" class="level"/>
+              <circle cx="8.5" cy="10" r="1" class="level"/>
+            </svg>
+            <svg width="24" height="12" viewBox="0 0 24 11"><rect y="0" width="22" height="11" rx="5.5" class="bar" stroke="currentColor" fill="none" stroke-width="1"/><rect x="1.5" y="1.5" width="16" height="8" rx="4" class="level"/><rect x="20" y="4" width="2" height="3" rx="1" class="bar"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <div class="app-header">
+            <div class="logo" aria-label="ooshare">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </div>
+            <div class="header-actions">
+              <button class="lang-btn" aria-label="Language, English">EN</button>
+              <button class="info-btn" aria-label="About and security info">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="9.2"/>
+                  <path d="M12 11v5"/>
+                  <circle cx="12" cy="7.6" r="1.3" fill="currentColor" stroke="none"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="screen-content">
+            <div class="body-wrap">
+              <div class="success-row">
+                <span class="success-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                </span>
+                <span class="success-title">Secret link created</span>
+              </div>
+
+              <div class="link-card">
+                <div class="card-label">YOUR LINK</div>
+                <div class="link-value">ooshare.io/<span class="seg">s/A7kQx2</span><span class="seg">#</span>fY9KtR2mCvX4Lq8W</div>
+                <button class="copy-btn" data-copied="false">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="11" height="11" rx="2"/>
+                    <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/>
+                  </svg>
+                  <span class="copy-label">Copy link</span>
+                </button>
+              </div>
+              <p class="copy-note">This link opens exactly once. After the first view it is permanently destroyed.</p>
+
+              <div class="share-label">Share via</div>
+              <div class="share-row">
+                <button class="share-btn" aria-label="Share on WhatsApp">
+                  <svg width="17" height="17" viewBox="0 0 24 24">
+                    <path class="w" d="M12 .4A11.5 11.5 0 0 0 1.6 15L.1 21.3a.8.8 0 0 0 .98.98l6.3-1.5A11.5 11.5 0 1 0 12 .4Zm-4.4 4.9c.23 0 .58-.02.9.55l.9 1.7c.25.43.26.86.13 1.22-.1.26-.36.62-.53.8-.17.18-.17.35-.09.56.5 1.12 1.9 3 3.1 4 .86.7 1.4.86 1.62.96.17.08.26.06.4-.08.32-.34.9-1 .46-1a.4.4 0 0 1 .15.02l.05.02c.64.83 1.1 1.35 1.94 2.67.2.3.06 1.3-1 1.6-1.06.33-1.9 0-2.94-.4-1.84-.68-3.4-2.86-4.6-4.7-.8-1.36-2-3.6-2.2-4.9-.1-.7-.53-1.1-.79-1.4a8 8 0 0 0-.6-.73l.05-.84c.56-.86 4.4-1.8 4.4-1.8Z"/>
+                  </svg>
+                  <span>WhatsApp</span>
+                </button>
+                <button class="share-btn" aria-label="Share by email">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5"/>
+                    <path d="m3 7 9 6 9-6"/>
+                  </svg>
+                  <span>Email</span>
+                </button>
+              </div>
+
+              <button class="create-another">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Create another
+              </button>
+            </div>
+
+            <p class="microline"><b>Encrypted in your browser</b> · Opens once · Then it's gone.</p>
+            <div class="trust-row" aria-label="Security properties">
+              <span class="trust-chip">AES-256-GCM</span>
+              <span class="trust-chip">ZERO-KNOWLEDGE</span>
+              <span class="trust-chip">ONE VIEW</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== LIGHT ==================== -->
+    <div class="panel">
+      <div class="phone-label">Light</div>
+      <div class="phone" data-theme="light" tabindex="0" aria-label="Light theme sealed preview">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="status-icons" aria-hidden="true">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+              <rect x="0" y="7" width="3" height="5" rx="1" class="bar"/>
+              <rect x="5" y="5" width="3" height="7" rx="1" class="bar"/>
+              <rect x="10" y="3" width="3" height="9" rx="1" class="bar"/>
+              <rect x="15" y="0.5" width="3" height="11" rx="1" class="bar"/>
+            </svg>
+            <svg width="17" height="12" viewBox="0 0 17 12">
+              <path d="M8.5 3.5A6.2 6.2 0 0 1 13 5L12 6.4A4.4 4.4 0 0 0 8.5 5.2 4.4 4.4 0 0 0 5 6.4L4 5a6.2 6.2 0 0 1 4.5-1.5Zm0 3A2.8 2.8 0 0 1 10 7.2l-1 1.4a1 1 0 0 0-1 0L7 7.2a2.8 2.8 0 0 1 1.5-.7Z" class="level"/>
+              <circle cx="8.5" cy="10" r="1" class="level"/>
+            </svg>
+            <svg width="24" height="12" viewBox="0 0 24 11"><rect y="0" width="22" height="11" rx="5.5" class="bar" stroke="currentColor" fill="none" stroke-width="1"/><rect x="1.5" y="1.5" width="16" height="8" rx="4" class="level"/><rect x="20" y="4" width="2" height="3" rx="1" class="bar"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <div class="app-header">
+            <div class="logo" aria-label="ooshare">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </div>
+            <div class="header-actions">
+              <button class="lang-btn" aria-label="Language, English">EN</button>
+              <button class="info-btn" aria-label="About and security info">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="9.2"/>
+                  <path d="M12 11v5"/>
+                  <circle cx="12" cy="7.6" r="1.3" fill="currentColor" stroke="none"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="screen-content">
+            <div class="body-wrap">
+              <div class="success-row">
+                <span class="success-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                </span>
+                <span class="success-title">Secret link created</span>
+              </div>
+
+              <div class="link-card">
+                <div class="card-label">YOUR LINK</div>
+                <div class="link-value">ooshare.io/<span class="seg">s/A7kQx2</span><span class="seg">#</span>fY9KtR2mCvX4Lq8W</div>
+                <button class="copy-btn" data-copied="false">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="11" height="11" rx="2"/>
+                    <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/>
+                  </svg>
+                  <span class="copy-label">Copy link</span>
+                </button>
+              </div>
+              <p class="copy-note">This link opens exactly once. After the first view it is permanently destroyed.</p>
+
+              <div class="share-label">Share via</div>
+              <div class="share-row">
+                <button class="share-btn" aria-label="Share on WhatsApp">
+                  <svg width="17" height="17" viewBox="0 0 24 24">
+                    <path class="w" d="M12 .4A11.5 11.5 0 0 0 1.6 15L.1 21.3a.8.8 0 0 0 .98.98l6.3-1.5A11.5 11.5 0 1 0 12 .4Zm-4.4 4.9c.23 0 .58-.02.9.55l.9 1.7c.25.43.26.86.13 1.22-.1.26-.36.62-.53.8-.17.18-.17.35-.09.56.5 1.12 1.9 3 3.1 4 .86.7 1.4.86 1.62.96.17.08.26.06.4-.08.32-.34.9-1 .46-1a.4.4 0 0 1 .15.02l.05.02c.64.83 1.1 1.35 1.94 2.67.2.3.06 1.3-1 1.6-1.06.33-1.9 0-2.94-.4-1.84-.68-3.4-2.86-4.6-4.7-.8-1.36-2-3.6-2.2-4.9-.1-.7-.53-1.1-.79-1.4a8 8 0 0 0-.6-.73l.05-.84c.56-.86 4.4-1.8 4.4-1.8Z"/>
+                  </svg>
+                  <span>WhatsApp</span>
+                </button>
+                <button class="share-btn" aria-label="Share by email">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5"/>
+                    <path d="m3 7 9 6 9-6"/>
+                  </svg>
+                  <span>Email</span>
+                </button>
+              </div>
+
+              <button class="create-another">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Create another
+              </button>
+            </div>
+
+            <p class="microline"><b>Encrypted in your browser</b> · Opens once · Then it's gone.</p>
+            <div class="trust-row" aria-label="Security properties">
+              <span class="trust-chip">AES-256-GCM</span>
+              <span class="trust-chip">ZERO-KNOWLEDGE</span>
+              <span class="trust-chip">ONE VIEW</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Copy button flip: Copy link -> "Copied ✓" for 1.8s, then revert.
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    const label = btn.querySelector('.copy-label');
+    btn.addEventListener('click', () => {
+      if (btn.dataset.copied === 'true') return;
+      btn.dataset.copied = 'true';
+      label.textContent = 'Copied ✓';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(() => {
+        btn.dataset.copied = 'false';
+        label.textContent = 'Copy link';
+      }, 1800);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round 2 · A · Ember — Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#EDEAE3;
+    --page-ink:#2A251C;
+    --page-muted:#8B8270;
+    --line-stage:#D8D2C4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Instrument Sans",system-ui,sans-serif;
+    background:var(--page-bg);
+    color:var(--page-ink);
+    -webkit-font-smoothing:antialiased;
+    padding:56px 24px 80px;
+  }
+
+  /* ---------- Theme tokens ---------- */
+  .phone[data-theme="dark"]{
+    --bg:#16130E; --surface:#201C15; --surface-2:#2A251C; --line:#3A342A;
+    --text:#F3EEE3; --text-soft:#B8AD99; --text-muted:#7E7462;
+    --accent:#F2591E; --accent-hover:#FF6B33; --on-accent:#FFF3EA;
+    --success:#3EC98C; --ash-bg:#3A342C; --ash-ink:#8F8470;
+    --bezel:#0B0A08;
+    --select:rgba(242,89,30,.28);
+    --recess:#15120C;
+    --seg-active-bg:#F3EEE3; --seg-active-ink:#16130E;
+  }
+  .phone[data-theme="light"]{
+    --bg:#F7F4EC; --surface:#FFFFFF; --surface-2:#F1EDE2; --line:#E3DDCE;
+    --text:#201B12; --text-soft:#5A5244; --text-muted:#8B8270;
+    --accent:#D94A12; --accent-hover:#BC3F0D; --on-accent:#FFF7F0;
+    --success:#1F7A4D; --ash-bg:#E9E4D6; --ash-ink:#6E6552;
+    --bezel:#17130C;
+    --select:rgba(217,74,18,.16);
+    --recess:#F1EDE2;
+    --seg-active-bg:#201B12; --seg-active-ink:#F7F4EC;
+  }
+
+  /* ---------- Shared stage ---------- */
+  .stage{max-width:880px;margin:0 auto}
+  .stage-title{
+    font-family:"Fraunces",serif;font-weight:600;font-size:24px;
+    letter-spacing:-.01em;color:var(--page-ink);margin-bottom:6px;
+  }
+  .stage-note{
+    font-size:13px;color:var(--page-muted);margin-bottom:36px;
+  }
+  .pair{
+    display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;
+  }
+  .panel{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .phone-label{
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--page-muted);
+    padding:2px 12px;border:1px solid var(--line-stage);border-radius:999px;
+  }
+
+  .phone{
+    width:392px;max-width:392px;background:var(--bg);color:var(--text);
+    border:10px solid var(--bezel);border-radius:44px;
+    box-shadow:0 30px 70px -18px rgba(0,0,0,.45);overflow:hidden;
+  }
+  .statusbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 26px 4px;font-family:"Space Mono",monospace;
+    font-size:12px;font-weight:700;color:var(--text);
+  }
+  .statusbar .sig{display:flex;gap:5px;align-items:center}
+  .statusbar .sig svg{display:block;color:var(--text)}
+  .screen{
+    min-height:760px;display:flex;flex-direction:column;padding:0 20px;
+  }
+
+  /* header */
+  .head{display:flex;align-items:center;justify-content:space-between;padding:16px 0 14px}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+  .brand .mark{display:block}
+  .wordmark{
+    font-family:"Fraunces",serif;font-weight:600;font-size:21px;letter-spacing:-.01em;
+  }
+  .head-actions{display:flex;gap:8px}
+  .pill{
+    font-family:"Space Mono",monospace;font-size:11px;font-weight:700;
+    letter-spacing:.06em;color:var(--text-soft);
+    padding:5px 10px;border:1px solid var(--line);border-radius:999px;
+    background:transparent;cursor:pointer;
+  }
+  .pill:hover{color:var(--text);border-color:var(--accent)}
+
+  /* base layout */
+  .body{flex:1;display:flex;flex-direction:column;padding-top:6px}
+  .label{
+    font-family:"Space Mono",monospace;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);
+    margin:0 0 8px 2px;
+  }
+
+  /* note card / textarea */
+  .note{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -16px rgba(0,0,0,.25);
+    position:relative;
+  }
+  .ta-wrap{position:relative}
+  textarea{
+    width:100%;min-height:200px;resize:none;border:0;background:transparent;
+    color:var(--text);font-family:"Instrument Sans",sans-serif;font-size:17px;
+    line-height:1.5;padding:18px 18px 42px 18px;outline:none;display:block;
+  }
+  textarea::placeholder{color:var(--text-muted)}
+  .chars{
+    position:absolute;right:16px;bottom:12px;
+    font-family:"Space Mono",monospace;font-size:11px;color:var(--text-muted);
+    background:var(--surface);padding:0 4px;
+  }
+  .attach{
+    margin-top:12px;display:flex;align-items:center;gap:8px;
+    border:1.5px dashed var(--line);border-radius:12px;
+    padding:12px 14px;font-size:13px;color:var(--text-soft);
+    cursor:pointer;background:transparent;width:100%;text-align:left;
+  }
+  .attach:hover{border-color:var(--accent);color:var(--text)}
+  .attach .plus{color:var(--accent);font-weight:600;font-family:"Instrument Sans",sans-serif}
+  .attach .max{margin-left:auto;font-family:"Space Mono",monospace;font-size:10px;color:var(--text-muted)}
+
+  /* expires segmented */
+  .expires{margin-top:22px}
+  .seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .seg button{
+    font-family:"Space Mono",monospace;font-size:12px;font-weight:700;
+    color:var(--text-soft);background:var(--surface);border:1px solid var(--line);
+    border-radius:9px;padding:9px 0;cursor:pointer;white-space:nowrap;
+  }
+  .seg button:hover{color:var(--text)}
+  .seg button[aria-pressed="true"]{
+    background:var(--seg-active-bg);color:var(--seg-active-ink);border-color:var(--seg-active-bg);
+  }
+
+  .cta{
+    margin-top:22px;width:100%;background:var(--accent);color:var(--on-accent);
+    border:0;border-radius:14px;padding:16px;font-family:"Instrument Sans",sans-serif;
+    font-size:16px;font-weight:600;letter-spacing:-.01em;cursor:pointer;
+    transition:background .12s ease, transform .05s ease;
+    box-shadow:0 10px 24px -14px var(--accent);
+  }
+  .cta:hover{background:var(--accent-hover)}
+  .cta:active{transform:translateY(1px)}
+  .micro{
+    margin-top:14px;text-align:center;font-size:11.5px;color:var(--text-muted);
+  }
+
+  .foot{
+    margin-top:24px;padding:16px 0 22px;border-top:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    font-family:"Space Mono",monospace;font-size:9.5px;font-weight:700;
+    letter-spacing:.09em;text-transform:uppercase;color:var(--text-soft);
+  }
+  .foot .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+
+  /* focus */
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .seg button:focus-visible{outline-offset:1px}
+
+  @media (max-width:960px){
+    .pair{grid-template-columns:1fr}
+    .panel:first-child{order:-1}
+    body{padding:36px 16px 64px}
+    .phone{width:100%;max-width:392px;margin:0 auto}
+  }
+  @media (max-width:420px){
+    body{padding:28px 10px 48px}
+    .phone{width:100%;max-width:100%;border-width:8px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="stage-title">A · Ember — Composer</p>
+  <p class="stage-note">The sender writes and seals a secret · mobile-first · dark &amp; light</p>
+  <div class="pair">
+    <div class="panel">
+      <div class="phone-label">Dark</div>
+      <div class="phone" data-theme="dark">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <div class="head-actions">
+              <button class="pill" type="button">EN</button>
+              <button class="pill" type="button" aria-label="Help">?</button>
+            </div>
+          </header>
+          <main class="body">
+            <p class="label">Secret</p>
+            <div class="note">
+              <div class="ta-wrap">
+                <textarea rows="6" placeholder="A password, an API key, a private message…"></textarea>
+                <span class="chars">0 / 100 KB</span>
+              </div>
+            </div>
+            <button class="attach" type="button">
+              <span class="plus">＋</span> Attach image, PDF, or archive
+              <span class="max">max 10 MB</span>
+            </button>
+            <div class="expires">
+              <p class="label">Expires</p>
+              <div class="seg" role="group" aria-label="Expiration">
+                <button type="button" aria-pressed="true">1h</button>
+                <button type="button" aria-pressed="false">4h</button>
+                <button type="button" aria-pressed="false">24h</button>
+                <button type="button" aria-pressed="false">48h</button>
+                <button type="button" aria-pressed="false">72h</button>
+              </div>
+            </div>
+            <button class="cta" type="button">Create secret link ›</button>
+            <p class="micro">Encrypted in your browser · opens once · then it's gone</p>
+          </main>
+          <footer class="foot">
+            <span class="dot"></span> AES-256-GCM
+            <span class="dot"></span> ZERO-KNOWLEDGE
+            <span class="dot"></span> ONE VIEW
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="phone-label">Light</div>
+      <div class="phone" data-theme="light">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <div class="head-actions">
+              <button class="pill" type="button">EN</button>
+              <button class="pill" type="button" aria-label="Help">?</button>
+            </div>
+          </header>
+          <main class="body">
+            <p class="label">Secret</p>
+            <div class="note">
+              <div class="ta-wrap">
+                <textarea rows="6" placeholder="A password, an API key, a private message…"></textarea>
+                <span class="chars">0 / 100 KB</span>
+              </div>
+            </div>
+            <button class="attach" type="button">
+              <span class="plus">＋</span> Attach image, PDF, or archive
+              <span class="max">max 10 MB</span>
+            </button>
+            <div class="expires">
+              <p class="label">Expires</p>
+              <div class="seg" role="group" aria-label="Expiration">
+                <button type="button" aria-pressed="true">1h</button>
+                <button type="button" aria-pressed="false">4h</button>
+                <button type="button" aria-pressed="false">24h</button>
+                <button type="button" aria-pressed="false">48h</button>
+                <button type="button" aria-pressed="false">72h</button>
+              </div>
+            </div>
+            <button class="cta" type="button">Create secret link ›</button>
+            <p class="micro">Encrypted in your browser · opens once · then it's gone</p>
+          </main>
+          <footer class="foot">
+            <span class="dot"></span> AES-256-GCM
+            <span class="dot"></span> ZERO-KNOWLEDGE
+            <span class="dot"></span> ONE VIEW
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Segmented TTL control on both phones
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.addEventListener('click', function(e){
+      var btn = e.target.closest('button');
+      if(!btn) return;
+      seg.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+    });
+  });
+
+  // Live char count (both phones)
+  document.querySelectorAll('textarea').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      var wrap = ta.closest('.ta-wrap');
+      var c = wrap.querySelector('.chars');
+      c.textContent = ta.value.length + ' / 100 KB';
+    });
+  });
+</script>
+</body>
+</html>

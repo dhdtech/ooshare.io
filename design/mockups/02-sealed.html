@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>02 · Sealed — ooshare revamp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#F1F0EA;
+  --note:#FBFAF6;
+  --ink:#1D1B16;
+  --ink-soft:#555248;
+  --ink-muted:#8A8577;
+  --rule:#D8D4C7;
+  --rule-soft:rgba(29,27,22,.10);
+  --ember:#CE3A1E;
+  --ember-deep:#B02C13;
+  --ember-ink:#FCEBE6;
+  --ash:#C9C4B4;
+  --ash-ink:#6E6959;
+  --char:#211E17;
+  --good:#2F7A4D;
+  --good-ink:#E7F1E9;
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:16px;
+  --r-sm:10px;
+  --shadow:0 1px 0 rgba(29,27,22,.05),0 12px 32px -8px rgba(29,27,22,.16);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+html{height:100%}
+body{
+  font-family:var(--font-sans);
+  color:var(--ink);
+  min-height:100%;
+  -webkit-font-smoothing:antialiased;
+  background-color:var(--paper);
+  background-image:
+    repeating-linear-gradient(to bottom,transparent 0 26px,rgba(29,27,22,.035) 26px 27px),
+    linear-gradient(to bottom,var(--paper),#ECEAE2);
+  background-attachment:fixed;
+}
+:focus-visible{outline:2px solid var(--ember);outline-offset:2px;border-radius:4px}
+
+/* ── Stage ─────────────────────────────── */
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 16px 44px}
+.caption{font-family:var(--font-mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-muted)}
+.phone{width:100%;max-width:392px;background:var(--paper);border-radius:28px;overflow:hidden}
+@media(min-width:560px){.phone{border:10px solid var(--char);border-radius:44px;box-shadow:0 28px 70px -14px rgba(29,27,22,.38)}}
+@media(max-width:559px){
+  .stage{padding:0;gap:0}
+  .phone{max-width:none;min-height:100vh;border-radius:0}
+  .caption{display:none}
+}
+.statusbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px 6px;font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink)}
+.sb-icons{display:flex;align-items:center;gap:5px;font-size:10px;letter-spacing:.02em;color:var(--ink-soft)}
+.screen{display:flex;flex-direction:column;min-height:calc(100vh - 10px)}
+@media(max-width:559px){.screen{min-height:calc(100vh - 26px)}}
+
+/* ── Header ────────────────────────────── */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:8px 22px 10px}
+.wordmark{font-family:var(--font-display);font-weight:600;font-size:20px;letter-spacing:-.01em;color:var(--ink);line-height:1}
+.wordmark .o{color:var(--ember)}
+.header-actions{display:flex;gap:6px;align-items:center}
+.icon-btn{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);background:transparent;
+  border:1px solid var(--rule);border-radius:999px;padding:6px 11px;cursor:pointer;
+  transition:all .12s var(--ease);
+}
+.icon-btn:hover{border-color:var(--ink-muted);color:var(--ink)}
+
+/* ── Sealed ────────────────────────────── */
+.sealed{flex:1;display:flex;flex-direction:column;padding:14px 22px 18px;gap:16px}
+.note{
+  position:relative;background:var(--note);border:1px solid var(--rule);
+  border-radius:var(--r);box-shadow:var(--shadow);padding:22px 20px 20px;margin-top:16px;
+}
+.stamp{
+  position:absolute;top:-15px;right:20px;transform:rotate(3deg);
+  font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ember);background:var(--note);border:2px solid var(--ember);border-radius:7px;
+  padding:6px 11px 5px;box-shadow:0 1px 0 rgba(206,58,30,.25);
+}
+.note-head{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.note-head::after{content:"";flex:1;height:1px;background:var(--rule)}
+.link-box{
+  font-family:var(--font-mono);font-size:13px;line-height:1.65;color:var(--ink);
+  word-break:break-all;background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--r-sm);padding:15px 16px;
+}
+.link-box .frag{color:var(--ember)}
+.hint{font-size:13px;color:var(--ink-soft);line-height:1.55;margin-top:14px}
+.hint b{color:var(--ink);font-weight:600}
+
+/* ── Buttons ───────────────────────────── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  padding:16px 18px;border-radius:var(--r-sm);border:1px solid transparent;
+  font-family:var(--font-sans);font-size:15.5px;font-weight:600;cursor:pointer;
+  transition:all .12s var(--ease);
+}
+.btn-primary{background:var(--ember);color:var(--ember-ink);box-shadow:0 10px 24px -8px rgba(206,58,30,.55)}
+.btn-primary:hover{background:var(--ember-deep)}
+.btn-sec{background:var(--note);color:var(--ink-soft);border-color:var(--rule)}
+.btn-sec:hover{border-color:var(--ink-muted);color:var(--ink)}
+.btn .ic{font-family:var(--font-mono);font-size:13px}
+.btn-good{background:var(--good);color:#fff;box-shadow:0 10px 24px -8px rgba(47,122,77,.5)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiet{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  color:var(--ink-soft);font-size:14px;font-weight:600;text-decoration:none;padding:8px;cursor:pointer;border:none;background:none;
+}
+.quiet:hover{color:var(--ember)}
+.quiet .plus{color:var(--ember)}
+
+/* ── Foot ──────────────────────────────── */
+.footline{text-align:center;font-size:12.5px;color:var(--ink-muted);line-height:1.55;margin-top:2px}
+.footline b{color:var(--ink-soft);font-weight:600}
+.app-footer{padding:14px 22px 20px;border-top:1px solid var(--rule-soft);display:flex;justify-content:center}
+.trust{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-muted)}
+.trust .dot{color:var(--ember)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="caption">02 · Sealed — the link, ready to hand over</p>
+  <div class="phone">
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="sb-icons">▂▄▆&nbsp;&nbsp;100%</span>
+    </div>
+    <div class="screen">
+      <header class="app-header">
+        <span class="wordmark">o<span class="o">o</span>share</span>
+        <div class="header-actions">
+          <button class="icon-btn" type="button">EN</button>
+          <button class="icon-btn" type="button" aria-label="How it works">?</button>
+        </div>
+      </header>
+
+      <main class="sealed">
+        <div class="note">
+          <span class="stamp">Sealed</span>
+          <p class="note-head">Your link</p>
+          <div class="link-box">
+            ooshare.io/s/<span class="frag">A7kQx2</span>#<span class="frag">fY9KtR2mCvX4Lq8W</span>
+          </div>
+          <p class="hint">
+            <b>Opens exactly once.</b><br />
+            Hand it over — after the first view, this link is permanently destroyed.
+          </p>
+        </div>
+
+        <button class="btn btn-primary" id="copy" type="button">
+          <span class="ic">▣</span>
+          <span id="copy-label">Copy link</span>
+        </button>
+
+        <div class="row">
+          <button class="btn btn-sec" type="button">
+            <span class="ic">✆</span>
+            WhatsApp
+          </button>
+          <button class="btn btn-sec" type="button">
+            <span class="ic">✉</span>
+            Email
+          </button>
+        </div>
+
+        <button class="quiet" type="button">
+          <span class="plus">＋</span>
+          Create another
+        </button>
+
+        <p class="footline">
+          <b>Encrypted in your browser</b> &nbsp;·&nbsp; opens once, then it's gone
+        </p>
+      </main>
+
+      <footer class="app-footer">
+        <div class="trust">
+          <span>AES-256-GCM</span><span class="dot">·</span>
+          <span>Zero-knowledge</span><span class="dot">·</span>
+          <span>One view</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>
+const btn = document.getElementById("copy");
+const label = document.getElementById("copy-label");
+btn.addEventListener("click", () => {
+  btn.classList.add("btn-good");
+  btn.classList.remove("btn-primary");
+  label.textContent = "Copied";
+  setTimeout(() => {
+    btn.classList.remove("btn-good");
+    btn.classList.add("btn-primary");
+    label.textContent = "Copy link";
+  }, 1800);
+});
+</script>
+</body>
+</html>

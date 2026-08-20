@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C · Zero — Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gg:'Space Grotesk', sans-serif;
+    --gm:'Space Mono', monospace;
+  }
+
+  /* ---------- shared stage shell ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#E9EFEA;
+    font-family:var(--gg);
+    color:#12201A;
+    min-height:100vh;
+    padding:48px 24px 72px;
+  }
+  .stage{max-width:900px;margin:0 auto}
+  .stage-title{
+    font-family:var(--gm);font-weight:700;font-size:13px;
+    letter-spacing:.16em;text-transform:uppercase;color:#0B7E6B;
+  }
+  .stage-note{
+    margin-top:8px;max-width:520px;font-size:15px;line-height:1.5;color:#42554B;
+  }
+  .pair{
+    display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;align-items:start;
+  }
+  .panel{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .phone-label{
+    font-family:var(--gm);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:#5F746C;text-align:center;
+  }
+
+  /* ---------- phone ---------- */
+  .phone{
+    width:min(100%,392px);
+    max-width:392px;
+    border:10px solid #071512;
+    border-radius:44px;
+    box-shadow:0 30px 70px -18px rgba(0,0,0,.45);
+    overflow:hidden;
+    background:var(--bg);
+  }
+  .statusbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px 8px;
+    font-family:var(--gm);font-size:12px;letter-spacing:.05em;
+    color:var(--text);background:var(--bg);
+  }
+  .statusbar .glyphs{display:flex;align-items:center;gap:6px}
+  .statusbar svg{display:block}
+  .screen{
+    min-height:760px;
+    display:flex;flex-direction:column;
+    padding:8px 20px 22px;
+    color:var(--text);background:var(--bg);
+    position:relative;
+  }
+
+  /* ---------- zero theme tokens ---------- */
+  .phone[data-theme="dark"]{
+    --bg:#0A1412;--surface:#101D1A;--surface-2:#162621;
+    --line:#1E312C;--line-soft:#16251F;
+    --text:#EAF2EE;--text-soft:#9FB3AB;--text-muted:#5F746C;
+    --accent:#35D0B2;--accent-hover:#4FE0C3;--on-accent:#06201A;--accent-soft:rgba(53,208,178,.12);
+    --success:#35D0B2;--danger:#FF8A80;--zero:#3A4B45;
+  }
+  .phone[data-theme="light"]{
+    --bg:#F4F6F3;--surface:#FFFFFF;--surface-2:#EFF3EF;
+    --line:#DCE5DF;--line-soft:#E7ECE7;
+    --text:#12201A;--text-soft:#42554B;--text-muted:#7B8C83;
+    --accent:#0B7E6B;--accent-hover:#096A5A;--on-accent:#F0FBF7;--accent-soft:rgba(11,126,107,.10);
+    --success:#0B7E6B;--danger:#B4231B;--zero:#B8C6BE;
+  }
+
+  /* ---------- screen components ---------- */
+  .screen *{font-family:var(--gg)}
+
+  .header{display:flex;align-items:center;justify-content:space-between;padding:6px 0 2px}
+  .logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+  .logo svg{width:24px;height:24px;display:block}
+  .wordmark{font-family:var(--gg);font-weight:700;font-size:21px;letter-spacing:-.01em}
+  .wordmark .oo{color:var(--accent)}
+  .header-actions{display:flex;align-items:center;gap:8px}
+  .icon-btn{
+    font-family:var(--gm);font-size:12px;letter-spacing:.08em;color:var(--text-muted);
+    background:transparent;border:1px solid var(--line);border-radius:8px;
+    padding:6px 9px;cursor:pointer;line-height:1;
+  }
+  .icon-btn:hover{color:var(--accent);border-color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  .body{flex:1;display:flex;flex-direction:column;justify-content:space-between;margin-top:30px}
+
+  .field-label{
+    font-family:var(--gm);font-weight:700;font-size:13px;
+    letter-spacing:.2em;color:var(--accent);
+  }
+  .field-copy{margin-top:8px;font-size:15px;line-height:1.5;color:var(--text-soft);max-width:300px}
+
+  .note{
+    margin-top:26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;padding:14px;
+  }
+  .note textarea{
+    width:100%;background:transparent;border:0;outline:none;resize:none;
+    color:var(--text);font-size:17px;line-height:1.5;min-height:150px;
+  }
+  .note textarea::placeholder{color:var(--text-muted)}
+  .note-meta{display:flex;justify-content:flex-end;margin-top:8px}
+  .char-count{font-family:var(--gm);font-size:11px;letter-spacing:.08em;color:var(--text-muted)}
+
+  .attach{
+    margin-top:14px;width:100%;text-align:left;background:transparent;border:0;cursor:pointer;
+    padding:10px 2px;border-bottom:1px solid var(--line-soft);
+    font-family:var(--gm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-soft);
+  }
+  .attach:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+  .expires-label{margin-top:28px}
+  .seg{margin-top:12px;display:grid;grid-template-columns:repeat(6,1fr);gap:0}
+  .seg button{
+    font-family:var(--gm);font-size:12px;letter-spacing:.06em;color:var(--text-soft);
+    background:transparent;border:0;padding:8px 2px 10px;cursor:pointer;
+    border-bottom:2px solid var(--line-soft);text-align:center;
+  }
+  .seg button:hover{color:var(--text)}
+  .seg button[aria-pressed="true"]{
+    color:var(--text);border-bottom-color:var(--accent);
+    box-shadow:inset 0 -2px 0 0 var(--accent);
+  }
+
+  .primary{
+    margin-top:26px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--accent);color:var(--on-accent);font-family:var(--gg);font-weight:600;
+    font-size:16px;padding:16px;border:0;border-radius:12px;cursor:pointer;
+  }
+  .primary:hover{background:var(--accent-hover)}
+  .primary .zero-glyph{font-family:var(--gm);font-weight:700;font-size:15px;letter-spacing:.02em}
+
+  .tagline{
+    font-family:var(--gm);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--text-muted);margin-top:16px;text-align:center;
+  }
+
+  .trustbar{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--gm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--text-muted);margin-top:20px;border-top:1px solid var(--line-soft);padding-top:16px;
+  }
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);display:inline-block}
+  .trustbar .sep{width:4px;height:4px;border-radius:50%;background:var(--accent);display:inline-block}
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+  }
+
+  /* ---------- responsive stage ---------- */
+  @media (max-width:900px){
+    .pair{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <p class="stage-title">C · Zero — Composer</p>
+    <p class="stage-note">The sender writes and seals a secret · mobile-first · dark &amp; light</p>
+
+    <div class="pair">
+      <!-- DARK -->
+      <div class="panel">
+        <div class="phone-label">Dark</div>
+        <div class="phone" data-theme="dark">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="glyphs">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13" y="0" width="3" height="11" rx="1"/></svg>
+              <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1 8.5c2.2-2.4 5.3-4 9.8-4"/><path d="M3.6 10.4C5 9 6.9 8.2 9.2 8.1"/><circle cx="11.5" cy="5" r="1.6"/></svg>
+            </span>
+          </div>
+          <div class="screen">
+
+            <header class="header">
+              <a class="logo" href="#" aria-label="ooshare home">
+                <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                <span class="wordmark"><span class="oo">oo</span>share</span>
+              </a>
+              <div class="header-actions">
+                <button class="icon-btn" type="button" aria-label="Change language">EN</button>
+                <button class="icon-btn" type="button" aria-label="Help">?</button>
+              </div>
+            </header>
+
+            <div class="body">
+              <div>
+                <p class="field-label">Secret</p>
+                <p class="field-copy">Write it here. It will not exist after one view.</p>
+
+                <div class="note">
+                  <textarea rows="5" placeholder="A password, an API key, a private message…" aria-label="Your secret"></textarea>
+                  <div class="note-meta"><span class="char-count">0 / 100 KB</span></div>
+                </div>
+
+                <button class="attach" type="button">＋ Attach image · Pdf · Archive · Max 10 MB</button>
+
+                <p class="field-label expires-label">Expires</p>
+                <div class="seg" role="group" aria-label="Expiry time">
+                  <button type="button" aria-pressed="true">1h</button>
+                  <button type="button" aria-pressed="false">4h</button>
+                  <button type="button" aria-pressed="false">12h</button>
+                  <button type="button" aria-pressed="false">24h</button>
+                  <button type="button" aria-pressed="false">48h</button>
+                  <button type="button" aria-pressed="false">72h</button>
+                </div>
+              </div>
+
+              <div>
+                <button class="primary" type="button">Create secret link <span class="zero-glyph">→ 0</span></button>
+                <p class="tagline">Share nothing twice.</p>
+              </div>
+            </div>
+
+            <footer class="trustbar">
+              <span>AES-256-GCM</span><span class="dot"></span>
+              <span>Zero-knowledge</span><span class="dot"></span>
+              <span>Zero copies</span>
+            </footer>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT -->
+      <div class="panel">
+        <div class="phone-label">Light</div>
+        <div class="phone" data-theme="light">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="glyphs">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13" y="0" width="3" height="11" rx="1"/></svg>
+              <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1 8.5c2.2-2.4 5.3-4 9.8-4"/><path d="M3.6 10.4C5 9 6.9 8.2 9.2 8.1"/><circle cx="11.5" cy="5" r="1.6"/></svg>
+            </span>
+          </div>
+          <div class="screen">
+
+            <header class="header">
+              <a class="logo" href="#" aria-label="ooshare home">
+                <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                <span class="wordmark"><span class="oo">oo</span>share</span>
+              </a>
+              <div class="header-actions">
+                <button class="icon-btn" type="button" aria-label="Change language">EN</button>
+                <button class="icon-btn" type="button" aria-label="Help">?</button>
+              </div>
+            </header>
+
+            <div class="body">
+              <div>
+                <p class="field-label">Secret</p>
+                <p class="field-copy">Write it here. It will not exist after one view.</p>
+
+                <div class="note">
+                  <textarea rows="5" placeholder="A password, an API key, a private message…" aria-label="Your secret"></textarea>
+                  <div class="note-meta"><span class="char-count">0 / 100 KB</span></div>
+                </div>
+
+                <button class="attach" type="button">＋ Attach image · Pdf · Archive · Max 10 MB</button>
+
+                <p class="field-label expires-label">Expires</p>
+                <div class="seg" role="group" aria-label="Expiry time">
+                  <button type="button" aria-pressed="true">1h</button>
+                  <button type="button" aria-pressed="false">4h</button>
+                  <button type="button" aria-pressed="false">12h</button>
+                  <button type="button" aria-pressed="false">24h</button>
+                  <button type="button" aria-pressed="false">48h</button>
+                  <button type="button" aria-pressed="false">72h</button>
+                </div>
+              </div>
+
+              <div>
+                <button class="primary" type="button">Create secret link <span class="zero-glyph">→ 0</span></button>
+                <p class="tagline">Share nothing twice.</p>
+              </div>
+            </div>
+
+            <footer class="trustbar">
+              <span>AES-256-GCM</span><span class="dot"></span>
+              <span>Zero-knowledge</span><span class="dot"></span>
+              <span>Zero copies</span>
+            </footer>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // TTL segmented control — toggle active underline indicator
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.addEventListener('click', function(e){
+      var btn = e.target.closest('button');
+      if(!btn) return;
+      seg.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed','false')});
+      btn.setAttribute('aria-pressed','true');
+    });
+  });
+</script>
+</body>
+</html>

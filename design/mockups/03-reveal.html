@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>03 · Reveal — ooshare revamp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#F1F0EA;
+  --note:#FBFAF6;
+  --ink:#1D1B16;
+  --ink-soft:#555248;
+  --ink-muted:#8A8577;
+  --rule:#D8D4C7;
+  --rule-soft:rgba(29,27,22,.10);
+  --ember:#CE3A1E;
+  --ember-deep:#B02C13;
+  --ember-ink:#FCEBE6;
+  --ash:#C9C4B4;
+  --ash-ink:#6E6959;
+  --char:#211E17;
+  --good:#2F7A4D;
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:16px;
+  --r-sm:10px;
+  --shadow:0 1px 0 rgba(29,27,22,.05),0 12px 32px -8px rgba(29,27,22,.16);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+html{height:100%}
+body{
+  font-family:var(--font-sans);
+  color:var(--ink);
+  min-height:100%;
+  -webkit-font-smoothing:antialiased;
+  background-color:var(--paper);
+  background-image:
+    repeating-linear-gradient(to bottom,transparent 0 26px,rgba(29,27,22,.035) 26px 27px),
+    linear-gradient(to bottom,var(--paper),#ECEAE2);
+  background-attachment:fixed;
+}
+:focus-visible{outline:2px solid var(--ember);outline-offset:2px;border-radius:4px}
+
+/* ── Stage ─────────────────────────────── */
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 16px 44px}
+.caption{font-family:var(--font-mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-muted)}
+.phone{width:100%;max-width:392px;background:var(--paper);border-radius:28px;overflow:hidden}
+@media(min-width:560px){.phone{border:10px solid var(--char);border-radius:44px;box-shadow:0 28px 70px -14px rgba(29,27,22,.38)}}
+@media(max-width:559px){
+  .stage{padding:0;gap:0}
+  .phone{max-width:none;min-height:100vh;border-radius:0}
+  .caption{display:none}
+}
+.statusbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px 6px;font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink)}
+.sb-icons{display:flex;align-items:center;gap:5px;font-size:10px;letter-spacing:.02em;color:var(--ink-soft)}
+.screen{display:flex;flex-direction:column;min-height:calc(100vh - 10px);position:relative}
+@media(max-width:559px){.screen{min-height:calc(100vh - 26px)}}
+
+/* ── Header ────────────────────────────── */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:8px 22px 10px}
+.wordmark{font-family:var(--font-display);font-weight:600;font-size:20px;letter-spacing:-.01em;color:var(--ink);line-height:1}
+.wordmark .o{color:var(--ember)}
+.header-actions{display:flex;gap:6px;align-items:center}
+.icon-btn{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);background:transparent;
+  border:1px solid var(--rule);border-radius:999px;padding:6px 11px;cursor:pointer;
+  transition:all .12s var(--ease);
+}
+.icon-btn:hover{border-color:var(--ink-muted);color:var(--ink)}
+
+/* ── Reveal ────────────────────────────── */
+.reveal{flex:1;display:flex;flex-direction:column;padding:14px 22px 18px;gap:14px}
+.reveal-head{display:flex;align-items:center;justify-content:space-between}
+.reveal-tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted)}
+.replay{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-muted);background:transparent;border:1px solid var(--rule);border-radius:999px;
+  padding:5px 10px;cursor:pointer;transition:all .12s var(--ease);
+}
+.replay:hover{color:var(--ember);border-color:var(--ember)}
+
+.unseal{display:flex;flex-direction:column;align-items:center;gap:14px;padding:70px 0 90px}
+.unseal-tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-muted)}
+.bar{width:168px;height:2px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:var(--ember);transform-origin:left;animation:fill .9s var(--ease) forwards}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.note{
+  position:relative;background:var(--note);border:1px solid var(--rule);border-radius:var(--r);
+  box-shadow:var(--shadow);min-height:340px;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:9px;padding:30px 26px;overflow:hidden;
+  transition:opacity .3s var(--ease),transform .3s var(--ease),background .45s var(--ease),border-color .45s var(--ease);
+}
+.secret-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-muted);transition:opacity .45s var(--ease)}
+.secret-value{font-family:var(--font-mono);font-size:17px;line-height:1.5;color:var(--ink);word-break:break-all;text-align:center;transition:color .45s var(--ease)}
+.secret-meta{font-size:12px;color:var(--ink-muted);transition:opacity .45s var(--ease)}
+.burn{
+  position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(206,58,30,.92) 0%,rgba(206,58,30,.45) 34%,rgba(206,58,30,.08) 62%,transparent 80%);
+  transition:height 1.2s var(--ease),opacity .4s var(--ease);
+}
+.sparks{position:absolute;left:0;right:0;bottom:0;height:100%;pointer-events:none;z-index:1}
+.spark{
+  position:absolute;bottom:6px;width:3px;height:10px;border-radius:2px;opacity:0;
+  background:linear-gradient(to top,var(--ember),rgba(206,58,30,.1));
+  animation:rise 1.15s var(--ease) forwards;
+}
+@keyframes rise{
+  0%{transform:translate(0,0) scale(1);opacity:0}
+  12%{opacity:1}
+  100%{transform:translate(var(--drift,0px),-140px) scale(.4);opacity:0}
+}
+.destroyed{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:15px;padding:30px 26px;text-align:center;z-index:2;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease);
+}
+.stamp-destroyed{
+  font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ember);background:var(--ash);border:2px solid var(--ember);border-radius:8px;
+  padding:9px 15px 8px;transform:rotate(-7deg);
+  box-shadow:0 0 0 3px var(--ash),0 0 0 6px rgba(206,58,30,.35);
+}
+.gone-title{font-family:var(--font-display);font-weight:600;font-size:27px;letter-spacing:-.01em;color:var(--ink);line-height:1.12}
+.gone-sub{font-size:14px;color:var(--ash-ink);line-height:1.6}
+
+/* ── Phase states ──────────────────────── */
+.reveal:not([data-phase="unsealing"]) .unseal{display:none}
+.reveal[data-phase="unsealing"] .note{opacity:.55;transform:scale(.985)}
+.reveal[data-phase="revealed"] .note{opacity:1;transform:scale(1)}
+.reveal[data-phase="burning"] .note{opacity:1}
+.reveal[data-phase="burning"] .burn{height:100%}
+.reveal[data-phase="destroyed"] .note{background:var(--ash);border-color:var(--ash)}
+.reveal[data-phase="destroyed"] .secret-value{color:var(--ash-ink)}
+.reveal[data-phase="destroyed"] .secret-label,
+.reveal[data-phase="destroyed"] .secret-meta{opacity:.55}
+.reveal[data-phase="destroyed"] .burn{opacity:0}
+.reveal[data-phase="destroyed"] .destroyed{opacity:1;transform:translateY(0);pointer-events:auto}
+
+/* ── Buttons ───────────────────────────── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:16px 20px;border:none;border-radius:var(--r-sm);
+  font-family:var(--font-sans);font-size:15.5px;font-weight:600;cursor:pointer;
+  transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .12s var(--ease);
+}
+.btn-primary{background:var(--ember);color:var(--ember-ink);box-shadow:0 10px 24px -8px rgba(206,58,30,.55)}
+.btn-primary:hover{background:var(--ember-deep);transform:translateY(-1px)}
+.arr{font-family:var(--font-mono);font-size:13px;transform:translateX(0);transition:transform .12s var(--ease)}
+.btn-primary:hover .arr{transform:translateX(3px)}
+
+/* ── Foot ──────────────────────────────── */
+.app-footer{padding:14px 22px 20px;border-top:1px solid var(--rule-soft);display:flex;justify-content:center}
+.trust{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-muted)}
+.trust .dot{color:var(--ember)}
+
+@media (prefers-reduced-motion: reduce){
+  .bar i{animation:none;transform:scaleX(1)}
+  .burn{transition:none}
+  .spark{display:none}
+  .note{transition:opacity .15s linear,background .3s linear,border-color .3s linear}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="caption">03 · Reveal — the recipient opens it, once</p>
+  <div class="phone">
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="sb-icons">▂▄▆&nbsp;&nbsp;100%</span>
+    </div>
+    <div class="screen">
+      <header class="app-header">
+        <span class="wordmark">o<span class="o">o</span>share</span>
+        <div class="header-actions">
+          <button class="icon-btn" type="button">EN</button>
+          <button class="icon-btn" type="button" aria-label="How it works">?</button>
+        </div>
+      </header>
+
+      <main class="reveal" id="reveal" data-phase="unsealing">
+        <div class="reveal-head">
+          <span class="reveal-tag">One-time link</span>
+          <button class="replay" type="button" id="replay">⟳ Replay</button>
+        </div>
+
+        <div class="unseal">
+          <span class="unseal-tag">Unsealing</span>
+          <div class="bar"><i></i></div>
+        </div>
+
+        <div class="note" id="note">
+          <span class="secret-label">Secret</span>
+          <div class="secret-value">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</div>
+          <span class="secret-meta">retrieved once · AES-256-GCM</span>
+          <div class="burn"></div>
+          <div class="sparks" id="sparks"></div>
+
+          <div class="destroyed">
+            <span class="stamp-destroyed">Destroyed</span>
+            <h2 class="gone-title">It's gone now.</h2>
+            <p class="gone-sub">
+              This link won't work again.<br />
+              Secrets are readable exactly once.
+            </p>
+            <button class="btn btn-primary" type="button">
+              Create a new secret
+              <span class="arr">›</span>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="trust">
+          <span>AES-256-GCM</span><span class="dot">·</span>
+          <span>Zero-knowledge</span><span class="dot">·</span>
+          <span>One view</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>
+const reveal = document.getElementById("reveal");
+const sparksEl = document.getElementById("sparks");
+const replayBtn = document.getElementById("replay");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let timer = null;
+
+function spawnSparks() {
+  sparksEl.innerHTML = "";
+  for (let i = 0; i < 9; i++) {
+    const s = document.createElement("span");
+    s.className = "spark";
+    s.style.left = (6 + Math.random() * 88) + "%";
+    s.style.setProperty("--drift", ((Math.random() - 0.5) * 34).toFixed(1) + "px");
+    s.style.animationDelay = (Math.random() * 0.5).toFixed(2) + "s";
+    sparksEl.appendChild(s);
+  }
+}
+
+function play() {
+  clearTimeout(timer);
+  sparksEl.innerHTML = "";
+  const seq = reduced
+    ? [[0, "unsealing"], [300, "revealed"], [750, "destroyed"]]
+    : [[0, "unsealing"], [900, "revealed"], [2200, "burning"], [3600, "destroyed"]];
+  seq.forEach(([at, phase]) => {
+    timer = setTimeout(() => {
+      reveal.setAttribute("data-phase", phase);
+      if (phase === "burning" && !reduced) spawnSparks();
+    }, at);
+  });
+}
+
+replayBtn.addEventListener("click", play);
+play();
+</script>
+</body>
+</html>

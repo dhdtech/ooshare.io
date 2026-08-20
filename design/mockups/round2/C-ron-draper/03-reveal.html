@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C · Zero — Reveal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--gg:'Space Grotesk',sans-serif;--gm:'Space Mono',monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#E9EFEA;font-family:var(--gg);color:#12201A;min-height:100vh;padding:48px 24px 72px}
+  .stage{max-width:900px;margin:0 auto}
+  .stage-title{font-family:var(--gm);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#0B7E6B}
+  .stage-note{margin-top:8px;max-width:560px;font-size:15px;line-height:1.5;color:#42554B}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;align-items:start}
+  .panel{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .phone-label{font-family:var(--gm);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5F746C;text-align:center}
+
+  .phone{width:min(100%,392px);max-width:392px;border:10px solid #071512;border-radius:44px;box-shadow:0 30px 70px -18px rgba(0,0,0,.45);overflow:hidden;background:var(--bg)}
+  .statusbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px 8px;font-family:var(--gm);font-size:12px;letter-spacing:.05em;color:var(--text);background:var(--bg)}
+  .statusbar .glyphs{display:flex;align-items:center;gap:6px}
+  .statusbar svg{display:block}
+  .screen{min-height:760px;display:flex;flex-direction:column;padding:8px 20px 22px;color:var(--text);background:var(--bg);position:relative}
+
+  /* tokens */
+  .phone[data-theme="dark"]{
+    --bg:#0A1412;--surface:#101D1A;--surface-2:#162621;
+    --line:#1E312C;--line-soft:#16251F;
+    --text:#EAF2EE;--text-soft:#9FB3AB;--text-muted:#5F746C;
+    --accent:#35D0B2;--accent-hover:#4FE0C3;--on-accent:#06201A;--accent-soft:rgba(53,208,178,.12);
+    --success:#35D0B2;--danger:#FF8A80;--zero:#3A4B45;
+  }
+  .phone[data-theme="light"]{
+    --bg:#F4F6F3;--surface:#FFFFFF;--surface-2:#EFF3EF;
+    --line:#DCE5DF;--line-soft:#E7ECE7;
+    --text:#12201A;--text-soft:#42554B;--text-muted:#7B8C83;
+    --accent:#0B7E6B;--accent-hover:#096A5A;--on-accent:#F0FBF7;--accent-soft:rgba(11,126,107,.10);
+    --success:#0B7E6B;--danger:#B4231B;--zero:#B8C6BE;
+  }
+
+  .screen *{font-family:var(--gg)}
+
+  .header{display:flex;align-items:center;justify-content:space-between;padding:6px 0 2px}
+  .logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+  .logo svg{width:24px;height:24px;display:block}
+  .wordmark{font-family:var(--gg);font-weight:700;font-size:21px;letter-spacing:-.01em}
+  .wordmark .oo{color:var(--accent)}
+
+  .replay-chip{
+    top:64px;right:20px;
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--gm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);border:1px solid var(--line);
+    border-radius:20px;padding:7px 12px;cursor:pointer;line-height:1;
+  }
+  .replay-chip:hover{border-color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  .stage-row{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:20px;position:relative}
+
+  /* opening progress */
+  .opening{text-align:center;display:none}
+  .opening.active{display:block}
+  .opening-label{font-family:var(--gm);font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-soft)}
+  .progress{width:100%;height:4px;background:var(--line-soft);border-radius:2px;margin-top:18px;overflow:hidden}
+  .progress .fill{display:block;height:100%;width:0;background:var(--accent);border-radius:2px}
+
+  /* content (secret) */
+  .content{display:none;text-align:left}
+  .content.active{display:block}
+  .secret-label{font-family:var(--gm);font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+  .secret-value{
+    margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:18px 16px;font-family:var(--gm);font-size:18px;line-height:1.5;color:var(--text);
+    word-break:break-all;letter-spacing:.02em;
+  }
+  .secret-meta{margin-top:12px;display:flex;align-items:center;gap:8px;font-family:var(--gm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+  .secret-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+
+  /* zero-out overlay */
+  .zero-out{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;opacity:0;pointer-events:none;
+  }
+  .zero-out .t00{
+    font-family:var(--gm);font-weight:700;font-size:130px;line-height:1;
+    color:var(--accent);letter-spacing:.02em;
+  }
+  .zero-out .nothing{
+    font-family:var(--gm);font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--text);margin-top:-14px;
+  }
+  .zero-out .sub{margin-top:14px;font-size:15px;line-height:1.5;color:var(--text-soft);max-width:260px;margin-left:auto;margin-right:auto}
+  .new-btn{
+    margin-top:22px;background:var(--accent);color:var(--on-accent);font-family:var(--gg);font-weight:600;
+    font-size:15px;padding:14px 22px;border:0;border-radius:12px;cursor:pointer;
+  }
+  .new-btn:hover{background:var(--accent-hover)}
+  .zero-out.show{opacity:1;pointer-events:auto;transition:opacity .5s ease}
+
+  /* reduced motion — fast fade only */
+  @media (prefers-reduced-motion: reduce){
+    .progress .fill{animation-duration:.1s!important}
+    .zero-out, .content{transition-duration:.2s!important}
+  }
+  @media (max-width:900px){.pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <p class="stage-title">C · Zero — Reveal</p>
+    <p class="stage-note">The recipient opens it once, then it zeroes out · mobile-first · dark &amp; light</p>
+
+    <div class="pair">
+
+      <!-- DARK -->
+      <div class="panel">
+        <div class="phone-label">Dark</div>
+        <div class="phone" data-theme="dark">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="glyphs">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13" y="0" width="3" height="11" rx="1"/></svg>
+              <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1 8.5c2.2-2.4 5.3-4 9.8-4"/><path d="M3.6 10.4C5 9 6.9 8.2 9.2 8.1"/><circle cx="11.5" cy="5" r="1.6"/></svg>
+            </span>
+          </div>
+          <div class="screen">
+            <header class="header">
+              <a class="logo" href="#" aria-label="ooshare home">
+                <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                <span class="wordmark"><span class="oo">oo</span>share</span>
+              </a>
+            </header>
+
+            <div class="stage-row">
+
+              <!-- 1. opening -->
+              <div class="opening active">
+                <p class="opening-label">Opening…</p>
+                <div class="progress"><span class="fill"></span></div>
+              </div>
+
+              <!-- 2. content -->
+              <div class="content">
+                <p class="secret-label">Secret</p>
+                <div class="secret-value">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</div>
+                <div class="secret-meta"><span class="dot"></span><span>Read once · AES-256-GCM</span></div>
+              </div>
+
+              <!-- 3. zero-out -->
+              <div class="zero-out">
+                <p class="t00">00</p>
+                <p class="nothing">Nothing left.</p>
+                <p class="sub">This link won't work again. Secrets are readable exactly once.</p>
+                <button class="new-btn" type="button">Create a new secret ›</button>
+              </div>
+            </div>
+
+            <button class="replay-chip" type="button" aria-label="Replay the reveal sequence">⟳ Replay</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT -->
+      <div class="panel">
+        <div class="phone-label">Light</div>
+        <div class="phone" data-theme="light">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="glyphs">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13" y="0" width="3" height="11" rx="1"/></svg>
+              <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1 8.5c2.2-2.4 5.3-4 9.8-4"/><path d="M3.6 10.4C5 9 6.9 8.2 9.2 8.1"/><circle cx="11.5" cy="5" r="1.6"/></svg>
+            </span>
+          </div>
+          <div class="screen">
+            <header class="header">
+              <a class="logo" href="#" aria-label="ooshare home">
+                <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                <span class="wordmark"><span class="oo">oo</span>share</span>
+              </a>
+            </header>
+
+            <div class="stage-row">
+
+              <div class="opening active">
+                <p class="opening-label">Opening…</p>
+                <div class="progress"><span class="fill"></span></div>
+              </div>
+
+              <div class="content">
+                <p class="secret-label">Secret</p>
+                <div class="secret-value">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</div>
+                <div class="secret-meta"><span class="dot"></span><span>Read once · AES-256-GCM</span></div>
+              </div>
+
+              <div class="zero-out">
+                <p class="t00">00</p>
+                <p class="nothing">Nothing left.</p>
+                <p class="sub">This link won't work again. Secrets are readable exactly once.</p>
+                <button class="new-btn" type="button">Create a new secret ›</button>
+              </div>
+            </div>
+
+            <button class="replay-chip" type="button" aria-label="Replay the reveal sequence">⟳ Replay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var OPEN = reduce ? 100 : 900;      // progress fill duration (ms)
+  var SECRET_HOLD = reduce ? 150 : 1400; // time the secret shows before zero-out
+
+  function runSequence(phone){
+    var screen = phone.querySelector('.screen');
+    var opening = screen.querySelector('.opening');
+    var content = screen.querySelector('.content');
+    var zero = screen.querySelector('.zero-out');
+    var fill = screen.querySelector('.fill');
+
+    // reset state
+    opening.classList.add('active');
+    content.classList.remove('active');
+    zero.classList.remove('show');
+    fill.style.animation = 'none';
+    void fill.offsetWidth; // reflow so animation restarts
+
+    if(reduce){
+      // reduced motion: skip to zero-out with a fast fade
+      fill.style.width = '100%';
+      opening.classList.remove('active');
+      zero.classList.add('show');
+      return;
+    }
+
+    // animate the progress bar fill
+    fill.style.transition = 'width ' + OPEN + 'ms linear';
+    fill.style.width = '100%';
+
+    // when opening finishes, show the secret
+    setTimeout(function(){
+      opening.classList.remove('active');
+      content.classList.add('active');
+      content.style.transition = 'opacity .3s ease';
+      content.style.opacity = '0';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ content.style.opacity = '1'; }); });
+    }, OPEN);
+
+    // after hold, zero out: fade content + big 00 behind
+    setTimeout(function(){
+      content.classList.remove('active');
+      zero.classList.add('show');
+    }, OPEN + SECRET_HOLD);
+  }
+
+  document.querySelectorAll('.phone').forEach(function(phone){
+    // replay chip restarts the sequence
+    phone.querySelector('.replay-chip').addEventListener('click', function(){ runSequence(phone); });
+  });
+
+  // initial animations in sync once fonts/layout are idle
+  window.addEventListener('load', function(){
+    document.querySelectorAll('.phone').forEach(function(phone, i){
+      setTimeout(function(){ runSequence(phone); }, i * 300);
+    });
+  });
+</script>
+</body>
+</html>

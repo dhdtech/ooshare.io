@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round 2 · A · Ember — Reveal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#EDEAE3; --page-ink:#2A251C; --page-muted:#8B8270; --line-stage:#D8D2C4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Instrument Sans",system-ui,sans-serif;background:var(--page-bg);
+    color:var(--page-ink);-webkit-font-smoothing:antialiased;padding:56px 24px 80px;
+  }
+
+  .phone[data-theme="dark"]{
+    --bg:#16130E; --surface:#201C15; --surface-2:#2A251C; --line:#3A342A;
+    --text:#F3EEE3; --text-soft:#B8AD99; --text-muted:#7E7462;
+    --accent:#F2591E; --accent-hover:#FF6B33; --on-accent:#FFF3EA;
+    --success:#3EC98C; --ash-bg:#3A342C; --ash-ink:#8F8470;
+    --bezel:#0B0A08;
+  }
+  .phone[data-theme="light"]{
+    --bg:#F7F4EC; --surface:#FFFFFF; --surface-2:#F1EDE2; --line:#E3DDCE;
+    --text:#201B12; --text-soft:#5A5244; --text-muted:#8B8270;
+    --accent:#D94A12; --accent-hover:#BC3F0D; --on-accent:#FFF7F0;
+    --success:#1F7A4D; --ash-bg:#E9E4D6; --ash-ink:#6E6552;
+    --bezel:#17130C;
+  }
+
+  .stage{max-width:880px;margin:0 auto}
+  .stage-title{font-family:"Fraunces",serif;font-weight:600;font-size:24px;letter-spacing:-.01em;margin-bottom:6px}
+  .stage-note{font-size:13px;color:var(--page-muted);margin-bottom:36px}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+  .panel{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .phone-label{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--page-muted);padding:2px 12px;border:1px solid var(--line-stage);border-radius:999px}
+
+  .phone{width:392px;max-width:392px;background:var(--bg);color:var(--text);border:10px solid var(--bezel);border-radius:44px;box-shadow:0 30px 70px -18px rgba(0,0,0,.45);overflow:hidden}
+  .statusbar{display:flex;align-items:center;justify-content:space-between;padding:12px 26px 4px;font-family:"Space Mono",monospace;font-size:12px;font-weight:700;color:var(--text)}
+  .statusbar .sig{display:flex;gap:5px;align-items:center}
+  .statusbar .sig svg{display:block;color:var(--text)}
+  .screen{min-height:760px;display:flex;flex-direction:column;padding:0 20px;position:relative}
+
+  .head{display:flex;align-items:center;justify-content:space-between;padding:16px 0 14px}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+  .brand .mark{display:block}
+  .wordmark{font-family:"Fraunces",serif;font-weight:600;font-size:21px;letter-spacing:-.01em}
+  .head-actions{display:flex;align-items:center;gap:8px}
+  .pill{font-family:"Space Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--text-soft);padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:transparent;cursor:pointer}
+  .pill:hover{color:var(--text);border-color:var(--accent)}
+
+  .replaychip{
+    font-family:"Space Mono",monospace;font-size:10.5px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--text-soft);
+    border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+    background:transparent;cursor:pointer;
+  }
+  .replaychip:hover{color:var(--text);border-color:var(--accent)}
+  .replaychip .arc{color:var(--accent)}
+
+  .body{flex:1;display:flex;flex-direction:column;padding-top:6px}
+  .label{font-family:"Space Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:0 0 8px 2px}
+
+  /* unsealing stage */
+  .stage-u{position:relative}
+  .progressbar{height:3px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:24px}
+  .progressbar .fill{
+    display:block;height:100%;width:0;background:var(--accent);
+    border-radius:99px;transition:width .9s ease;
+  }
+  .prog{
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text-soft);margin:4px 2px 0 0;text-align:right;
+  }
+
+  /* note & burn */
+  .stage-c{position:relative}
+  .note{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -16px rgba(0,0,0,.25);
+  }
+  .secret-val{
+    padding:20px 18px 14px;font-family:"Instrument Sans",sans-serif;font-size:17px;
+    color:var(--text);line-height:1.5;word-break:break-all;
+  }
+  .secret-val .keytxt{font-family:"Space Mono",monospace}
+  .meta{
+    padding:0 18px 16px;font-family:"Space Mono",monospace;font-size:10.5px;
+    letter-spacing:.06em;color:var(--text-muted);
+  }
+
+  /* burn overlay */
+  .burn{
+    position:absolute;left:0;right:0;bottom:0;height:100%;border-radius:16px;
+    overflow:hidden;pointer-events:none;
+    background:linear-gradient(to top,
+      var(--accent) 0%, rgba(242,89,30,.0) 62%);
+    opacity:0;transform:translateY(100%);
+  }
+  .burning .burn{animation:burnup 1.2s ease forwards}
+  @keyframes burnup{
+    0%{opacity:0;transform:translateY(100%)}
+    30%{opacity:.95}
+    100%{opacity:1;transform:translateY(-2%)}
+  }
+  .spark{position:absolute;bottom:6%;left:var(--sx,40%);width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0}
+  .burning .spark{animation:shoot 1.1s ease-out var(--sd,0s) forwards}
+  @keyframes shoot{
+    0%{opacity:0;transform:translate(0,0) scale(.6)}
+    15%{opacity:1}
+    100%{opacity:0;transform:translate(var(--tx,0px),-54px) scale(1.15)}
+  }
+
+  /* destroyed / ash state */
+  .stage-d{position:relative}
+  .stage-d .note{
+    background:var(--ash-bg);border-color:var(--line);box-shadow:0 1px 0 rgba(0,0,0,.02);
+  }
+  .stage-d .secret-val{color:var(--ash-ink)}
+  .stage-d .meta{color:var(--ash-ink);opacity:.7}
+  .destroyed{
+    position:absolute;top:-15px;right:16px;
+    font-family:"Space Mono",monospace;font-weight:700;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--accent);
+    transform:rotate(-4deg);z-index:2;
+  }
+  .destroyed .ring{
+    position:absolute;inset:-8px;border:2.5px solid var(--accent);border-radius:9px;
+  }
+  .destroyed .ring2{
+    position:absolute;inset:-14px;border:1px solid var(--accent);border-radius:12px;opacity:.55;
+  }
+  .destroyed span.txt{position:relative;z-index:1}
+
+  .gone{
+    font-family:"Fraunces",serif;font-weight:600;font-size:27px;letter-spacing:-.015em;
+    color:var(--text);margin-top:26px;
+  }
+  .gone-sub{margin-top:6px;font-size:13.5px;line-height:1.5;color:var(--text-soft)}
+  .acted{margin-top:20px}
+
+  .cta{
+    width:100%;background:var(--accent);color:var(--on-accent);border:0;border-radius:14px;
+    padding:16px;font-family:"Instrument Sans",sans-serif;font-size:16px;font-weight:600;
+    letter-spacing:-.01em;cursor:pointer;transition:background .12s ease,transform .05s ease;
+    box-shadow:0 10px 24px -14px var(--accent);
+  }
+  .cta:hover{background:var(--accent-hover)}
+  .cta:active{transform:translateY(1px)}
+
+  .spacer{flex:1}
+  .micro{margin-top:14px;text-align:center;font-size:11.5px;color:var(--text-muted)}
+
+  .foot{padding:16px 0 22px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:7px;font-family:"Space Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-soft);margin-top:auto}
+  .foot .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+
+  .hidden{display:none !important}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .replaychip:focus-visible{outline-offset:1px}
+
+  /* reduced motion: fast cross-fade, no burn */
+  @media (prefers-reduced-motion: reduce){
+    .progressbar .fill{transition:none}
+    .burning .burn{animation:none;opacity:0;transform:none}
+    .burning .spark{animation:none}
+    .stage-c, .stage-d{transition:opacity .18s ease}
+    .rm-cross{transition:opacity .18s ease}
+  }
+
+  @media (max-width:960px){
+    .pair{grid-template-columns:1fr}
+    .panel:first-child{order:-1}
+    body{padding:36px 16px 64px}
+    .phone{width:100%;max-width:392px;margin:0 auto}
+  }
+  @media (max-width:420px){
+    body{padding:28px 10px 48px}
+    .phone{width:100%;max-width:100%;border-width:8px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="stage-title">A · Ember — Reveal</p>
+  <p class="stage-note">The recipient opens it once; it burns · mobile-first · dark &amp; light · auto-plays then ⌘/Ctrl-click Replay</p>
+  <div class="pair">
+    <div class="panel">
+      <div class="phone-label">Dark</div>
+      <div class="phone" data-theme="dark">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <button class="replaychip" type="button" aria-label="Replay the reveal sequence"><span class="arc">⟳</span> Replay</button>
+          </header>
+
+          <main class="body">
+            <!-- stage 1: unsealing -->
+            <section class="stage-u" aria-live="polite">
+              <div class="progressbox">
+                <div class="progressbar"><span class="fill"></span></div>
+                <p class="prog">UNSEALING</p>
+              </div>
+            </section>
+
+            <!-- stage 2 + 3: content, then burn -->
+            <section class="stage-c hidden">
+              <p class="label">Secret</p>
+              <div class="note">
+                <span class="secret-val"><span class="keytxt">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</span></span>
+                <p class="meta">retrieved once · AES-256-GCM</p>
+                <div class="burn" aria-hidden="true">
+                  <span class="spark" style="--sx:24%;--tx:9px;--sd:.08s"></span>
+                  <span class="spark" style="--sx:42%;--tx:-7px;--sd:.22s"></span>
+                  <span class="spark" style="--sx:58%;--tx:11px;--sd:.38s"></span>
+                  <span class="spark" style="--sx:34%;--tx:-12px;--sd:.52s"></span>
+                  <span class="spark" style="--sx:70%;--tx:6px;--sd:.66s"></span>
+                  <span class="spark" style="--sx:16%;--tx:5px;--sd:.80s"></span>
+                  <span class="spark" style="--sx:86%;--tx:-8px;--sd:.94s"></span>
+                </div>
+              </div>
+            </section>
+
+            <!-- stage 4: destroyed -->
+            <section class="stage-d hidden">
+              <p class="label">Secret</p>
+              <div class="note">
+                <div class="destroyed" aria-hidden="true">
+                  <span class="ring"></span><span class="ring2"></span>
+                  <span class="txt">DESTROYED</span>
+                </div>
+                <span class="secret-val"><span class="keytxt">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</span></span>
+                <p class="meta">retrieved once · AES-256-GCM</p>
+              </div>
+              <h2 class="gone">It's gone now.</h2>
+              <p class="gone-sub">This link won't work again. Secrets are readable exactly once.</p>
+              <div class="acted">
+                <button class="cta" type="button">Create a new secret ›</button>
+              </div>
+            </section>
+          </main>
+
+          <footer class="foot">
+            <span class="dot"></span> AES-256-GCM
+            <span class="dot"></span> ZERO-KNOWLEDGE
+            <span class="dot"></span> ONE VIEW
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="phone-label">Light</div>
+      <div class="phone" data-theme="light">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="sig">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M1 7h1.6v3H1zM4.4 5h1.6v5H4.4zM7.8 3h1.6v7H7.8zM11.2 1h1.6v9h-1.6zM14.6 0h1.4v10h-1.4z"/></svg>
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor" aria-hidden="true"><path d="M8.5 6.4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-2.9c-3 0-5.7 1.4-7.3 3.6l1.5 1.4A7 7 0 0 1 8.5 5.6a7 7 0 0 1 5.8 2.9l1.5-1.4A9 9 0 0 0 8.5 3.5zm0-3C4.3.5 1.4 2 .2 4.4l1.6 1.4A7 7 0 0 1 8.5 3c2 0 3.9.8 6.7 2.8L16.8 4.4C15.6 2 12.7.5 8.5.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 24 11" fill="currentColor" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="9" height="7" rx="1.3" fill="currentColor"/><path d="M22.5 4v3a2 2 0 0 0 0-3z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="screen">
+          <header class="head">
+            <a class="brand" href="#" aria-label="ooshare home">
+              <svg class="mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span class="wordmark">ooshare</span>
+            </a>
+            <button class="replaychip" type="button" aria-label="Replay the reveal sequence"><span class="arc">⟳</span> Replay</button>
+          </header>
+
+          <main class="body">
+            <section class="stage-u" aria-live="polite">
+              <div class="progressbox">
+                <div class="progressbar"><span class="fill"></span></div>
+                <p class="prog">UNSEALING</p>
+              </div>
+            </section>
+
+            <section class="stage-c hidden">
+              <p class="label">Secret</p>
+              <div class="note">
+                <span class="secret-val"><span class="keytxt">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</span></span>
+                <p class="meta">retrieved once · AES-256-GCM</p>
+                <div class="burn" aria-hidden="true">
+                  <span class="spark" style="--sx:24%;--tx:9px;--sd:.08s"></span>
+                  <span class="spark" style="--sx:42%;--tx:-7px;--sd:.22s"></span>
+                  <span class="spark" style="--sx:58%;--tx:11px;--sd:.38s"></span>
+                  <span class="spark" style="--sx:34%;--tx:-12px;--sd:.52s"></span>
+                  <span class="spark" style="--sx:70%;--tx:6px;--sd:.66s"></span>
+                  <span class="spark" style="--sx:16%;--tx:5px;--sd:.80s"></span>
+                  <span class="spark" style="--sx:86%;--tx:-8px;--sd:.94s"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="stage-d hidden">
+              <p class="label">Secret</p>
+              <div class="note">
+                <div class="destroyed" aria-hidden="true">
+                  <span class="ring"></span><span class="ring2"></span>
+                  <span class="txt">DESTROYED</span>
+                </div>
+                <span class="secret-val"><span class="keytxt">sk_live_51N4kQ2Lq8WxT7eK9v2Jh4</span></span>
+                <p class="meta">retrieved once · AES-256-GCM</p>
+              </div>
+              <h2 class="gone">It's gone now.</h2>
+              <p class="gone-sub">This link won't work again. Secrets are readable exactly once.</p>
+              <div class="acted">
+                <button class="cta" type="button">Create a new secret ›</button>
+              </div>
+            </section>
+          </main>
+
+          <footer class="foot">
+            <span class="dot"></span> AES-256-GCM
+            <span class="dot"></span> ZERO-KNOWLEDGE
+            <span class="dot"></span> ONE VIEW
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Build sparks once (they repeat infinitely inside each burn, but we add/remove burn class so fine)
+  function runPhone(phone){
+    var stageU = phone.querySelector('.stage-u');
+    var stageC = phone.querySelector('.stage-c');
+    var stageD = phone.querySelector('.stage-d');
+    var fill = phone.querySelector('.progressbar .fill');
+    var note = phone.querySelector('.stage-c .note');
+
+    // reset
+    phone.classList.remove('burning');
+    stageC.classList.add('hidden');
+    stageD.classList.add('hidden');
+    stageU.classList.remove('hidden');
+    fill.style.width = '0%';
+
+    // stage 1: unseal / progress
+    requestAnimationFrame(function(){
+      setTimeout(function(){ fill.style.width = '100%'; }, 60);
+    });
+
+    // stage 2: content
+    setTimeout(function(){
+      stageU.classList.add('hidden');
+      stageC.classList.remove('hidden');
+      note.classList.add('rm-cross');
+      // give it a beat at full size
+    },
+      reduce ? 260 : 900 );
+
+    // stage 3: burn
+    var burnDelay = reduce ? 420 : 2100;
+    setTimeout(function(){
+      if(reduce){
+        // reduced motion: fade out content fast
+        note.style.transition = 'opacity .15s ease';
+        note.style.opacity = '0';
+      } else {
+        phone.classList.add('burning');
+      }
+    }, burnDelay);
+
+    // stage 4: destroyed
+    var destDelay = reduce ? 600 : 3350;
+    setTimeout(function(){
+      stageC.classList.add('hidden');
+      // clear inline overrides from reduced path so replay is clean
+      note.style.opacity = '';
+      note.style.transition = '';
+      phone.classList.remove('burning');
+      stageD.classList.remove('hidden');
+    }, destDelay);
+  }
+
+  function runAll(){
+    document.querySelectorAll('.phone').forEach(runPhone);
+  }
+
+  // auto-play once on load (small stagger so both are visible)
+  window.addEventListener('load', function(){
+    setTimeout(runAll, 300);
+  });
+
+  // replay chips (each replays its own phone)
+  document.querySelectorAll('.replaychip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      runPhone(chip.closest('.phone'));
+    });
+  });
+
+  // re-run if the user changes reduced-motion preference
+  window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', function(e){
+    reduce = e.matches;
+    runAll();
+  });
+</script>
+</body>
+</html>
