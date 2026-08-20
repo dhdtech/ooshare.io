@@ -6,7 +6,7 @@ async function injectContent(tabId: number): Promise<void> {
   try {
     await browser.scripting.executeScript({
       target: { tabId },
-      files: ["/content.js"],
+      files: ["/content-scripts/content.js"],
     });
   } catch {
     // Already injected (e.g. running on ooshare.io) — safe to ignore.
