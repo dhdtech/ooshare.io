@@ -35,8 +35,8 @@ jobs:
           npm run zip:chrome
           npm run zip:firefox
           mkdir -p dist-artifacts
-          cp .output/chrome-mv3/*.zip dist-artifacts/ooshare-chrome-${GITHUB_REF_NAME#ext-v}.zip
-          cp .output/firefox-mv3/*.zip dist-artifacts/ooshare-firefox-${GITHUB_REF_NAME#ext-v}.zip
+          cp .output/ooshare-*-chrome.zip dist-artifacts/ooshare-chrome-${GITHUB_REF_NAME#ext-v}.zip
+          cp .output/ooshare-*-firefox.zip dist-artifacts/ooshare-firefox-${GITHUB_REF_NAME#ext-v}.zip
           tar -czf dist-artifacts/source.tar.gz -C .output --exclude node_modules .
           (cd dist-artifacts && sha256sum * > SHA256SUMS)
       - uses: actions/upload-artifact@v4
