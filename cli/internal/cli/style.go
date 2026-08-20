@@ -5,6 +5,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -38,6 +39,24 @@ func noColorEnv() bool {
 		return true
 	}
 	return os.Getenv("TERM") == "dumb"
+}
+
+// isLightTerminal reports whether the terminal has a light background.
+//
+// COLORFGBG (set by terminals that don't answer the OSC-11 background query) is
+// checked first: it has the form "<fg>;<bg>" and a background index in 7-15 is
+// light. Otherwise we query the real terminal via termenv; in a test/non-TTY
+// context that falls back to dark, which keeps rendering deterministic.
+func isLightTerminal() bool {
+	if fgbg := os.Getenv("COLORFGBG"); fgbg != "" {
+		fields := strings.Split(fgbg, ";")
+		if len(fields) >= 2 {
+			if bg, err := strconv.Atoi(fields[1]); err == nil {
+				return bg >= 7
+			}
+		}
+	}
+	return !termenv.HasDarkBackground()
 }
 
 // attachmentInfo is the rendered attachment row data.
@@ -79,18 +98,28 @@ func renderCreateSuccess(d createSuccessData, noColor bool) string {
 		return b.String()
 	}
 
+	// Pick a concrete palette once based on the detected terminal background.
+	// (Keeping the TrueColor pin above means emission is 24-bit and deterministic;
+	// only which hex ends up on the wire changes.)
+	var greenHex, dimHex, linkHex, borderHex string
+	if isLightTerminal() {
+		greenHex, dimHex, linkHex, borderHex = "#1a7f37", "#57606a", "#0969da", "#d0d7de"
+	} else {
+		greenHex, dimHex, linkHex, borderHex = "#7ee787", "#8b949e", "#79c0ff", "#30363d"
+	}
+
 	green := colorRenderer.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.AdaptiveColor{Light: "#1a7f37", Dark: "#7ee787"})
+		Foreground(lipgloss.Color(greenHex))
 	dimmer := colorRenderer.NewStyle().
-		Foreground(lipgloss.AdaptiveColor{Light: "#57606a", Dark: "#8b949e"})
+		Foreground(lipgloss.Color(dimHex))
 	linkStyle := colorRenderer.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.AdaptiveColor{Light: "#0969da", Dark: "#79c0ff"})
+		Foreground(lipgloss.Color(linkHex))
 	border := colorRenderer.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		Padding(0, 2).
-		BorderForeground(lipgloss.AdaptiveColor{Light: "#d0d7de", Dark: "#30363d"})
+		BorderForeground(lipgloss.Color(borderHex))
 
 	var boxLines []string
 	boxLines = append(boxLines, green.Render("✓  Secret created — opens exactly once"))

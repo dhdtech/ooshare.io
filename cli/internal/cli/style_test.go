@@ -107,3 +107,60 @@ func TestIsTerminalPipe(t *testing.T) {
 func TestStdoutIsTTYExecutes(t *testing.T) {
 	_ = stdoutIsTTY() // exercises the default closure over os.Stdout
 }
+
+func TestIsLightTerminal(t *testing.T) {
+	t.Run("light fg 5 bg 7", func(t *testing.T) {
+		t.Setenv("COLORFGBG", "5;7")
+		if !isLightTerminal() {
+			t.Fatal("bg 7 should be light")
+		}
+	})
+	t.Run("light fg 5 bg 15", func(t *testing.T) {
+		t.Setenv("COLORFGBG", "5;15")
+		if !isLightTerminal() {
+			t.Fatal("bg 15 should be light")
+		}
+	})
+	t.Run("dark fg 5 bg 0", func(t *testing.T) {
+		t.Setenv("COLORFGBG", "5;0")
+		if isLightTerminal() {
+			t.Fatal("bg 0 should be dark")
+		}
+	})
+	t.Run("dark fg 5 bg 6", func(t *testing.T) {
+		t.Setenv("COLORFGBG", "5;6")
+		if isLightTerminal() {
+			t.Fatal("bg 6 should be dark")
+		}
+	})
+	t.Run("unset defaults dark", func(t *testing.T) {
+		// Reduce to a truly unset COLORFGBG so the fallback termenv query runs,
+		// which is deterministic (dark) in a test/non-TTY environment.
+		t.Setenv("COLORFGBG", "")
+		os.Unsetenv("COLORFGBG")
+		if isLightTerminal() {
+			t.Fatal("unset COLORFGBG in a test (non-TTY) should default to dark")
+		}
+	})
+}
+
+func TestRenderCreateSuccessUsesLightColorsWhenLight(t *testing.T) {
+	t.Setenv("COLORFGBG", "5;7")
+	got := renderCreateSuccess(createSuccessData{TTLHours: 1, URL: "U"}, false)
+	// #1a7f37 = rgb(26,127,55) → TrueColor ANSI "38;2;26;127;55"
+	if !strings.Contains(got, "38;2;26;127;55") {
+		t.Fatalf("light terminal should get the light green #1a7f37, got:\n%q", got)
+	}
+	if strings.Contains(got, "38;2;126;231;135") { // dark green #7ee787
+		t.Fatalf("light terminal should NOT get the dark green, got:\n%q", got)
+	}
+}
+
+func TestRenderCreateSuccessUsesDarkColorsWhenDark(t *testing.T) {
+	t.Setenv("COLORFGBG", "5;0")
+	got := renderCreateSuccess(createSuccessData{TTLHours: 1, URL: "U"}, false)
+	// #7ee787 = rgb(126,231,135) → "38;2;126;231;135"
+	if !strings.Contains(got, "38;2;126;231;135") {
+		t.Fatalf("dark terminal should get the dark green #7ee787, got:\n%q", got)
+	}
+}
