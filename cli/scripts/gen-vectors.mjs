@@ -1,6 +1,6 @@
 // Regenerates the golden vectors in internal/crypto/vectors_test.go.
 // Requires Node >= 18 (Web Crypto API). Run: node scripts/gen-vectors.mjs
-const { webcrypto } = require("node:crypto");
+import { webcrypto } from "node:crypto";
 const { subtle } = webcrypto;
 const enc = new TextEncoder();
 

@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/dhdtech/only-once-share/cli/internal/api"
 	"github.com/dhdtech/only-once-share/cli/internal/crypto"
@@ -63,7 +64,9 @@ func Create(out, errw io.Writer, args []string) int {
 
 	apiURLStr := envDefault(*apiURL, "OOSHARE_API_URL", defaultAPIURL)
 	originStr := envDefault(*origin, "OOSHARE_ORIGIN", defaultOrigin)
-	warnInsecure(errw, apiURLStr)
+	if !*quiet {
+		warnInsecure(errw, apiURLStr)
+	}
 
 	if *ttl < 1 || *ttl > 72 {
 		fmt.Fprintf(errw, "ooshare create: --ttl must be between 1 and 72, got %d\n", *ttl)
@@ -79,7 +82,7 @@ func Create(out, errw io.Writer, args []string) int {
 		fmt.Fprintln(errw, err)
 		return 2
 	}
-	if len(secretText) > maxTextChars {
+	if utf8.RuneCountInString(secretText) > maxTextChars {
 		fmt.Fprintf(errw, "ooshare create: text exceeds %d characters\n", maxTextChars)
 		return 2
 	}
@@ -170,7 +173,7 @@ func readText(flagText, filePath string) (string, error) {
 		}
 		return "", errors.New("ooshare create: no secret text or --file provided")
 	}
-	b, err := io.ReadAll(stdin)
+	b, err := io.ReadAll(io.LimitReader(stdin, 4*maxTextChars))
 	if err != nil {
 		return "", fmt.Errorf("ooshare create: reading stdin: %w", err)
 	}

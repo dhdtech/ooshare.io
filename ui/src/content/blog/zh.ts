@@ -901,7 +901,7 @@ docker compose up -d</code></pre>
 <h2>Only Once Share如何处理密码保护的照片分享</h2>
 <p><a href="/">Only Once Share</a>提供军事级加密的密码保护照片分享：</p>
 <ol>
-<li><strong>上传你的照片</strong>——拖放或点击选择图片（JPEG、PNG、GIF、WebP，最大10 MB）。你也可以在照片旁边附上文字消息或PDF。</li>
+<li><strong>上传你的照片</strong>——拖放或点击选择图片（JPEG、PNG、GIF、WebP，最大25 MB）。你也可以在照片旁边附上文字消息或PDF。</li>
 <li><strong>自动加密</strong>——你的照片在浏览器中使用AES-256-GCM加密，密钥通过HKDF-SHA-256派生。服务器只接收加密字节。</li>
 <li><strong>获取一次性链接</strong>——加密密钥嵌入URL片段中（<code>#</code>符号之后），永远不会发送到任何服务器。</li>
 <li><strong>分享链接</strong>——通过任何渠道发送链接（WhatsApp、电子邮件、短信）。即使该渠道被入侵，没有完整URL也无法读取加密的照片。</li>
@@ -1070,7 +1070,7 @@ docker compose up -d</code></pre>
 <h2>Only Once Share如何处理安全PDF分享</h2>
 <p><a href="/">Only Once Share</a>正是为这些场景而构建的。以下是它的工作原理：</p>
 <ol>
-<li><strong>上传你的PDF</strong>——选择一个最大10 MB的PDF文件。你还可以附带文本消息或图片。</li>
+<li><strong>上传你的PDF</strong>——选择一个最大25 MB的PDF文件。你还可以附带文本消息或图片。</li>
 <li><strong>浏览器端加密</strong>——PDF在你的浏览器中使用AES-256-GCM加密，密钥通过HKDF-SHA-256派生。服务器只会接收到加密字节——它无法读取你的文档。</li>
 <li><strong>获取一次性链接</strong>——加密密钥嵌入在URL片段（#号之后）中，永远不会被发送到任何服务器。</li>
 <li><strong>分享链接</strong>——通过任何渠道发送。即使渠道被入侵，没有完整URL就无法解密加密的PDF。</li>
@@ -1139,7 +1139,7 @@ docker compose up -d</code></pre>
 <h2>Only Once Share如何处理安全压缩包分享</h2>
 <p><a href="/">Only Once Share</a>通过加密自毁链接解决了这些问题：</p>
 <ol>
-<li><strong>上传你的ZIP文件</strong>——选择一个ZIP、RAR、7Z或TAR.GZ压缩包，最大支持10 MB。你还可以附带文本消息。</li>
+<li><strong>上传你的ZIP文件</strong>——选择一个ZIP、RAR、7Z或TAR.GZ压缩包，最大支持25 MB。你还可以附带文本消息。</li>
 <li><strong>浏览器端加密</strong>——压缩包在你的浏览器中使用AES-256-GCM加密，密钥通过HKDF-SHA-256派生。服务器只会接收到加密字节——它无法读取或解压你的文件。</li>
 <li><strong>获取一次性链接</strong>——加密密钥嵌入在URL片段（#号之后）中，永远不会被发送到任何服务器。</li>
 <li><strong>分享链接</strong>——通过任何渠道发送。即使渠道被入侵，没有完整URL就无法解密加密的压缩包。</li>

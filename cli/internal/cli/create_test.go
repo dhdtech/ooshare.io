@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"unicode/utf8"
 )
 
 func createServer(t *testing.T, ttlWant float64) string {
@@ -246,6 +247,52 @@ func TestCreateTextTooLongExits2(t *testing.T) {
 	long := strings.Repeat("x", maxTextChars+1)
 	var out, errw bytes.Buffer
 	if code := Create(&out, &errw, []string{"--text", long}); code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+	if !strings.Contains(errw.String(), "exceeds") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateStdinTextTooLongExits2(t *testing.T) {
+	// 4 bytes/char cap at 200,000 bytes for the stdin body, then the rune-count
+	// check kicks in: 50,001 ASCII chars must be rejected before hitting the API.
+	old := stdin
+	defer func() { stdin = old }()
+	stdin = strings.NewReader(strings.Repeat("x", maxTextChars+1))
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--json"})
+	if code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+	if !strings.Contains(errw.String(), "exceeds") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateCJKWrapWithinRuneLimit(t *testing.T) {
+	// CJK characters are 3 bytes each: a 50,000-rune string is 150,000 bytes,
+	// far over the byte-based limit but exactly at the rune limit. It must pass
+	// (the check counts characters, matching the web's textarea).
+	api := createServer(t, 24)
+	var out, errw bytes.Buffer
+	cjk := strings.Repeat("界", maxTextChars)
+	code := Create(&out, &errw, []string{"--api-url", api, "--json", "--text", cjk})
+	if code != 0 {
+		t.Fatalf("exit = %d, want 0 (rune count = %d, bytes = %d), stderr = %q",
+			code, utf8.RuneCountInString(cjk), len(cjk), errw.String())
+	}
+}
+
+func TestCreateCJKOverRuneLimitExits2(t *testing.T) {
+	old := stdin
+	defer func() { stdin = old }()
+	// 50,001 runes via stdin (160,008 bytes) — under the 200,000-byte stdin cap
+	// but over the 50,000 rune limit, so it must be rejected by rune count.
+	stdin = strings.NewReader(strings.Repeat("界", maxTextChars+1))
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--json"})
+	if code != 2 {
 		t.Fatalf("exit = %d, want 2", code)
 	}
 	if !strings.Contains(errw.String(), "exceeds") {

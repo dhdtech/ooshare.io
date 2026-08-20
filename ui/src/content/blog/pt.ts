@@ -852,7 +852,7 @@ docker compose up -d</code></pre>
 <h2>Como o Only Once Share Trata o Compartilhamento de Fotos com Proteção por Senha</h2>
 <p><a href="/">Only Once Share</a> oferece compartilhamento de fotos com proteção por senha com criptografia de nível militar:</p>
 <ol>
-<li><strong>Adicione sua foto</strong> — Arraste e solte ou clique para selecionar uma imagem (JPEG, PNG, GIF, WebP de até 10 MB). Você também pode incluir uma mensagem de texto ou um PDF junto com a foto.</li>
+<li><strong>Adicione sua foto</strong> — Arraste e solte ou clique para selecionar uma imagem (JPEG, PNG, GIF, WebP de até 25 MB). Você também pode incluir uma mensagem de texto ou um PDF junto com a foto.</li>
 <li><strong>Criptografia automática</strong> — Sua foto é criptografada no seu navegador usando AES-256-GCM com uma chave derivada via HKDF-SHA-256. O servidor recebe apenas bytes criptografados.</li>
 <li><strong>Obtenha um link de uso único</strong> — A chave de criptografia é incorporada no fragmento da URL (após o #) e nunca enviada a nenhum servidor.</li>
 <li><strong>Compartilhe o link</strong> — Envie o link por qualquer canal (WhatsApp, e-mail, SMS). Mesmo que o canal seja comprometido, a foto criptografada não pode ser lida sem a URL completa.</li>
@@ -946,7 +946,7 @@ docker compose up -d</code></pre>
 <h2>Como o Only Once Share lida com o compartilhamento seguro de PDFs</h2>
 <p><a href="/">Only Once Share</a> foi criado exatamente para esses cenários. Veja como funciona:</p>
 <ol>
-<li><strong>Faça upload do seu PDF</strong> — Selecione um arquivo PDF de até 10 MB. Você também pode incluir uma mensagem de texto ou imagem junto com ele.</li>
+<li><strong>Faça upload do seu PDF</strong> — Selecione um arquivo PDF de até 25 MB. Você também pode incluir uma mensagem de texto ou imagem junto com ele.</li>
 <li><strong>Criptografia no navegador</strong> — O PDF é criptografado no seu navegador usando AES-256-GCM com uma chave derivada via HKDF-SHA-256. O servidor só recebe bytes criptografados — ele não consegue ler seu documento.</li>
 <li><strong>Obtenha um link de uso único</strong> — A chave de criptografia é incorporada no fragmento da URL (após o #), que nunca é enviado a nenhum servidor.</li>
 <li><strong>Compartilhe o link</strong> — Envie por qualquer canal. Mesmo que o canal seja comprometido, o PDF criptografado não pode ser descriptografado sem a URL completa.</li>
@@ -1014,7 +1014,7 @@ docker compose up -d</code></pre>
 <h2>Como o Only Once Share Lida com o Compartilhamento Seguro de Arquivos</h2>
 <p><a href="/">Only Once Share</a> resolve esses problemas com links criptografados e autodestrutivos:</p>
 <ol>
-<li><strong>Faça upload do seu arquivo ZIP</strong> — Selecione um arquivo ZIP, RAR, 7Z ou TAR.GZ de até 10 MB. Você também pode incluir uma mensagem de texto junto.</li>
+<li><strong>Faça upload do seu arquivo ZIP</strong> — Selecione um arquivo ZIP, RAR, 7Z ou TAR.GZ de até 25 MB. Você também pode incluir uma mensagem de texto junto.</li>
 <li><strong>Criptografia no navegador</strong> — O arquivo é criptografado no seu navegador usando AES-256-GCM com uma chave derivada via HKDF-SHA-256. O servidor só recebe bytes criptografados — ele não consegue ler ou extrair seus arquivos.</li>
 <li><strong>Obtenha um link de uso único</strong> — A chave de criptografia é incorporada no fragmento da URL (após o #), que nunca é enviado a nenhum servidor.</li>
 <li><strong>Compartilhe o link</strong> — Envie por qualquer canal. Mesmo que o canal seja comprometido, o arquivo criptografado não pode ser descriptografado sem a URL completa.</li>

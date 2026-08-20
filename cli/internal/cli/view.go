@@ -61,7 +61,9 @@ func View(out, errw io.Writer, args []string) int {
 	defer crypto.Zeroize(u.Key)
 
 	apiURLStr := envDefault(*apiURL, "OOSHARE_API_URL", defaultAPIURL)
-	warnInsecure(errw, apiURLStr)
+	if !*quiet {
+		warnInsecure(errw, apiURLStr)
+	}
 	client := &api.Client{BaseURL: apiURLStr, HTTP: &http.Client{Timeout: 30 * time.Second}}
 
 	ciphertext, actualID, err := client.GetSecret(context.Background(), u.ID)
@@ -80,6 +82,11 @@ func View(out, errw io.Writer, args []string) int {
 	if err != nil {
 		fmt.Fprintf(errw, "ooshare view: %v\n", err)
 		return 1
+	}
+
+	if *asJSON && decoded.Image != nil && *output == "-" {
+		fmt.Fprintln(errw, "ooshare view: --json cannot be combined with --output - when a file attachment is present (JSON and raw bytes cannot both go to stdout)")
+		return 2
 	}
 
 	if decoded.Image != nil && *output == "-" {

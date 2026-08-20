@@ -1860,7 +1860,7 @@ docker compose up -d</code></pre>
 <p><a href="/">Only Once Share</a> provides password protected photo sharing with military-grade encryption:</p>
 
 <ol>
-<li><strong>Drop your photo</strong> — Drag and drop or click to select an image (JPEG, PNG, GIF, WebP up to 10 MB). You can also include a text message, a PDF, or a ZIP archive alongside the photo.</li>
+<li><strong>Drop your photo</strong> — Drag and drop or click to select an image (JPEG, PNG, GIF, WebP up to 25 MB). You can also include a text message, a PDF, or a ZIP archive alongside the photo.</li>
 <li><strong>Automatic encryption</strong> — Your photo is encrypted in your browser using AES-256-GCM with a key derived via HKDF-SHA-256. The server receives only encrypted bytes.</li>
 <li><strong>Get a one-time link</strong> — The encryption key is embedded in the URL fragment (after the #) and never sent to any server.</li>
 <li><strong>Share the link</strong> — Send the link via any channel (WhatsApp, email, SMS). Even if the channel is compromised, the encrypted photo cannot be read without the full URL.</li>
@@ -1964,7 +1964,7 @@ docker compose up -d</code></pre>
 <h2>How Only Once Share Handles Secure PDF Sharing</h2>
 <p><a href="/">Only Once Share</a> was built for exactly these scenarios. Here is how it works:</p>
 <ol>
-<li><strong>Upload your PDF</strong> — Select a PDF file up to 10 MB. You can also include a text message, image, or ZIP archive alongside it.</li>
+<li><strong>Upload your PDF</strong> — Select a PDF file up to 25 MB. You can also include a text message, image, or ZIP archive alongside it.</li>
 <li><strong>Browser-side encryption</strong> — The PDF is encrypted in your browser using AES-256-GCM with a key derived via HKDF-SHA-256. The server only ever sees encrypted bytes — it cannot read your document.</li>
 <li><strong>Get a one-time link</strong> — The encryption key is embedded in the URL fragment (after the #), which is never sent to any server.</li>
 <li><strong>Share the link</strong> — Send it via any channel. Even if the channel is compromised, the encrypted PDF cannot be decrypted without the full URL.</li>
@@ -2041,7 +2041,7 @@ docker compose up -d</code></pre>
 <h2>How Only Once Share Handles Secure Archive Sharing</h2>
 <p><a href="/">Only Once Share</a> solves these problems with encrypted, self-destructing links:</p>
 <ol>
-<li><strong>Upload your ZIP file</strong> — Select a ZIP, RAR, 7Z, or TAR.GZ archive up to 10 MB. You can also include a text message alongside it.</li>
+<li><strong>Upload your ZIP file</strong> — Select a ZIP, RAR, 7Z, or TAR.GZ archive up to 25 MB. You can also include a text message alongside it.</li>
 <li><strong>Browser-side encryption</strong> — The archive is encrypted in your browser using AES-256-GCM with a key derived via HKDF-SHA-256. The server only ever sees encrypted bytes — it cannot read or extract your files.</li>
 <li><strong>Get a one-time link</strong> — The encryption key is embedded in the URL fragment (after the #), which is never sent to any server.</li>
 <li><strong>Share the link</strong> — Send it via any channel. Even if the channel is compromised, the encrypted archive cannot be decrypted without the full URL.</li>

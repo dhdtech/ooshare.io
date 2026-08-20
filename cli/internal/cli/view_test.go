@@ -233,6 +233,37 @@ func TestViewOutputExistingDir(t *testing.T) {
 	}
 }
 
+func TestViewJSONStdoutAttachmentExits2(t *testing.T) {
+	// Secret WITH an attachment, but --json --output - : JSON and raw bytes
+	// cannot both go to stdout, so the command must refuse (not drop bytes).
+	key := bytes.Repeat([]byte{0x5a}, 32)
+	id := "10000000-1000-4000-8000-100000000000"
+	payload, err := crypto.EncodePayload("cap", &crypto.ImageAttachment{MIME: "image/png", Data: []byte{0x89, 0x50}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	ct, err := crypto.Encrypt(payload, key, id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	u := "https://ooshare.io/s/" + id + "?lng=en#" + crypto.Base64urlEncode(key)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, `{"ciphertext":%q,"id":%q}`, ct, id)
+	}))
+	defer srv.Close()
+	var out, errw bytes.Buffer
+	code := View(&out, &errw, []string{"--api-url", srv.URL, "--json", "--output", "-", u})
+	if code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+	if !strings.Contains(errw.String(), "cannot be combined") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+	if out.Len() != 0 {
+		t.Fatalf("stdout should be empty on refusal, got %q", out.String())
+	}
+}
+
 func TestViewJSONWithAttachment(t *testing.T) {
 	key := bytes.Repeat([]byte{0x5a}, 32)
 	id := "10000000-1000-4000-8000-100000000000"
