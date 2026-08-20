@@ -19,3 +19,19 @@ Object.defineProperty(navigator, "clipboard", {
   writable: true,
   configurable: true,
 });
+
+// jsdom's `window.postMessage` delivers `source: null` and `origin: ""` even
+// for a self-targeted same-origin message. The overlay (a web_accessible_iframe
+// hosted as a top-level page here) must reject any message whose `source` is not
+// `window.parent` and whose `origin` is not `location.origin`. Emulate the real
+// browser contract so the component's security gate is exercised faithfully.
+const originalPostMessage = window.postMessage.bind(window);
+window.postMessage = (message, targetOrigin) => {
+  const ev = new MessageEvent("message", {
+    source: window,
+    origin: location.origin,
+    data: message,
+  });
+  window.dispatchEvent(ev);
+  return undefined as unknown as ReturnType<typeof originalPostMessage>;
+};

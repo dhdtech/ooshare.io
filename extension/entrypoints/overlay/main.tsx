@@ -1,6 +1,11 @@
 import { createRoot } from "react-dom/client";
-import Overlay from "./Overlay";
+import { ToastProvider } from "@ui/components/ui/Toast";
+import RevealView from "./RevealView";
 import "../../src/styles/extension.css";
 
 const root = document.getElementById("root")!;
-createRoot(root).render(<Overlay />);
+createRoot(root).render(
+  <ToastProvider>
+    <RevealView />
+  </ToastProvider>,
+);
