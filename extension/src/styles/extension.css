@@ -1,0 +1,18 @@
+/* Exact UI look & feel (INEGOTIABLE) */
+@import "@ui/styles/tokens.css";
+@import "@ui/styles/components.css";
+@import "@ui/styles/pages.css";
+@import "@ui/styles/ui.css";
+
+/* Extension surfaces are smaller than the site: keep the look, shrink layout */
+body.ext-surface {
+  width: 360px;
+  min-height: 0;
+  background: var(--bg);
+}
+
+.ext-surface .create-wrap,
+.ext-surface .view-container {
+  max-width: none;
+  padding: 16px;
+}
