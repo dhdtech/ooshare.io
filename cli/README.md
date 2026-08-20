@@ -7,7 +7,7 @@ Create and view one-time secrets from the terminal, exactly like the web
 
 | Method | Command | Verify |
 |---|---|---|
-| Homebrew | `brew tap dhdtech/ooshare && brew install ooshare` | `ooshare version` |
+| Homebrew | `brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare` | `ooshare version` |
 | Scoop | `scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare` | `ooshare version` |
 | winget | `winget install dhdtech.ooshare` | `ooshare version` |
 | apt (Debian/Ubuntu) | `sudo install -Dm644 <(curl -Ls https://dhdtech.github.io/packages-ooshare/apt/ooshare.gpg) /usr/share/keyrings/ooshare.gpg` then add `deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main` | `apt update && apt install ooshare` |
