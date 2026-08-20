@@ -36,11 +36,6 @@ func Run(args []string, out, errw io.Writer) int {
 	}
 }
 
-// View reveals a secret from its URL. Implemented in a later task.
-func View(out, errw io.Writer, args []string) int {
-	return runNotImplemented(out, errw, "view")
-}
-
 func runNotImplemented(out, errw io.Writer, cmd string) int {
 	fmt.Fprintf(errw, "ooshare: %q not implemented yet\n", cmd)
 	return 1
