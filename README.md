@@ -127,7 +127,7 @@ Text + Image (type 0x01):
 - **Type `0x00`**: Text-only secret. Everything after the type byte is UTF-8 text.
 - **Type `0x01`**: Text + image. Text length is encoded as a 4-byte big-endian uint32 (text can be empty). Image bytes follow the MIME type string.
 - **Legacy**: Secrets created before the image feature have no type byte — decoded as raw UTF-8 text. Fully backwards compatible.
-- **Accepted file types**: JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ (max 10 MB). SVG is excluded to prevent XSS.
+- **Accepted file types**: JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ (max 25 MB). SVG is excluded to prevent XSS.
 - The outer ciphertext format is unchanged — the server cannot distinguish text from images, PDFs, or archives.
 
 ### URL Structure
@@ -164,7 +164,7 @@ https://example.com/s/Kx7mP2nQ?lng=en#iZcjqbPIBnrWwHHkv_KDWeDcUr9hi3A0oMaVbgCVLr
 | **Key derivation** | HKDF-SHA-256 derives a unique key per secret from master key + secret ID |
 | **Authenticated data** | Secret ID bound as AES-GCM AAD — ciphertext cannot be swapped between secrets |
 | **Key delivery** | URL fragment — never reaches the server |
-| **File sharing** | JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ up to 10 MB — encrypted identically to text |
+| **File sharing** | JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ up to 25 MB — encrypted identically to text |
 | **Zero knowledge** | Server stores only ciphertext, cannot distinguish text from images, PDFs, or archives |
 | **One-time view** | Secret is atomically deleted on first retrieval (`GETDEL`) |
 | **Auto-expiry** | Redis TTL (1–72h) ensures secrets expire even if never viewed |

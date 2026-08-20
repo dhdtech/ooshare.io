@@ -31,10 +31,10 @@
     "emailBody": "Estoy compartiendo un secreto contigo. Abre este enlace para verlo — solo se puede abrir una vez:\n\n{{link}}",
     "dropzone.label": "Arrastra y suelta un archivo aquí",
     "dropzone.hint": "o haz clic para explorar",
-    "dropzone.sizeLimit": "Máx. 10 MB · Imágenes (JPEG, PNG, GIF, WebP), PDF o archivos (ZIP, RAR, 7Z)",
+    "dropzone.sizeLimit": "Máx. 25 MB · Imágenes (JPEG, PNG, GIF, WebP), PDF o archivos (ZIP, RAR, 7Z)",
     "dropzone.dragActive": "Suelta tu archivo aquí",
     "file.invalidType": "Solo se permiten imágenes (JPEG, PNG, GIF, WebP), PDFs y archivos comprimidos (ZIP, RAR, 7Z, TAR.GZ)",
-    "file.tooLarge": "El archivo debe ser menor a 10 MB",
+    "file.tooLarge": "El archivo debe ser menor a 25 MB",
     "file.remove": "Eliminar archivo",
     "file.preview": "Vista previa del archivo"
   },
@@ -90,7 +90,7 @@
       "title": "Acerca de Only Once Share",
       "lead": "Creamos Only Once Share porque compartir contraseñas e información sensible no debería requerir confiar en un tercero con tus datos — ni pagar por el privilegio.",
       "viewOnGithub": "Ver en GitHub",
-      "feature2Desc": "Sin límites artificiales. Sin «8 secretos al mes». Comparte texto de hasta 50.000 caracteres y archivos (imágenes, PDFs o archivos comprimidos) de hasta 10 MB, completamente gratis y sin necesidad de cuenta."
+      "feature2Desc": "Sin límites artificiales. Sin «8 secretos al mes». Comparte texto de hasta 50.000 caracteres y archivos (imágenes, PDFs o archivos comprimidos) de hasta 25 MB, completamente gratis y sin necesidad de cuenta."
     },
     "why": {
       "metaTitle": "¿Por qué Only Once Share? — Comparación de herramientas seguras para secretos, imágenes, PDFs y archivos comprimidos",
@@ -102,7 +102,7 @@
       "benefit2Title": "Texto, imágenes, PDFs y archivos comprimidos",
       "benefit2Desc": "Comparte contraseñas, claves API, capturas de pantalla, documentos, PDFs sensibles y archivos comprimidos en un solo enlace cifrado. Ninguna otra herramienta ofrece compartir archivos cifrados.",
       "benefit3Title": "Gratis e ilimitado",
-      "benefit3Desc": "Sin límites artificiales, sin planes de pago, sin necesidad de cuenta. Comparte hasta 50,000 caracteres de texto e imágenes de 10 MB — todos los secretos que necesites.",
+      "benefit3Desc": "Sin límites artificiales, sin planes de pago, sin necesidad de cuenta. Comparte hasta 50,000 caracteres de texto e imágenes de 25 MB — todos los secretos que necesites.",
       "benefit4Title": "Código abierto y auto-alojable",
       "benefit4Desc": "Todo el código es público en GitHub bajo licencia MIT. Audita el cifrado tú mismo o despliega en tu propia infraestructura con Docker.",
       "tableTitle": "Comparación",
@@ -119,7 +119,7 @@
       "detail1Title": "Cifrado en el cliente vs en el servidor",
       "detail1Desc": "La mayoría de herramientas — incluyendo OneTimeSecret y Privnote — cifran tus datos en el servidor. Esto significa que tu texto plano es brevemente visible para el servidor antes del cifrado. Only Once Share cifra todo en tu navegador usando AES-256-GCM a través de la Web Crypto API. El servidor solo maneja datos cifrados que no puede leer.",
       "detail2Title": "Archivos cifrados — Una primicia",
-      "detail2Desc": "Ninguna otra herramienta de compartir secretos soporta imágenes, PDFs y archivos comprimidos cifrados. Con Only Once Share, puedes compartir capturas de pantalla, fotos de documentos, contratos firmados, diagramas sensibles, archivos comprimidos y cualquier archivo de hasta 10 MB. Los archivos y el texto se empaquetan en un solo payload cifrado — el servidor ni siquiera puede saber qué tipo de contenido contiene un secreto.",
+      "detail2Desc": "Ninguna otra herramienta de compartir secretos soporta imágenes, PDFs y archivos comprimidos cifrados. Con Only Once Share, puedes compartir capturas de pantalla, fotos de documentos, contratos firmados, diagramas sensibles, archivos comprimidos y cualquier archivo de hasta 25 MB. Los archivos y el texto se empaquetan en un solo payload cifrado — el servidor ni siquiera puede saber qué tipo de contenido contiene un secreto.",
       "detail3Title": "Sin muros de pago, sin límites, sin dependencia",
       "detail3Desc": "Muchos competidores restringen a los usuarios gratuitos con un puñado de secretos al mes, tiempos de expiración limitados o tamaños de payload reducidos. Only Once Share es completamente gratis sin límites artificiales. Y como es código abierto bajo la licencia MIT, puedes auto-alojarlo en tu propia infraestructura — tus datos, tus reglas.",
       "ctaText": "¿Listo para compartir secretos de forma segura?",
@@ -133,7 +133,7 @@
       "moreQuestions": "¿Tienes más preguntas?",
       "askGithub": "Pregunta en GitHub",
       "a1": "Cuando creas un secreto — ya sea texto, una imagen, un PDF, un archivo comprimido o una combinación — tu navegador genera una clave de cifrado AES-256-GCM aleatoria usando la Web Crypto API. Todo se cifra íntegramente en tu navegador — el texto plano nunca sale de tu dispositivo. Los datos cifrados se envían a nuestro servidor y se almacenan temporalmente en Redis. La clave de cifrado se coloca en el fragmento de la URL (después del símbolo #), que los navegadores nunca envían a los servidores. Cuando el destinatario abre el enlace, los datos cifrados se recuperan y se eliminan permanentemente en una única operación atómica. Su navegador descifra entonces el secreto usando la clave del fragmento de URL.",
-      "a7": "Sí, completamente gratis y sin límites. A diferencia de algunos competidores que restringen a los usuarios gratuitos a un puñado de secretos al mes o imponen límites de tamaño, Only Once Share no tiene restricciones artificiales. Puedes compartir texto de hasta 50.000 caracteres y adjuntar imágenes, PDFs o archivos comprimidos de hasta 10 MB (JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ), sin necesidad de cuenta. La herramienta también es de código abierto bajo la licencia MIT.",
+      "a7": "Sí, completamente gratis y sin límites. A diferencia de algunos competidores que restringen a los usuarios gratuitos a un puñado de secretos al mes o imponen límites de tamaño, Only Once Share no tiene restricciones artificiales. Puedes compartir texto de hasta 50.000 caracteres y adjuntar imágenes, PDFs o archivos comprimidos de hasta 25 MB (JPEG, PNG, GIF, WebP, PDF, ZIP, RAR, 7Z, TAR.GZ), sin necesidad de cuenta. La herramienta también es de código abierto bajo la licencia MIT.",
       "a8": "No. Only Once Share no requiere registro, ni correo electrónico, ni cuenta. Solo escribe tu texto, adjunta una imagen, PDF o archivo comprimido opcionalmente, elige un tiempo de expiración y comparte el enlace generado. Este enfoque sin fricciones significa que no hay datos personales que proteger ni credenciales que puedan verse comprometidas."
     },
     "blog": {

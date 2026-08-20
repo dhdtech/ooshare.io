@@ -7,7 +7,7 @@ import FileDropzone, { formatFileSize, isPdf, isArchive, MAX_FILE_SIZE, ACCEPTED
 const labels = {
   label: "Drag & drop a file here",
   hint: "or click to browse",
-  limit: "Max 10 MB",
+  limit: "Max 25 MB",
   activeLabel: "Drop your file here",
   invalidType: "Invalid type",
   tooLarge: "File too large",
@@ -31,7 +31,7 @@ describe("FileDropzone", () => {
     renderWithProviders(<FileDropzone labels={labels} onChange={() => {}} />);
     expect(screen.getByText("Drag & drop a file here")).toBeInTheDocument();
     expect(screen.getByText("or click to browse")).toBeInTheDocument();
-    expect(screen.getByText("Max 10 MB")).toBeInTheDocument();
+    expect(screen.getByText("Max 25 MB")).toBeInTheDocument();
   });
 
   it("shows active label on drag enter and resets on drag leave", () => {
@@ -142,7 +142,7 @@ describe("FileDropzone helpers", () => {
   });
 
   it("exports a max file size and accepted type list", () => {
-    expect(MAX_FILE_SIZE).toBe(10 * 1024 * 1024);
+    expect(MAX_FILE_SIZE).toBe(25 * 1024 * 1024);
     expect(ACCEPTED_TYPES).toContain("image/png");
     expect(ACCEPTED_TYPES).toContain("application/pdf");
   });

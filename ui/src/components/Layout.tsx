@@ -32,9 +32,9 @@ const GLOBAL_SCHEMA = JSON.stringify([
     featureList: [
       "End-to-end AES-256-GCM encryption",
       "Zero-knowledge architecture",
-      "Password protected photo sharing (JPEG, PNG, GIF, WebP up to 10 MB)",
-      "Encrypted PDF and document sharing (up to 10 MB)",
-      "Encrypted archive sharing (ZIP, RAR, 7Z, TAR.GZ up to 10 MB)",
+      "Password protected photo sharing (JPEG, PNG, GIF, WebP up to 25 MB)",
+      "Encrypted PDF and document sharing (up to 25 MB)",
+      "Encrypted archive sharing (ZIP, RAR, 7Z, TAR.GZ up to 25 MB)",
       "Single-use self-destructing links",
       "Text, image, PDF, and archive secrets in one link",
       "No account required",

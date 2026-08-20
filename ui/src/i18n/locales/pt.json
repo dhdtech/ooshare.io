@@ -31,10 +31,10 @@
     "emailBody": "Estou compartilhando um segredo com você. Abra este link para vê-lo — só pode ser aberto uma vez:\n\n{{link}}",
     "dropzone.label": "Arraste e solte um arquivo aqui",
     "dropzone.hint": "ou clique para procurar",
-    "dropzone.sizeLimit": "Máx. 10 MB · Imagens (JPEG, PNG, GIF, WebP), PDF ou arquivos (ZIP, RAR, 7Z)",
+    "dropzone.sizeLimit": "Máx. 25 MB · Imagens (JPEG, PNG, GIF, WebP), PDF ou arquivos (ZIP, RAR, 7Z)",
     "dropzone.dragActive": "Solte seu arquivo aqui",
     "file.invalidType": "Apenas imagens (JPEG, PNG, GIF, WebP), PDFs e arquivos compactados (ZIP, RAR, 7Z, TAR.GZ) são permitidos",
-    "file.tooLarge": "O arquivo deve ter menos de 10 MB",
+    "file.tooLarge": "O arquivo deve ter menos de 25 MB",
     "file.remove": "Remover arquivo",
     "file.preview": "Visualização do arquivo"
   },
@@ -91,7 +91,7 @@
       "title": "Sobre o Only Once Share",
       "lead": "Criamos o Only Once Share porque compartilhar senhas e informações sensíveis não deveria exigir confiar em terceiros com seus dados — nem pagar por isso.",
       "feature2Title": "Gratuito e ilimitado",
-      "feature2Desc": "Sem limites artificiais. Sem \"8 segredos por mês\". Compartilhe textos com até 50.000 caracteres e arquivos (imagens, PDFs ou arquivos compactados) de até 10 MB, completamente grátis, sem necessidade de conta.",
+      "feature2Desc": "Sem limites artificiais. Sem \"8 segredos por mês\". Compartilhe textos com até 50.000 caracteres e arquivos (imagens, PDFs ou arquivos compactados) de até 25 MB, completamente grátis, sem necessidade de conta.",
       "viewOnGithub": "Ver no GitHub"
     },
     "why": {
@@ -104,7 +104,7 @@
       "benefit2Title": "Texto, imagens, PDFs e arquivos compactados",
       "benefit2Desc": "Compartilhe senhas, chaves de API, capturas de tela, documentos, PDFs e arquivos compactados sensíveis em um único link criptografado. Nenhuma outra ferramenta oferece compartilhamento de arquivos criptografados.",
       "benefit3Title": "Gratuito e ilimitado",
-      "benefit3Desc": "Sem limites artificiais, sem planos pagos, sem necessidade de conta. Compartilhe até 50.000 caracteres de texto e arquivos de 10 MB — quantos segredos precisar.",
+      "benefit3Desc": "Sem limites artificiais, sem planos pagos, sem necessidade de conta. Compartilhe até 50.000 caracteres de texto e arquivos de 25 MB — quantos segredos precisar.",
       "benefit4Title": "Código aberto e auto-hospedável",
       "benefit4Desc": "Todo o código é público no GitHub sob licença MIT. Audite a criptografia você mesmo ou implante na sua própria infraestrutura com Docker.",
       "tableTitle": "Comparação",
@@ -121,7 +121,7 @@
       "detail1Title": "Criptografia no cliente vs no servidor",
       "detail1Desc": "A maioria das ferramentas — incluindo OneTimeSecret e Privnote — criptografa seus dados no servidor. Isso significa que seu texto simples fica brevemente visível para o servidor antes da criptografia. O Only Once Share criptografa tudo no seu navegador usando AES-256-GCM via Web Crypto API.",
       "detail2Title": "Arquivos criptografados — Uma novidade",
-      "detail2Desc": "Nenhuma outra ferramenta de compartilhamento de segredos suporta imagens, PDFs e arquivos compactados criptografados. Com o Only Once Share, você pode compartilhar capturas de tela, fotos de documentos, contratos assinados, diagramas sensíveis e qualquer arquivo de até 10 MB com segurança.",
+      "detail2Desc": "Nenhuma outra ferramenta de compartilhamento de segredos suporta imagens, PDFs e arquivos compactados criptografados. Com o Only Once Share, você pode compartilhar capturas de tela, fotos de documentos, contratos assinados, diagramas sensíveis e qualquer arquivo de até 25 MB com segurança.",
       "detail3Title": "Sem paywalls, sem limites, sem lock-in",
       "detail3Desc": "Muitos concorrentes restringem usuários gratuitos com poucos segredos por mês, tempos de expiração limitados ou tamanhos de payload reduzidos. O Only Once Share é completamente gratuito sem limites artificiais. E como é código aberto sob a licença MIT, você pode auto-hospedá-lo na sua própria infraestrutura.",
       "ctaText": "Pronto para compartilhar segredos com segurança?",
@@ -137,7 +137,7 @@
       "q1": "Como o Only Once Share funciona?",
       "a1": "Ao criar um segredo — seja um texto, uma imagem, um PDF, um arquivo compactado ou uma combinação — seu navegador gera uma chave de criptografia AES-256-GCM aleatória usando a Web Crypto API. Tudo é criptografado inteiramente no seu navegador — o conteúdo original nunca sai do seu dispositivo. Os dados criptografados são enviados ao servidor e armazenados temporariamente no Redis. A chave de criptografia fica no fragmento da URL (após o símbolo #), que os navegadores nunca enviam aos servidores. Quando o destinatário abre o link, os dados criptografados são recuperados e excluídos permanentemente em uma única operação atômica. O navegador do destinatário então descriptografa o segredo usando a chave da URL.",
       "q7": "O Only Once Share é gratuito?",
-      "a7": "Sim, completamente gratuito e sem limites. Ao contrário de alguns concorrentes que restringem usuários gratuitos a poucos segredos por mês ou impõem limites de tamanho, o Only Once Share não tem restrições artificiais. Você pode compartilhar textos com até 50.000 caracteres e arquivos de até 10 MB (imagens, PDFs ou arquivos compactados), sem necessidade de conta. A ferramenta também é de código aberto sob a licença MIT.",
+      "a7": "Sim, completamente gratuito e sem limites. Ao contrário de alguns concorrentes que restringem usuários gratuitos a poucos segredos por mês ou impõem limites de tamanho, o Only Once Share não tem restrições artificiais. Você pode compartilhar textos com até 50.000 caracteres e arquivos de até 25 MB (imagens, PDFs ou arquivos compactados), sem necessidade de conta. A ferramenta também é de código aberto sob a licença MIT.",
       "q8": "Preciso criar uma conta?",
       "a8": "Não. O Only Once Share não exige cadastro, e-mail nem conta. Basta digitar seu texto, anexar uma imagem, PDF ou arquivo compactado opcionalmente, escolher o prazo de expiração e compartilhar o link gerado. Essa abordagem sem fricção significa que não há dados pessoais a proteger nem credenciais que possam ser comprometidas."
     },

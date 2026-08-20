@@ -216,7 +216,7 @@ describe("CreateSecret", () => {
     renderWithProviders(<CreateSecret />);
     expect(screen.getByText("Drag & drop a file here")).toBeInTheDocument();
     expect(screen.getByText("or click to browse")).toBeInTheDocument();
-    expect(screen.getByText(/Max 10 MB/)).toBeInTheDocument();
+    expect(screen.getByText(/Max 25 MB/)).toBeInTheDocument();
   });
 
   it("shows drag active state on dragenter", () => {
@@ -289,13 +289,13 @@ describe("CreateSecret", () => {
     expect(screen.queryByAltText("File preview")).not.toBeInTheDocument();
   });
 
-  it("rejects files over 10MB", async () => {
+  it("rejects files over MAX_FILE_SIZE", async () => {
     renderWithProviders(<CreateSecret />);
     const dropzone = screen.getByText("Drag & drop a file here").closest(".dropzone")!;
-    const bigFile = new File([new ArrayBuffer(11 * 1024 * 1024)], "large.png", { type: "image/png" });
+    const bigFile = new File([new ArrayBuffer(26 * 1024 * 1024)], "large.png", { type: "image/png" });
 
     fireEvent.drop(dropzone, { dataTransfer: { files: [bigFile] } });
-    expect(screen.getByText("File must be under 10 MB")).toBeInTheDocument();
+    expect(screen.getByText("File must be under 25 MB")).toBeInTheDocument();
   });
 
   it("shows preview for valid image", async () => {
