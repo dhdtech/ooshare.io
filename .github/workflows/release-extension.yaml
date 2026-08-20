@@ -1,0 +1,140 @@
+name: Release Extension
+
+on:
+  push:
+    tags: ["ext-v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build all targets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - name: Install
+        working-directory: extension
+        run: npm ci && npm run icons
+      - name: Build + lint
+        working-directory: extension
+        run: |
+          npm run build:all
+          npm run lint:firefox
+      - name: Package
+        working-directory: extension
+        run: |
+          npm run zip:chrome
+          mkdir -p dist-artifacts
+          cp .output/chrome-mv3/*.zip dist-artifacts/ooshare-chrome-${GITHUB_REF_NAME#ext-v}.zip
+          cp .output/firefox-mv3/*.zip dist-artifacts/ooshare-firefox-${GITHUB_REF_NAME#ext-v}.zip 2>/dev/null || true
+          (cd .output && tar -czf ../dist-artifacts/source.tar.gz --exclude node_modules .) || true
+          (cd dist-artifacts && sha256sum * > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-builds
+          path: extension/dist-artifacts
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: extension
+        run: gh release create "$GITHUB_REF_NAME" dist-artifacts/* --generate-notes --title "$GITHUB_REF_NAME"
+
+  publish-chrome:
+    name: Publish Chrome Web Store
+    needs: build
+    runs-on: ubuntu-latest
+    if: env.GOOGLE_CLIENT_ID != '' && env.GOOGLE_CLIENT_SECRET != '' && env.GOOGLE_REFRESH_TOKEN != '' && env.EXTENSION_ITEM_ID != ''
+    env:
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+      EXTENSION_ITEM_ID: ${{ secrets.EXTENSION_ITEM_ID }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: extension-builds
+          path: dist
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Upload + publish to CWS
+        working-directory: extension
+        run: |
+          npx chrome-webstore-upload-cli upload --source ../dist/ooshare-chrome-*.zip
+          npx chrome-webstore-upload-cli publish --target default
+
+  publish-firefox:
+    name: Publish Firefox AMO
+    needs: build
+    runs-on: ubuntu-latest
+    if: env.AMO_API_KEY != '' && env.AMO_API_SECRET != ''
+    env:
+      AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
+      AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: extension-builds
+          path: dist
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Sign + submit to AMO (unlisted)
+        working-directory: extension
+        run: |
+          npx web-ext sign --source-dir .output/firefox-mv3 \
+            --artifacts-dir ../dist \
+            --api-key "$AMO_API_KEY" --api-secret "$AMO_API_SECRET" \
+            --channel unlisted
+        # Produces ../dist/ooshare-firefox-<id>.xpi — a signed, installable build.
+        # NOTE: for a public *listed* submission, use the AMO submit API with the
+        # extension ID registered on addons.mozilla.org. See docs/release-bootstrap.md.
+
+  publish-safari:
+    name: Build + publish Safari wrapper
+    needs: build
+    runs-on: macos-latest
+    if: env.APPLE_API_KEY != '' && env.APPLE_API_KEY_ID != '' && env.APPLE_API_ISSUER != ''
+    env:
+      APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+      APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare Safari wrapper
+        working-directory: extension
+        run: npx wxt prepare -b safari
+      - name: Build wrapper app
+        working-directory: extension/.output/safari
+        run: xcodebuild -project ooshare.xcodeproj -scheme ooshare -configuration Release archive -archivePath dist/ooshare.xcarchive
+      - name: Notarize + upload (App Store Connect)
+        env:
+          APPLE_API_KEY_PATH: /tmp/AuthKey.p8
+        run: |
+          echo "$APPLE_API_KEY" | base64 -d > /tmp/AuthKey.p8
+          xcrun notarytool submit extension/.output/safari/dist/ooshare.xcarchive --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER" --wait
+          xcrun altool --upload-app -f extension/.output/safari/dist/ooshare.app -t macos --api-key "$APPLE_API_KEY_ID" --api-issuer "$APPLE_API_ISSUER"
+
+  publish-edge:
+    name: Publish Edge Add-ons
+    needs: build
+    runs-on: ubuntu-latest
+    if: env.EDGE_API_TOKEN != ''
+    env:
+      EDGE_API_TOKEN: ${{ secrets.EDGE_API_TOKEN }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: extension-builds
+          path: dist
+      - name: Upload to Edge Partner Center
+        working-directory: extension
+        run: |
+          echo "Edge Partner Center API requires an Azure AD app + product ID."
+          echo "For v1: upload ../dist/ooshare-chrome-*.zip manually, or use 'Import from Chrome Web Store'."
