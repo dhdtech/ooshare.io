@@ -100,8 +100,11 @@ jobs:
         run: |
           set -euo pipefail
           cp attest/attestation.intoto.jsonl dist/
-          gh release create "$GITHUB_REF_NAME" dist/* --generate-notes \
-            --title "$GITHUB_REF_NAME"
+          # idempotent: remove any partial release from a previous attempt
+          gh release delete "$GITHUB_REF_NAME" --yes 2>/dev/null || true
+          # upload only files (excludes GoReleaser's per-target build subdirectories)
+          gh release create "$GITHUB_REF_NAME" $(find dist -maxdepth 1 -type f) \
+            --generate-notes --title "$GITHUB_REF_NAME"
 
   deploy-brew:
     name: Deploy Homebrew
