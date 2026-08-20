@@ -36,11 +36,6 @@ func Run(args []string, out, errw io.Writer) int {
 	}
 }
 
-// Create creates a one-time secret and prints its URL. Implemented in a later task.
-func Create(out, errw io.Writer, args []string) int {
-	return runNotImplemented(out, errw, "create")
-}
-
 // View reveals a secret from its URL. Implemented in a later task.
 func View(out, errw io.Writer, args []string) int {
 	return runNotImplemented(out, errw, "view")
