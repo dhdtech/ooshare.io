@@ -5,18 +5,16 @@ Create and view one-time secrets from the terminal, exactly like the web
 
 ## Install
 
-Download the release for your platform from the [releases](https://github.com/dhdtech/ooshare.io/releases)
-page. Releases are tagged `v*` and ship as `ooshare_<version>_<os>_<arch>.tar.gz` (`.zip` on Windows),
-plus `.deb`/`.rpm` packages and a `SHA256SUMS` checksum file. macOS and Linux:
+| Method | Command | Verify |
+|---|---|---|
+| Homebrew | `brew tap dhdtech/tap && brew install ooshare` | `ooshare version` |
+| Scoop | `scoop bucket add ooshare https://github.com/dhdtech/scoop-bucket && scoop install ooshare` | `ooshare version` |
+| winget | `winget install dhdtech.ooshare` | `ooshare version` |
+| apt (Debian/Ubuntu) | `sudo install -Dm644 <(curl -Ls https://dhdtech.github.io/ooshare-packages/apt/ooshare.gpg) /usr/share/keyrings/ooshare.gpg` then add `deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/ooshare-packages/apt stable main` | `apt update && apt install ooshare` |
+| yum/dnf (RHEL/Fedora) | add a `.repo` with `baseurl=https://dhdtech.github.io/ooshare-packages/rpm` and `gpgkey=https://dhdtech.github.io/ooshare-packages/rpm/ooshare.gpg` | `dnf install ooshare` |
+| Release binary | download from [releases](https://github.com/dhdtech/ooshare.io/releases) | `sha256sum -c SHA256SUMS` |
 
-```bash
-curl -fsSL https://github.com/dhdtech/ooshare.io/releases/download/v0.1.0/ooshare_0.1.0_linux_amd64.tar.gz -o ooshare.tgz
-tar -xzf ooshare.tgz ooshare
-sudo mv ooshare /usr/local/bin/
-```
-
-Note the tag keeps its leading `v` in the download path, but the asset filename uses the
-version without it (e.g. tag `v0.1.0` → `ooshare_0.1.0_linux_amd64.tar.gz`).
+Supply-chain verification: `cosign verify-blob --certificate-identity-regexp '…ooshare…' <artifact> --signature <artifact>.sig --certificate <artifact>.pem` and `slsa-verifier verify-artifact --source-builder 'https://github.com/dhdtech/ooshare.io/.github/workflows/release-cli.yaml@refs/tags/v*' --source-uri github.com/dhdtech/ooshare.io <artifact>`.
 
 ## Create a secret
 
