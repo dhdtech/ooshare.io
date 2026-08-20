@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { generateKey, exportKey, encrypt, encodePayload } from "../lib/crypto";
 import { createSecret } from "../lib/api";
 import posthog from "../lib/posthog";
+import { trackSecretCreated, trackSecretFailed } from "../lib/metaPixel";
 import useSEO from "../lib/useSEO";
 import {
   PageHeader,
@@ -99,11 +100,17 @@ export default function CreateSecret() {
         has_attachment: !!attachedFile,
         attachment_type: attachedFile ? (isPdf(attachedFile) ? "pdf" : isArchive(attachedFile) ? "archive" : "image") : null,
       });
+      trackSecretCreated({
+        ttl_hours: ttlHours,
+        has_attachment: !!attachedFile,
+        attachment_type: attachedFile ? (isPdf(attachedFile) ? "pdf" : isArchive(attachedFile) ? "archive" : "image") : null,
+      });
       setSecret("");
       setFormKey((k) => k + 1); // reset dropzone + attached file
       setAttachedFile(null);
     } catch (err) {
       posthog.capture("secret_create_failed");
+      trackSecretFailed();
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
