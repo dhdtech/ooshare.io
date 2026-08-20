@@ -263,9 +263,14 @@ docker compose -f docker-compose.yml up --build
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `POST` | `/api/secrets` | Store encrypted secret (max 15 MB), returns `{ id, alias }` |
+| `POST` | `/api/secrets` | Store encrypted secret (max 40 MB), returns `{ id, alias }` |
 | `GET` | `/api/secrets/:id` | Retrieve and delete encrypted secret (accepts UUID or alias), returns `{ ciphertext, id }` |
 | `GET` | `/api/health` | Health check |
+
+## CLI
+
+`ooshare` — a single-binary command-line client (macOS, Linux, Windows) for creating
+and viewing one-time secrets, with JSON output for scripts and CI. See `cli/README.md`.
 
 ## I18n
 
