@@ -1,9 +1,17 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, Link } from "react-router-dom";
-import { Shield, Lock, Eye, Trash2, Github } from "lucide-react";
+import { Lock, Eye, Trash2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import SecurityModal from "./SecurityModal";
 import LanguageSelector from "./LanguageSelector";
+import {
+  Logo,
+  NavLink,
+  ToastProvider,
+  FooterBadges,
+  FooterNav,
+  FooterLegal,
+} from "./ui";
 
 const GLOBAL_SCHEMA = JSON.stringify([
   {
@@ -54,7 +62,7 @@ const GLOBAL_SCHEMA = JSON.stringify([
   },
 ]);
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+function LayoutContent({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation();
   const location = useLocation();
 
@@ -73,18 +81,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         dangerouslySetInnerHTML={{ __html: GLOBAL_SCHEMA }}
       />
       <header className="layout-header">
-        <Link to="/">
-          <Shield size={22} className="header-icon" />
-          <span className="header-title">{t("header.title")}</span>
-        </Link>
-        <div className="header-actions">
-          <nav className="header-nav">
-            <Link to="/security">{t("nav.security")}</Link>
-            <Link to="/blog">{t("nav.blog")}</Link>
-            <Link to="/faq">{t("nav.faq")}</Link>
-          </nav>
-          <LanguageSelector />
-          <SecurityModal />
+        <div className="ui-header-inner">
+          <Logo size={30} />
+          <div className="ui-header-actions">
+            <nav className="ui-header-nav" aria-label="Primary">
+              <NavLink to="/security">{t("nav.security")}</NavLink>
+              <NavLink to="/blog">{t("nav.blog")}</NavLink>
+              <NavLink to="/faq">{t("nav.faq")}</NavLink>
+            </nav>
+            <LanguageSelector />
+            <SecurityModal />
+          </div>
         </div>
       </header>
 
@@ -93,47 +100,45 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       <footer className="layout-footer">
-        <div className="footer-badges">
-          <span className="footer-badge">
-            <Lock size={13} />
-            {t("footer.encryption")}
-          </span>
-          <span className="footer-badge">
-            <Eye size={13} />
-            {t("footer.zeroKnowledge")}
-          </span>
-          <span className="footer-badge">
-            <Trash2 size={13} />
-            {t("footer.autoDelete")}
-          </span>
-        </div>
-        <div className="footer-links">
-          <Link to="/security">{t("nav.security")}</Link>
-          <Link to="/blog">{t("nav.blog")}</Link>
-          <Link to="/faq">{t("nav.faq")}</Link>
-          <Link to="/about">{t("nav.about")}</Link>
-          <Link to="/why">{t("nav.why")}</Link>
-        </div>
-        <a
-          href="https://github.com/dhdtech/oos"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-opensource"
-        >
-          <Github size={14} />
-          {t("footer.openSource")}
-        </a>
-        <div className="footer-powered">
-          <span>Powered by</span>
-          <a
-            href="https://dhdtech.io"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            DHDTech.io
-          </a>
+        <div className="ui-footer-inner">
+          <FooterBadges
+            badges={[
+              { label: t("footer.encryption"), icon: <Lock size={12} /> },
+              { label: t("footer.zeroKnowledge"), icon: <Eye size={12} /> },
+              { label: t("footer.autoDelete"), icon: <Trash2 size={12} /> },
+            ]}
+          />
+          <FooterNav
+            links={[
+              { to: "/security", label: t("nav.security") },
+              { to: "/blog", label: t("nav.blog") },
+              { to: "/faq", label: t("nav.faq") },
+              { to: "/about", label: t("nav.about") },
+              { to: "/why", label: t("nav.why") },
+            ]}
+          />
+          <FooterLegal
+            openSourceLabel={t("footer.openSource")}
+            openSourceHref="https://github.com/dhdtech/oos"
+            poweredByLabel="Powered by"
+            poweredByHref="https://dhdtech.io"
+            poweredByBrand="DHDTech.io"
+          />
         </div>
       </footer>
     </div>
+  );
+}
+
+/**
+ * App shell: header logo + nav + language + security modal, main content,
+ * footer. Wraps children in a ToastProvider so shared copy toasts surface
+ * anywhere in the tree.
+ */
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <ToastProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </ToastProvider>
   );
 }

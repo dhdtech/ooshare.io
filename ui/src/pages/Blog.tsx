@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { getBlogPosts } from "../content/blog-posts";
 import useSEO from "../lib/useSEO";
+import { ArticleHeader, BlogCard, BackLink } from "../components/ui";
 
 export default function Blog() {
   const { t, i18n } = useTranslation();
@@ -23,35 +22,25 @@ export default function Blog() {
   return (
     <div className="content-page">
       <article className="article">
-        <header className="article-header">
-          <h1>{t("pages.blog.title")}</h1>
-          <p className="article-lead">{t("pages.blog.lead")}</p>
-        </header>
+        <ArticleHeader title={t("pages.blog.title")} lead={t("pages.blog.lead")} />
 
-        <div className="blog-list">
+        <div className="ui-blog-list">
           {sorted.map((post) => (
-            <Link key={post.slug} to={`/blog/${post.slug}`} className="blog-card">
-              <div className="blog-card-content">
-                <div className="blog-card-tags">
-                  {post.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="blog-tag">{tag}</span>
-                  ))}
-                </div>
-                <h2 className="blog-card-title">{post.title}</h2>
-                <p className="blog-card-excerpt">{post.description}</p>
-                <div className="blog-card-meta">
-                  <span><Calendar size={13} /> {new Date(post.date).toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}</span>
-                  <span><Clock size={13} /> {post.readingTime} {t("pages.blog.minRead")}</span>
-                </div>
-              </div>
-            </Link>
+            <BlogCard
+              key={post.slug}
+              slug={post.slug}
+              title={post.title}
+              description={post.description}
+              tags={post.tags}
+              date={post.date}
+              readingTime={post.readingTime}
+              locale={locale}
+              minReadLabel={t("pages.blog.minRead")}
+            />
           ))}
         </div>
 
-        <Link to="/" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.backHome")}
-        </Link>
+        <BackLink to="/">{t("nav.backHome")}</BackLink>
       </article>
     </div>
   );

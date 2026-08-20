@@ -13,6 +13,7 @@ import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
+import Components from "./pages/Components";
 import "./i18n";
 import "./index.css";
 
@@ -30,6 +31,7 @@ const app = (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/components" element={<Components />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

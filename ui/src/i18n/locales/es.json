@@ -22,6 +22,7 @@
     "shareVia": "Compartir vía",
     "copy": "Copiar",
     "copied": "Copiado",
+    "copiedToast": "Enlace copiado al portapapeles",
     "whatsapp": "WhatsApp",
     "email": "Correo",
     "createAnother": "Crear otro",
@@ -45,6 +46,7 @@
     "destroyed": "Este secreto ha sido destruido permanentemente. No se puede ver de nuevo.",
     "copySecret": "Copiar secreto",
     "copiedClipboard": "Copiado al portapapeles",
+    "copiedToast": "Secreto copiado al portapapeles",
     "notFoundTitle": "Secreto no disponible",
     "notFoundMsg": "Este secreto ya ha sido visto o ha expirado. Los secretos solo se pueden acceder una vez.",
     "errorTitle": "Algo salió mal",
@@ -147,6 +149,30 @@
       "ctaDesc": "Only Once Share usa cifrado AES-256-GCM con arquitectura de conocimiento cero. Sin necesidad de cuenta.",
       "ctaButton": "Prueba Only Once Share",
       "contentInEnglish": "Este artículo está disponible actualmente en inglés."
+    },
+    "components": {
+      "metaTitle": "Biblioteca de componentes — Only Once Share (interno)",
+      "metaDesc": "Una vitrina viva del sistema de diseño de Only Once Share.",
+      "title": "Biblioteca de componentes",
+      "subtitle": "Una vitrina viva del sistema de diseño de ooshare — la fuente única de verdad para marcado y comportamiento.",
+      "sectionButtons": "Botones, botones de icono y enlaces",
+      "sectionInputs": "Entradas y campos",
+      "sectionSegmented": "Control segmentado",
+      "sectionFile": "Zona de soltar archivos",
+      "sectionBadges": "Insignias (chips mono)",
+      "sectionCopy": "Copiar y avisos",
+      "sectionModal": "Modal",
+      "sectionAccordion": "Acordeón",
+      "sectionSteps": "Pasos (cómo funciona)",
+      "sectionSecurity": "Tarjetas de información de seguridad",
+      "sectionStates": "Estados de retroalimentación",
+      "sectionNav": "Navegación",
+      "sectionFooter": "Pie de página",
+      "sectionShare": "Botones de compartir",
+      "sectionBrand": "Marca",
+      "copySample": "https://ooshare.io/s/sample#key",
+      "toastCopied": "Copiado al portapapeles",
+      "toastDemo": "Aviso de demostración lanzado"
     }
   },
   "footer": {
@@ -171,5 +197,9 @@
     "oneTimeDesc": "Cuando se recupera un secreto, se elimina atómicamente del almacenamiento en la misma operación. No hay posibilidad de una segunda lectura.",
     "expiryTitle": "Expiración automática",
     "expiryDesc": "Los secretos expiran automáticamente después del TTL elegido (1-72 horas), incluso si nunca se ven. Ningún dato persiste más allá de la ventana de expiración."
+  },
+  "notFound": {
+    "title": "404 — Página no encontrada",
+    "message": "La página que buscas no existe o se ha movido."
   }
 }

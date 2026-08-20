@@ -22,6 +22,7 @@
     "shareVia": "分享方式",
     "copy": "复制",
     "copied": "已复制",
+    "copiedToast": "链接已复制到剪贴板",
     "whatsapp": "WhatsApp",
     "email": "邮件",
     "createAnother": "创建新的",
@@ -45,6 +46,7 @@
     "destroyed": "此秘密已被永久销毁，无法再次查看。",
     "copySecret": "复制秘密",
     "copiedClipboard": "已复制到剪贴板",
+    "copiedToast": "秘密已复制到剪贴板",
     "notFoundTitle": "秘密不可用",
     "notFoundMsg": "此秘密已被查看或已过期。秘密只能被访问一次。",
     "errorTitle": "出了点问题",
@@ -151,6 +153,30 @@
       "ctaDesc": "Only Once Share使用AES-256-GCM加密和零知识架构。无需注册账户。",
       "ctaButton": "试用Only Once Share",
       "contentInEnglish": "本文目前仅提供英文版本。"
+    },
+    "components": {
+      "metaTitle": "组件库 — Only Once Share（内部）",
+      "metaDesc": "Only Once Share 设计系统的活体展示。",
+      "title": "组件库",
+      "subtitle": "ooshare 设计系统的活体展示 — 标记和行为的事实来源。",
+      "sectionButtons": "按钮、图标按钮和链接",
+      "sectionInputs": "输入与字段",
+      "sectionSegmented": "分段控件",
+      "sectionFile": "文件拖放区",
+      "sectionBadges": "徽章（等宽芯片）",
+      "sectionCopy": "复制与提示",
+      "sectionModal": "模态框",
+      "sectionAccordion": "手风琴",
+      "sectionSteps": "步骤（工作原理）",
+      "sectionSecurity": "安全信息卡片",
+      "sectionStates": "反馈状态",
+      "sectionNav": "导航",
+      "sectionFooter": "页脚",
+      "sectionShare": "分享按钮",
+      "sectionBrand": "品牌",
+      "copySample": "https://ooshare.io/s/sample#key",
+      "toastCopied": "已复制到剪贴板",
+      "toastDemo": "已触发提示演示"
     }
   },
   "footer": {
@@ -175,5 +201,9 @@
     "oneTimeDesc": "当秘密被检索时，它会在同一操作中从存储中被原子性删除。不存在第二次读取的可能。",
     "expiryTitle": "自动过期",
     "expiryDesc": "秘密在选定的TTL（1-72小时）后自动过期，即使未被查看。没有数据会在过期时间后持续存在。"
+  },
+  "notFound": {
+    "title": "404 — 页面未找到",
+    "message": "您要查找的页面不存在或已被移动。"
   }
 }

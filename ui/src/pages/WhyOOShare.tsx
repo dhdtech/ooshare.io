@@ -1,14 +1,17 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Shield, ImagePlus, Infinity, Github, Lock } from "lucide-react";
 import {
-  Shield,
-  ImagePlus,
-  Infinity,
-  Github,
-  ArrowLeft,
-  Lock,
-} from "lucide-react";
+  ArticleHeader,
+  InfoCard,
+  ProseSection,
+  CompareTable,
+  CtaBlock,
+  Button,
+  BackLink,
+} from "../components/ui";
 import useSEO from "../lib/useSEO";
+
+const PRODUCT_COLUMNS = ["OOShare", "OneTimeSecret", "Privnote", "Scrt.link", "Password.link"];
 
 export default function WhyOOShare() {
   const { t } = useTranslation();
@@ -19,146 +22,115 @@ export default function WhyOOShare() {
     path: "/why",
   });
 
+  const rows = [
+    {
+      label: t("pages.why.e2e"),
+      values: ["Yes", "No", "No", "Yes", "Yes"],
+    },
+    {
+      label: t("pages.why.imageSharing"),
+      values: ["Yes", "No", "No", "No", "No"],
+    },
+    {
+      label: t("pages.why.free"),
+      values: [
+        { value: "Yes", tone: "yes" as const },
+        { value: "Limited", tone: "partial" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Limited", tone: "partial" as const },
+        { value: "Limited", tone: "partial" as const },
+      ],
+    },
+    {
+      label: t("pages.why.openSource"),
+      values: [
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        "No",
+        "No",
+        "No",
+      ],
+    },
+    {
+      label: t("pages.why.noAccount"),
+      values: [
+        { value: "Yes", tone: "yes" as const },
+        { value: "Optional", tone: "partial" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+      ],
+    },
+    {
+      label: t("pages.why.selfHost"),
+      values: [
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        "No",
+        "No",
+        "No",
+      ],
+    },
+    {
+      label: t("pages.why.zeroKnowledge"),
+      values: ["Yes", "No", "No", "Yes", "Yes"],
+    },
+    {
+      label: t("pages.why.autoExpiry"),
+      values: [
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+        { value: "Yes", tone: "yes" as const },
+      ],
+    },
+  ];
+
   return (
     <div className="content-page">
       <article className="article">
-        <header className="article-header">
-          <h1>{t("pages.why.title")}</h1>
-          <p className="article-lead">{t("pages.why.lead")}</p>
-        </header>
+        <ArticleHeader title={t("pages.why.title")} lead={t("pages.why.lead")} />
 
-        <section className="why-grid">
-          <div className="info-card">
-            <div className="info-card-icon"><Shield size={20} /></div>
-            <h2>{t("pages.why.benefit1Title")}</h2>
-            <p>{t("pages.why.benefit1Desc")}</p>
-          </div>
-          <div className="info-card">
-            <div className="info-card-icon"><ImagePlus size={20} /></div>
-            <h2>{t("pages.why.benefit2Title")}</h2>
-            <p>{t("pages.why.benefit2Desc")}</p>
-          </div>
-          <div className="info-card">
-            <div className="info-card-icon"><Infinity size={20} /></div>
-            <h2>{t("pages.why.benefit3Title")}</h2>
-            <p>{t("pages.why.benefit3Desc")}</p>
-          </div>
-          <div className="info-card">
-            <div className="info-card-icon"><Github size={20} /></div>
-            <h2>{t("pages.why.benefit4Title")}</h2>
-            <p>{t("pages.why.benefit4Desc")}</p>
-          </div>
+        <section className="ui-info-grid" aria-label={t("pages.why.title")}>
+          <InfoCard icon={<Shield size={20} />} title={t("pages.why.benefit1Title")}>
+            {t("pages.why.benefit1Desc")}
+          </InfoCard>
+          <InfoCard icon={<ImagePlus size={20} />} title={t("pages.why.benefit2Title")}>
+            {t("pages.why.benefit2Desc")}
+          </InfoCard>
+          <InfoCard icon={<Infinity size={20} />} title={t("pages.why.benefit3Title")}>
+            {t("pages.why.benefit3Desc")}
+          </InfoCard>
+          <InfoCard icon={<Github size={20} />} title={t("pages.why.benefit4Title")}>
+            {t("pages.why.benefit4Desc")}
+          </InfoCard>
         </section>
 
-        <section className="article-section">
-          <h2>{t("pages.why.tableTitle")}</h2>
-          <div className="compare-table-wrapper">
-            <table className="compare-table">
-              <thead>
-                <tr>
-                  <th>{t("pages.why.feature")}</th>
-                  <th className="compare-highlight">OOShare</th>
-                  <th>OneTimeSecret</th>
-                  <th>Privnote</th>
-                  <th>Scrt.link</th>
-                  <th>Password.link</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{t("pages.why.e2e")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.imageSharing")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.free")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-partial">Limited</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-partial">Limited</td>
-                  <td className="compare-partial">Limited</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.openSource")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.noAccount")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-partial">Optional</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.selfHost")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.zeroKnowledge")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-no">No</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>{t("pages.why.autoExpiry")}</td>
-                  <td className="compare-highlight compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                  <td className="compare-yes">Yes</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <ProseSection title={t("pages.why.tableTitle")}>
+          <CompareTable
+            headers={[t("pages.why.feature"), ...PRODUCT_COLUMNS]}
+            rows={rows}
+            highlightCol={1}
+          />
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.why.detailTitle")}</h2>
-
+        <ProseSection title={t("pages.why.detailTitle")}>
           <h3>{t("pages.why.detail1Title")}</h3>
           <p>{t("pages.why.detail1Desc")}</p>
-
           <h3>{t("pages.why.detail2Title")}</h3>
           <p>{t("pages.why.detail2Desc")}</p>
-
           <h3>{t("pages.why.detail3Title")}</h3>
           <p>{t("pages.why.detail3Desc")}</p>
-        </section>
+        </ProseSection>
 
-        <div className="article-cta">
-          <p>{t("pages.why.ctaText")}</p>
-          <Link to="/" className="btn btn-primary">
-            <Lock size={16} />
+        <CtaBlock text={t("pages.why.ctaText")}>
+          <Button to="/" icon={<Lock size={16} />}>
             {t("pages.why.ctaButton")}
-          </Link>
-        </div>
+          </Button>
+        </CtaBlock>
 
-        <Link to="/" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.backHome")}
-        </Link>
+        <BackLink to="/">{t("nav.backHome")}</BackLink>
       </article>
     </div>
   );

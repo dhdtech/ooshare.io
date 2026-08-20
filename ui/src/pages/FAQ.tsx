@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArticleHeader,
+  FaqItem,
+  CtaBlock,
+  Button,
+  BackLink,
+} from "../components/ui";
 import useSEO from "../lib/useSEO";
 
 const FAQ_COUNT = 12;
@@ -48,36 +53,28 @@ export default function FAQ() {
   return (
     <div className="content-page">
       <article className="article">
-        <header className="article-header">
-          <h1>{t("pages.faq.title")}</h1>
-          <p className="article-lead">{t("pages.faq.lead")}</p>
-        </header>
+        <ArticleHeader title={t("pages.faq.title")} lead={t("pages.faq.lead")} />
 
         <div className="faq-list">
           {faqs.map((faq, i) => (
-            <details key={i} className="faq-item" open={i === 0}>
-              <summary className="faq-question">{faq.q}</summary>
-              <div className="faq-answer"><p>{faq.a}</p></div>
-            </details>
+            <FaqItem key={i} question={faq.q} defaultOpen={i === 0}>
+              <p>{faq.a}</p>
+            </FaqItem>
           ))}
         </div>
 
-        <div className="article-cta">
-          <p>{t("pages.faq.moreQuestions")}</p>
-          <a
+        <CtaBlock text={t("pages.faq.moreQuestions")}>
+          <Button
+            variant="secondary"
             href="https://github.com/dhdtech/oos/issues"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-secondary"
           >
             {t("pages.faq.askGithub")}
-          </a>
-        </div>
+          </Button>
+        </CtaBlock>
 
-        <Link to="/" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.backHome")}
-        </Link>
+        <BackLink to="/">{t("nav.backHome")}</BackLink>
       </article>
     </div>
   );

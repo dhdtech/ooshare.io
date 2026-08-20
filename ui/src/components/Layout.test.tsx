@@ -4,9 +4,9 @@ import { renderWithProviders } from "../test/render";
 import Layout from "./Layout";
 
 describe("Layout", () => {
-  it("renders header with title", () => {
+  it("renders header with wordmark", () => {
     renderWithProviders(<Layout><div>child</div></Layout>);
-    expect(screen.getByText("Only Once Share")).toBeInTheDocument();
+    expect(screen.getByText("ooshare")).toBeInTheDocument();
   });
 
   it("renders children", () => {

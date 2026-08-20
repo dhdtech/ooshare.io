@@ -1,6 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { Shield, Github, Globe, ArrowLeft } from "lucide-react";
+import { Shield, Github, Globe } from "lucide-react";
+import {
+  ArticleHeader,
+  ProseSection,
+  InfoCard,
+  CtaBlock,
+  Button,
+  BackLink,
+} from "../components/ui";
 import useSEO from "../lib/useSEO";
 
 export default function About() {
@@ -15,74 +22,54 @@ export default function About() {
   return (
     <div className="content-page">
       <article className="article">
-        <header className="article-header">
-          <h1>{t("pages.about.title")}</h1>
-          <p className="article-lead">{t("pages.about.lead")}</p>
-        </header>
+        <ArticleHeader title={t("pages.about.title")} lead={t("pages.about.lead")} />
 
-        <section className="article-section">
-          <h2>{t("pages.about.missionTitle")}</h2>
+        <ProseSection title={t("pages.about.missionTitle")}>
           <p>{t("pages.about.missionP1")}</p>
           <p>{t("pages.about.missionP2")}</p>
-        </section>
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.about.whyOssTitle")}</h2>
+        <ProseSection title={t("pages.about.whyOssTitle")}>
           <p>{t("pages.about.whyOssP1")}</p>
           <p>{t("pages.about.whyOssP2")}</p>
-        </section>
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.about.builtByTitle")}</h2>
+        <ProseSection title={t("pages.about.builtByTitle")}>
           <p dangerouslySetInnerHTML={{ __html: t("pages.about.builtByP1") }} />
-        </section>
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.about.differentTitle")}</h2>
-          <div className="feature-grid">
-            <div className="feature-item">
-              <Shield size={20} />
-              <h3>{t("pages.about.feature1Title")}</h3>
-              <p>{t("pages.about.feature1Desc")}</p>
-            </div>
-            <div className="feature-item">
-              <Globe size={20} />
-              <h3>{t("pages.about.feature2Title")}</h3>
-              <p>{t("pages.about.feature2Desc")}</p>
-            </div>
-            <div className="feature-item">
-              <Github size={20} />
-              <h3>{t("pages.about.feature3Title")}</h3>
-              <p>{t("pages.about.feature3Desc")}</p>
-            </div>
-            <div className="feature-item">
-              <Globe size={20} />
-              <h3>{t("pages.about.feature4Title")}</h3>
-              <p>{t("pages.about.feature4Desc")}</p>
-            </div>
-          </div>
-        </section>
+        <ProseSection title={t("pages.about.differentTitle")}>
+          <section className="ui-info-grid" aria-label={t("pages.about.differentTitle")}>
+            <InfoCard icon={<Shield size={20} />} title={t("pages.about.feature1Title")}>
+              {t("pages.about.feature1Desc")}
+            </InfoCard>
+            <InfoCard icon={<Globe size={20} />} title={t("pages.about.feature2Title")}>
+              {t("pages.about.feature2Desc")}
+            </InfoCard>
+            <InfoCard icon={<Github size={20} />} title={t("pages.about.feature3Title")}>
+              {t("pages.about.feature3Desc")}
+            </InfoCard>
+            <InfoCard icon={<Globe size={20} />} title={t("pages.about.feature4Title")}>
+              {t("pages.about.feature4Desc")}
+            </InfoCard>
+          </section>
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.about.involvedTitle")}</h2>
+        <ProseSection title={t("pages.about.involvedTitle")}>
           <p>{t("pages.about.involvedP1")}</p>
-          <div className="article-cta">
-            <a
+          <CtaBlock>
+            <Button
               href="https://github.com/dhdtech/only-once-share"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary"
+              icon={<Github size={16} />}
             >
-              <Github size={16} />
               {t("pages.about.viewOnGithub")}
-            </a>
-          </div>
-        </section>
+            </Button>
+          </CtaBlock>
+        </ProseSection>
 
-        <Link to="/" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.backHome")}
-        </Link>
+        <BackLink to="/">{t("nav.backHome")}</BackLink>
       </article>
     </div>
   );

@@ -1,10 +1,18 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { getBlogPosts } from "../content/blog-posts";
 import NotFound from "./NotFound";
 import useSEO from "../lib/useSEO";
+import {
+  ArticleHeader,
+  BlogTag,
+  BlogMeta,
+  BlogContent,
+  BlogCtaBox,
+  BlogNav,
+  BackLink,
+} from "../components/ui";
 
 export default function BlogPost() {
   const { t, i18n } = useTranslation();
@@ -53,53 +61,45 @@ export default function BlogPost() {
   const prev = idx < sorted.length - 1 ? sorted[idx + 1] : null;
   const next = idx > 0 ? sorted[idx - 1] : null;
   const locale = i18n.language === "zh" ? "zh-CN" : i18n.language;
+
   return (
     <div className="content-page">
-      <article className="article blog-article">
-        <header className="article-header">
-          <div className="blog-card-tags">
-            {post.tags.map(tag => (
-              <span key={tag} className="blog-tag">{tag}</span>
-            ))}
-          </div>
-          <h1>{post.title}</h1>
-          <div className="blog-post-meta">
-            <span><Calendar size={14} /> {new Date(post.date).toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}</span>
-            <span><Clock size={14} /> {post.readingTime} {t("pages.blog.minRead")}</span>
-            <span>{t("pages.blog.by")} DHD Tech</span>
-          </div>
-        </header>
-
-        <div
-          className="blog-content"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+      <article className="article">
+        <ArticleHeader
+          title={post.title}
+          variant="post"
+          tags={post.tags.map(tag => (
+            <BlogTag key={tag}>{tag}</BlogTag>
+          ))}
+          meta={
+            <BlogMeta
+              date={post.date}
+              locale={locale}
+              readingTime={post.readingTime}
+              minReadLabel={t("pages.blog.minRead")}
+              author="DHD Tech"
+              byLabel={t("pages.blog.by")}
+              size="lg"
+            />
+          }
         />
 
-        <div className="blog-cta-box">
-          <h3>{t("pages.blog.ctaTitle")}</h3>
-          <p>{t("pages.blog.ctaDesc")}</p>
-          <Link to="/" className="btn btn-primary">{t("pages.blog.ctaButton")}</Link>
-        </div>
+        <BlogContent html={post.content} />
 
-        <nav className="blog-nav">
-          {prev && (
-            <Link to={`/blog/${prev.slug}`} className="blog-nav-link blog-nav-prev">
-              <small>{t("pages.blog.previous")}</small>
-              <span>{prev.title}</span>
-            </Link>
-          )}
-          {next && (
-            <Link to={`/blog/${next.slug}`} className="blog-nav-link blog-nav-next">
-              <small>{t("pages.blog.next")}</small>
-              <span>{next.title}</span>
-            </Link>
-          )}
-        </nav>
+        <BlogCtaBox
+          title={t("pages.blog.ctaTitle")}
+          description={t("pages.blog.ctaDesc")}
+          buttonLabel={t("pages.blog.ctaButton")}
+        />
 
-        <Link to="/blog" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.allPosts")}
-        </Link>
+        <BlogNav
+          prev={prev ? { slug: prev.slug, title: prev.title } : undefined}
+          next={next ? { slug: next.slug, title: next.title } : undefined}
+          prevLabel={t("pages.blog.previous")}
+          nextLabel={t("pages.blog.next")}
+        />
+
+        <BackLink to="/blog">{t("nav.allPosts")}</BackLink>
       </article>
     </div>
   );

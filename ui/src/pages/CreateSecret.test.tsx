@@ -49,7 +49,8 @@ describe("CreateSecret", () => {
 
   it("24h TTL is selected by default", () => {
     renderWithProviders(<CreateSecret />);
-    const btn = screen.getByText("24h");
+    // The segment label now lives in an inner span; aria-pressed is on the button.
+    const btn = screen.getByRole("button", { name: "Expires in: 24h" });
     expect(btn).toHaveAttribute("aria-pressed", "true");
   });
 
@@ -57,9 +58,9 @@ describe("CreateSecret", () => {
     const user = userEvent.setup();
     renderWithProviders(<CreateSecret />);
 
-    await user.click(screen.getByText("1h"));
-    expect(screen.getByText("1h")).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByText("24h")).toHaveAttribute("aria-pressed", "false");
+    await user.click(screen.getByRole("button", { name: "Expires in: 1h" }));
+    expect(screen.getByRole("button", { name: "Expires in: 1h" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Expires in: 24h" })).toHaveAttribute("aria-pressed", "false");
   });
 
   it("submit is disabled when neither text nor image is present", () => {

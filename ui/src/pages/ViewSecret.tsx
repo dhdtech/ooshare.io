@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ShieldOff,
-  ArrowLeft,
-  EyeOff,
-  AlertCircle,
-  Copy,
-  Check,
   X,
   FileText,
   Download,
@@ -17,6 +12,14 @@ import {
 import { importKey, decrypt, decodePayload } from "../lib/crypto";
 import { getSecret } from "../lib/api";
 import posthog from "../lib/posthog";
+import {
+  Card,
+  Button,
+  CopyButton,
+  BackLink,
+  LoadingState,
+  ErrorState,
+} from "../components/ui";
 
 type Status = "loading" | "revealed" | "not-found" | "error";
 
@@ -26,7 +29,6 @@ export default function ViewSecret() {
   const [status, setStatus] = useState<Status>("loading");
   const [plaintext, setPlaintext] = useState("");
   const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
   const [archiveUrl, setArchiveUrl] = useState("");
@@ -92,42 +94,33 @@ export default function ViewSecret() {
     };
   }, [imageUrl, pdfUrl, archiveUrl]);
 
-  async function handleCopy() {
-    await navigator.clipboard.writeText(plaintext);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
   return (
     <div className="view-container">
       {status === "loading" && (
-        <div className="card">
-          <div className="loading-card">
-            <div className="loading-spinner" />
-            <p>{t("view.loading")}</p>
-          </div>
-        </div>
+        <Card>
+          <LoadingState label={t("view.loading")} />
+        </Card>
       )}
 
       {status === "revealed" && (
-        <div className="card">
+        <Card>
           <div className="revealed-card">
             <div className="destroyed-banner">
-              <ShieldOff size={15} />
+              <ShieldOff size={15} aria-hidden="true" />
               <span>{t("view.destroyed")}</span>
             </div>
 
             {plaintext && (
               <>
                 <div className="secret-content">{plaintext}</div>
-                <button
-                  className={`btn btn-sm btn-full ${copied ? "btn-success" : "btn-secondary"}`}
-                  onClick={handleCopy}
-                  aria-label={t("view.copySecret")}
-                >
-                  {copied ? <Check size={15} /> : <Copy size={15} />}
-                  {copied ? t("view.copiedClipboard") : t("view.copySecret")}
-                </button>
+                <CopyButton
+                  text={plaintext}
+                  copyLabel={t("view.copySecret")}
+                  copiedLabel={t("view.copiedClipboard")}
+                  toastMessage={t("view.copiedToast")}
+                  variant="secondary"
+                  className="ui-btn--full"
+                />
               </>
             )}
 
@@ -146,27 +139,18 @@ export default function ViewSecret() {
             {pdfUrl && (
               <div className="secret-pdf-container">
                 <div className="pdf-preview">
-                  <FileText size={48} />
+                  <FileText size={48} aria-hidden="true" />
                   <p>{t("view.pdfAttached")}</p>
                 </div>
                 <div className="pdf-actions">
-                  <a
-                    href={pdfUrl}
-                    download="secret.pdf"
-                    className="btn btn-secondary"
-                  >
-                    <Download size={16} />
+                  <Button href={pdfUrl} download="secret.pdf" variant="secondary">
+                    <Download size={16} aria-hidden="true" />
                     {t("view.downloadPdf")}
-                  </a>
-                  <a
-                    href={pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-secondary"
-                  >
-                    <ExternalLink size={16} />
+                  </Button>
+                  <Button href={pdfUrl} target="_blank" rel="noopener noreferrer" variant="secondary">
+                    <ExternalLink size={16} aria-hidden="true" />
                     {t("view.viewPdf")}
-                  </a>
+                  </Button>
                 </div>
               </div>
             )}
@@ -174,23 +158,23 @@ export default function ViewSecret() {
             {archiveUrl && (
               <div className="secret-pdf-container">
                 <div className="pdf-preview">
-                  <Archive size={48} />
+                  <Archive size={48} aria-hidden="true" />
                   <p>{t("view.archiveAttached")}</p>
                 </div>
                 <div className="pdf-actions">
-                  <a
+                  <Button
                     href={archiveUrl}
                     download={`secret${archiveMime.includes("rar") ? ".rar" : archiveMime.includes("7z") ? ".7z" : archiveMime.includes("gzip") ? ".tar.gz" : archiveMime.includes("tar") ? ".tar" : ".zip"}`}
-                    className="btn btn-secondary"
+                    variant="secondary"
                   >
-                    <Download size={16} />
+                    <Download size={16} aria-hidden="true" />
                     {t("view.downloadArchive")}
-                  </a>
+                  </Button>
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </Card>
       )}
 
       {showImageModal && imageUrl && (
@@ -207,7 +191,7 @@ export default function ViewSecret() {
               onClick={() => setShowImageModal(false)}
               aria-label={t("view.imageModal.close")}
             >
-              <X size={16} />
+              <X size={16} aria-hidden="true" />
             </button>
             <img src={imageUrl} alt={t("view.clickToEnlarge")} />
           </div>
@@ -215,33 +199,26 @@ export default function ViewSecret() {
       )}
 
       {status === "not-found" && (
-        <div className="card">
-          <div className="not-found-card">
-            <div className="not-found-icon">
-              <EyeOff size={22} />
-            </div>
-            <h2>{t("view.notFoundTitle")}</h2>
-            <p>{t("view.notFoundMsg")}</p>
-          </div>
-        </div>
+        <Card>
+          <ErrorState
+            title={t("view.notFoundTitle")}
+            message={t("view.notFoundMsg")}
+          />
+        </Card>
       )}
 
       {status === "error" && (
-        <div className="card">
-          <div className="error-card">
-            <div className="error-icon">
-              <AlertCircle size={22} />
-            </div>
-            <h2>{t("view.errorTitle")}</h2>
-            <p>{error || t("view.errorMsg")}</p>
-          </div>
-        </div>
+        <Card>
+          <ErrorState
+            title={t("view.errorTitle")}
+            message={error || t("view.errorMsg")}
+          />
+        </Card>
       )}
 
-      <Link to="/" className="back-link">
-        <ArrowLeft size={15} />
+      <BackLink to="/">
         {status === "revealed" ? t("view.newSecret") : t("view.backHome")}
-      </Link>
+      </BackLink>
     </div>
   );
 }

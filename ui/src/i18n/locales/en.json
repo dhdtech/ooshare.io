@@ -22,6 +22,7 @@
     "shareVia": "Share via",
     "copy": "Copy",
     "copied": "Copied",
+    "copiedToast": "Link copied to clipboard",
     "whatsapp": "WhatsApp",
     "email": "Email",
     "createAnother": "Create Another",
@@ -45,6 +46,7 @@
     "destroyed": "This secret has been permanently destroyed. It cannot be viewed again.",
     "copySecret": "Copy secret",
     "copiedClipboard": "Copied to clipboard",
+    "copiedToast": "Secret copied to clipboard",
     "notFoundTitle": "Secret Not Available",
     "notFoundMsg": "This secret has already been viewed or has expired. Secrets can only be accessed once.",
     "errorTitle": "Something Went Wrong",
@@ -206,6 +208,30 @@
       "ctaDesc": "Only Once Share uses AES-256-GCM encryption with zero-knowledge architecture. No account required.",
       "ctaButton": "Try Only Once Share",
       "contentInEnglish": "This article is currently available in English."
+    },
+    "components": {
+      "metaTitle": "Component Library — Only Once Share (internal)",
+      "metaDesc": "A living showcase of the Only Once Share design system.",
+      "title": "Component Library",
+      "subtitle": "A living showcase of the ooshare design system — the single source of truth for markup and behavior.",
+      "sectionButtons": "Buttons, icon buttons & links",
+      "sectionInputs": "Inputs & fields",
+      "sectionSegmented": "Segmented control",
+      "sectionFile": "File dropzone",
+      "sectionBadges": "Badges (mono chips)",
+      "sectionCopy": "Copy & toasts",
+      "sectionModal": "Modal",
+      "sectionAccordion": "Accordion",
+      "sectionSteps": "Steps (How it works)",
+      "sectionSecurity": "Security info cards",
+      "sectionStates": "Feedback states",
+      "sectionNav": "Navigation",
+      "sectionFooter": "Footer",
+      "sectionShare": "Share buttons",
+      "sectionBrand": "Brand",
+      "copySample": "https://ooshare.io/s/sample#key",
+      "toastCopied": "Copied to clipboard",
+      "toastDemo": "Toast demo fired"
     }
   },
   "footer": {
@@ -230,5 +256,9 @@
     "oneTimeDesc": "When a secret is retrieved, it is atomically deleted from storage in the same operation. There is no window where a second read is possible.",
     "expiryTitle": "Auto-Expiration",
     "expiryDesc": "Secrets automatically expire after the chosen TTL (1–72 hours), even if never viewed. No data persists beyond the expiration window."
+  },
+  "notFound": {
+    "title": "404 — Page Not Found",
+    "message": "The page you're looking for doesn't exist or has been moved."
   }
 }

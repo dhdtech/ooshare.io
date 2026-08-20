@@ -17,32 +17,87 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* ─── Design Tokens ─── */
+/* ─── Self-hosted JetBrains Mono (variable) ─── */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ─── Design Tokens ───
+ * The approved design system (dark theme). Token names are the SAME semantic
+ * tokens the existing global CSS consumes (--bg, --surface, --border, …), so
+ * the existing stylesheets keep working — only the VALUES follow the new
+ * system. Additional token names are added for the new look. A later
+ * `[data-theme="light"]` block can override these same `--*` names to flip
+ * themes without touching any component CSS.
+ * ─── */
 :root {
-  --bg: #06090f;
-  --bg-gradient: linear-gradient(170deg, #06090f 0%, #0c1322 40%, #0f172a 100%);
-  --surface: #111827;
-  --surface-hover: #1a2234;
-  --surface-elevated: #1e293b;
-  --border: #1e293b;
-  --border-hover: #334155;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Backgrounds / surfaces */
+  --bg: #0b1020;
+  --bg-soft: #0e1526;
+  --surface: #111831;
+  --surface-hover: #151d3a;
+  --surface-elevated: #151d3a;
+  --field-bg: #0d1322;
+
+  /* Hairlines */
+  --border: rgba(158, 168, 200, 0.14);
+  --border-hover: rgba(158, 168, 200, 0.26);
+  --hairline-strong: rgba(158, 168, 200, 0.26);
+
+  /* Brand / accent (indigo is the fixed brand color) */
   --primary: #6366f1;
   --primary-hover: #818cf8;
-  --primary-glow: rgba(99, 102, 241, 0.12);
-  --success: #10b981;
-  --success-glow: rgba(16, 185, 129, 0.12);
+  --accent: #6366f1;
+  --accent-strong: #4f46e5;
+  --accent-text: #a5b4fc;
+  --chip-bg: rgba(99, 102, 241, 0.1);
+  --chip-text: #a5b4fc;
+  --primary-glow: rgba(99, 102, 241, 0.1);
+  --btn-gradient: linear-gradient(180deg, #5a53ea, #4f46e5);
+  --cta-shadow: 0 12px 28px -10px rgba(79, 70, 229, 0.55);
+
+  /* Status */
+  --success: #34d399;
+  --success-glow: rgba(52, 211, 153, 0.12);
   --warning: #f59e0b;
+  --warning-light: #fcd34d;
   --warning-glow: rgba(245, 158, 11, 0.1);
   --error: #ef4444;
+  --error-light: #fca5a5;
   --error-glow: rgba(239, 68, 68, 0.1);
-  --text: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --radius: 12px;
-  --radius-sm: 8px;
+
+  /* Text */
+  --text: #e7eaf3;
+  --text-secondary: #aeb6cc;
+  --text-muted: #828ba4;
+
+  /* Radii */
+  --radius: 16px;
+  --radius-sm: 10px;
   --radius-lg: 16px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --transition: 200ms ease;
+  --radius-xs: 6px;
+  --radius-pill: 999px;
+
+  /* Shadows & motion */
+  --shadow: 0 18px 44px -28px rgba(0, 0, 0, 0.65);
+  --card-shadow: 0 18px 44px -28px rgba(0, 0, 0, 0.65);
+  --transition: 160ms ease;
+
+  /* Motion tokens (approved design system, AUDIT §2) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 120ms;
+  --dur-popover: 180ms;
+  --dur-panel: 260ms;
+  --dur-modal: 320ms;
 
   /* Light variants (text on colored backgrounds) */
   --error-light: #fca5a5;
@@ -52,12 +107,10 @@
   /* Brand colors */
   --brand-whatsapp: #25d366;
 
-  /* Additional radii */
-  --radius-xs: 4px;
-
   /* Z-index scale */
   --z-dropdown: 40;
   --z-modal: 50;
+  --z-toast: 60;
 }
 
 /* ─── Reset ─── */
@@ -77,7 +130,6 @@ html {
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
-  background-image: var(--bg-gradient);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
@@ -89,4 +141,16 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Shared entrance: opacity + 12px rise */
+@keyframes ui-rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Shared pop-in for state-swap icons */
+@keyframes ui-pop {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
 }

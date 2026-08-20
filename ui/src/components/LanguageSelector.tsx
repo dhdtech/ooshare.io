@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Globe, Check } from "lucide-react";
 import { LANGUAGES } from "../i18n";
 
 export default function LanguageSelector() {
@@ -27,28 +28,37 @@ export default function LanguageSelector() {
   return (
     <div className="lang-selector" ref={ref}>
       <button
-        className="lang-trigger"
+        className="lang-trigger ui-lang-trigger"
         onClick={() => setOpen(!open)}
         aria-label="Select language"
         aria-expanded={open}
       >
-        <span className="lang-flag">{current.flag}</span>
+        <Globe size={14} aria-hidden="true" />
+        <span className="ui-lang-code">{current.code.toUpperCase()}</span>
       </button>
 
       {open && (
         <div className="lang-dropdown" role="listbox" aria-label="Languages">
-          {LANGUAGES.map((lang) => (
-            <button
-              key={lang.code}
-              className={`lang-option ${lang.code === i18n.language ? "lang-option--active" : ""}`}
-              role="option"
-              aria-selected={lang.code === i18n.language}
-              onClick={() => select(lang.code)}
-            >
-              <span className="lang-flag">{lang.flag}</span>
-              <span>{lang.label}</span>
-            </button>
-          ))}
+          {LANGUAGES.map((lang) => {
+            const active = lang.code === i18n.language;
+            return (
+              <button
+                key={lang.code}
+                className={`lang-option ${active ? "lang-option--active" : ""}`}
+                role="option"
+                aria-selected={active}
+                onClick={() => select(lang.code)}
+              >
+                <span className="lang-flag">{lang.flag}</span>
+                <span>{lang.label}</span>
+                {active ? (
+                  <span className="ui-lang-check" aria-hidden="true">
+                    <Check size={13} />
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

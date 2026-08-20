@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../test/render";
 import SecurityModal from "./SecurityModal";
@@ -40,7 +40,8 @@ describe("SecurityModal", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     await user.click(screen.getByLabelText("Close"));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    // The modal animates out (plan 004 exit) before unmounting.
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
   it("closes on overlay click", async () => {
@@ -50,7 +51,7 @@ describe("SecurityModal", () => {
     await user.click(screen.getByLabelText("How It Works"));
     const overlay = document.querySelector(".modal-overlay")!;
     await user.click(overlay);
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
   it("does not close when clicking inside modal", async () => {

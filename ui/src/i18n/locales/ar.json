@@ -22,6 +22,7 @@
     "shareVia": "مشاركة عبر",
     "copy": "نسخ",
     "copied": "تم النسخ",
+    "copiedToast": "تم نسخ الرابط إلى الحافظة",
     "whatsapp": "واتساب",
     "email": "بريد",
     "createAnother": "إنشاء آخر",
@@ -45,6 +46,7 @@
     "destroyed": "تم تدمير هذا السر نهائياً. لا يمكن مشاهدته مرة أخرى.",
     "copySecret": "نسخ السر",
     "copiedClipboard": "تم النسخ إلى الحافظة",
+    "copiedToast": "تم نسخ السر إلى الحافظة",
     "notFoundTitle": "السر غير متاح",
     "notFoundMsg": "تمت مشاهدة هذا السر بالفعل أو انتهت صلاحيته. يمكن الوصول إلى الأسرار مرة واحدة فقط.",
     "errorTitle": "حدث خطأ ما",
@@ -149,6 +151,30 @@
       "ctaDesc": "يستخدم Only Once Share تشفير AES-256-GCM مع بنية معرفة صفرية. لا حاجة لحساب.",
       "ctaButton": "جرّب Only Once Share",
       "contentInEnglish": "هذا المقال متاح حالياً باللغة الإنجليزية."
+    },
+    "components": {
+      "metaTitle": "مكتبة المكونات — Only Once Share (داخلي)",
+      "metaDesc": "عرض حي لنظام تصميم Only Once Share.",
+      "title": "مكتبة المكونات",
+      "subtitle": "عرض حي لنظام تصميم ooshare — المصدر الوحيد للحقيقة في الترميز والسلوك.",
+      "sectionButtons": "الأزرار وأزرار الأيقونات والروابط",
+      "sectionInputs": "المدخلات والحقول",
+      "sectionSegmented": "عنصر تحكم مجزأ",
+      "sectionFile": "منطقة إسقاط الملفات",
+      "sectionBadges": "الشارات (رقائق أحادية المسافة)",
+      "sectionCopy": "النسخ والإشعارات",
+      "sectionModal": "النافذة المنبثقة",
+      "sectionAccordion": "الأكورديون",
+      "sectionSteps": "الخطوات (كيف يعمل)",
+      "sectionSecurity": "بطاقات معلومات الأمان",
+      "sectionStates": "حالات التغذية الراجعة",
+      "sectionNav": "التنقل",
+      "sectionFooter": "التذييل",
+      "sectionShare": "أزرار المشاركة",
+      "sectionBrand": "العلامة التجارية",
+      "copySample": "https://ooshare.io/s/sample#key",
+      "toastCopied": "تم النسخ إلى الحافظة",
+      "toastDemo": "تم تشغيل إشعار تجريبي"
     }
   },
   "footer": {
@@ -173,5 +199,9 @@
     "oneTimeDesc": "عند استرجاع السر، يتم حذفه ذرياً من التخزين في نفس العملية.",
     "expiryTitle": "انتهاء تلقائي",
     "expiryDesc": "تنتهي صلاحية الأسرار تلقائياً بعد المدة المختارة (1-72 ساعة)، حتى لو لم يتم مشاهدتها."
+  },
+  "notFound": {
+    "title": "404 — الصفحة غير موجودة",
+    "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
   }
 }

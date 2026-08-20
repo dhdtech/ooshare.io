@@ -1,6 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { Shield, Lock, Key, Eye, Trash2, Hash, Server, ArrowLeft } from "lucide-react";
+import { Shield, Lock, Key, Eye, Trash2, Hash, Server } from "lucide-react";
+import {
+  ArticleHeader,
+  InfoCard,
+  ProseSection,
+  NumberedList,
+  CtaBlock,
+  Button,
+  BackLink,
+} from "../components/ui";
 import useSEO from "../lib/useSEO";
 
 export default function Security() {
@@ -15,82 +23,42 @@ export default function Security() {
   return (
     <div className="content-page">
       <article className="article">
-        <header className="article-header">
-          <h1>{t("pages.security.title")}</h1>
-          <p className="article-lead">{t("pages.security.lead")}</p>
-        </header>
+        <ArticleHeader title={t("pages.security.title")} lead={t("pages.security.lead")} />
 
-        <section className="info-section">
-          <div className="info-card">
-            <div className="info-card-icon"><Lock size={20} /></div>
-            <h2>{t("pages.security.e2eTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.e2eContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Key size={20} /></div>
-            <h2>{t("pages.security.hkdfTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.hkdfContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Hash size={20} /></div>
-            <h2>{t("pages.security.aadTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.aadContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Eye size={20} /></div>
-            <h2>{t("pages.security.zkTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.zkContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Server size={20} /></div>
-            <h2>{t("pages.security.serverTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.serverContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Trash2 size={20} /></div>
-            <h2>{t("pages.security.oneTimeTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.oneTimeContent") }} />
-          </div>
-
-          <div className="info-card">
-            <div className="info-card-icon"><Shield size={20} /></div>
-            <h2>{t("pages.security.ossTitle")}</h2>
-            <p dangerouslySetInnerHTML={{ __html: t("pages.security.ossContent") }} />
-          </div>
+        <section className="ui-info-grid" aria-label={t("pages.security.title")}>
+          <InfoCard icon={<Lock size={20} />} title={t("pages.security.e2eTitle")} html={t("pages.security.e2eContent")} />
+          <InfoCard icon={<Key size={20} />} title={t("pages.security.hkdfTitle")} html={t("pages.security.hkdfContent")} />
+          <InfoCard icon={<Hash size={20} />} title={t("pages.security.aadTitle")} html={t("pages.security.aadContent")} />
+          <InfoCard icon={<Eye size={20} />} title={t("pages.security.zkTitle")} html={t("pages.security.zkContent")} />
+          <InfoCard icon={<Server size={20} />} title={t("pages.security.serverTitle")} html={t("pages.security.serverContent")} />
+          <InfoCard icon={<Trash2 size={20} />} title={t("pages.security.oneTimeTitle")} html={t("pages.security.oneTimeContent")} />
+          <InfoCard icon={<Shield size={20} />} title={t("pages.security.ossTitle")} html={t("pages.security.ossContent")} />
         </section>
 
-        <section className="article-section">
-          <h2>{t("pages.security.flowTitle")}</h2>
-          <ol className="steps-list">
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step1") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step2") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step3") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step4") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step5") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step6") }} />
-            <li dangerouslySetInnerHTML={{ __html: t("pages.security.step7") }} />
-          </ol>
-        </section>
+        <ProseSection title={t("pages.security.flowTitle")}>
+          <NumberedList
+            items={[
+              t("pages.security.step1"),
+              t("pages.security.step2"),
+              t("pages.security.step3"),
+              t("pages.security.step4"),
+              t("pages.security.step5"),
+              t("pages.security.step6"),
+              t("pages.security.step7"),
+            ]}
+          />
+        </ProseSection>
 
-        <section className="article-section">
-          <h2>{t("pages.security.whyTitle")}</h2>
+        <ProseSection title={t("pages.security.whyTitle")}>
           <p dangerouslySetInnerHTML={{ __html: t("pages.security.whyP1") }} />
           <p dangerouslySetInnerHTML={{ __html: t("pages.security.whyP2") }} />
-        </section>
+        </ProseSection>
 
-        <div className="article-cta">
-          <Link to="/" className="btn btn-primary">{t("pages.security.cta")}</Link>
-        </div>
+        <CtaBlock>
+          <Button to="/">{t("pages.security.cta")}</Button>
+        </CtaBlock>
 
-        <Link to="/" className="back-link">
-          <ArrowLeft size={15} />
-          {t("nav.backHome")}
-        </Link>
+        <BackLink to="/">{t("nav.backHome")}</BackLink>
       </article>
     </div>
   );
