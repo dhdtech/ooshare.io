@@ -6,15 +6,7 @@ import Card from "@ui/components/ui/Card";
 import Button from "@ui/components/ui/Button";
 import SegmentedControl from "@ui/components/ui/SegmentedControl";
 import { useToast } from "@ui/components/ui/Toast";
-
-const TTL_OPTIONS = [
-  { value: 1, label: "1h" },
-  { value: 4, label: "4h" },
-  { value: 12, label: "12h" },
-  { value: 24, label: "24h" },
-  { value: 48, label: "48h" },
-  { value: 72, label: "72h" },
-];
+import { TTL_OPTIONS } from "../../src/lib/ttl";
 
 const LANGUAGES = [
   { code: "en", label: "English" },

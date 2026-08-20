@@ -58,7 +58,7 @@ export default defineContentScript({
         browser.runtime.sendMessage({
           type: "ooshare:reveal-request",
           url: a.href,
-        });
+        }).catch(() => {});
       });
       return b;
     };

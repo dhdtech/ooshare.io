@@ -16,3 +16,8 @@ body.ext-surface {
   max-width: none;
   padding: 16px;
 }
+
+.ext-secret-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}

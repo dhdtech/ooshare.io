@@ -11,11 +11,35 @@ export type ContentMessage =
   | { type: "ooshare:created"; url: string }
   | { type: "ooshare:error"; title: string; message: string; fallbackUrl?: string };
 
-export function isContentMessage(msg: unknown): msg is ContentMessage {
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+
+function isReveal(msg: Record<string, unknown>): boolean {
+  const payload = msg.payload;
+  if (!isRecord(payload) || typeof payload.text !== "string") return false;
+  if (payload.attachment === undefined) return true;
   return (
-    typeof msg === "object" &&
-    msg !== null &&
-    "type" in msg &&
-    (msg as { type: string }).type.startsWith("ooshare:")
+    isRecord(payload.attachment) &&
+    typeof payload.attachment.mime === "string" &&
+    payload.attachment.data instanceof Uint8Array
   );
+}
+
+export function isContentMessage(msg: unknown): msg is ContentMessage {
+  if (!isRecord(msg) || typeof msg.type !== "string") return false;
+  switch (msg.type) {
+    case "ooshare:reveal":
+      return isReveal(msg);
+    case "ooshare:created":
+      return typeof msg.url === "string";
+    case "ooshare:error":
+      return (
+        typeof msg.title === "string" &&
+        typeof msg.message === "string" &&
+        (msg.fallbackUrl === undefined || typeof msg.fallbackUrl === "string")
+      );
+    default:
+      return false;
+  }
 }

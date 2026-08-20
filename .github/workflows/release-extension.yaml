@@ -4,6 +4,10 @@ on:
   push:
     tags: ["ext-v*"]
 
+concurrency:
+  group: release-extension-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
 

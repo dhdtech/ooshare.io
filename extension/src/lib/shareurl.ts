@@ -50,7 +50,13 @@ export function parseShareUrl(raw: string): ParsedShareUrl {
   if (!id) throw new Error("Missing secret id in URL path");
   if (!u.hash) throw new Error("Missing master key in URL fragment");
   const key = u.hash.slice(1);
-  if (decodeB64url(key).length !== KEY_BYTES) {
+  let keyBytes: Uint8Array;
+  try {
+    keyBytes = decodeB64url(key);
+  } catch {
+    throw new Error("Invalid master key in URL fragment");
+  }
+  if (keyBytes.length !== KEY_BYTES) {
     throw new Error("Invalid master key in URL fragment");
   }
   return { id, lang: u.searchParams.get("lng") ?? "", key };

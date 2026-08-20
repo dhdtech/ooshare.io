@@ -9,15 +9,7 @@ import Button from "@ui/components/ui/Button";
 import ErrorBanner from "@ui/components/ui/ErrorBanner";
 import CopyButton from "@ui/components/ui/CopyButton";
 import { createShare } from "../../src/lib/secret-service";
-
-const TTL_OPTIONS = [
-  { value: 1, label: "1h" },
-  { value: 4, label: "4h" },
-  { value: 12, label: "12h" },
-  { value: 24, label: "24h" },
-  { value: 48, label: "48h" },
-  { value: 72, label: "72h" },
-];
+import { TTL_OPTIONS } from "../../src/lib/ttl";
 
 export default function CreateTab() {
   const { t } = useTranslation();

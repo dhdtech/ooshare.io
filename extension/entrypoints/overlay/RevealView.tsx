@@ -78,7 +78,7 @@ function RevealedResult({ payload }: { payload: RevealPayload }) {
       <p className="result-header" style={{ marginBottom: 12 }}>Only Once Share</p>
       {text && (
         <>
-          <div className="secret-content" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</div>
+          <div className="secret-content ext-secret-text">{text}</div>
           <CopyButton text={text} copyLabel={t("extension.copy")} copiedLabel={t("extension.copied")} toastMessage={t("extension.toastCopied")} variant="secondary" className="ui-btn--full" />
         </>
       )}

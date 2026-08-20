@@ -41,7 +41,7 @@ export default function RevealTab() {
         {t("extension.revealButton")}
       </Button>
       {loading && <LoadingState label={t("extension.revealLoading")} />}
-      {result && <div className="secret-content" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{result}</div>}
+      {result && <div className="secret-content ext-secret-text">{result}</div>}
       {error ? <ErrorBanner>{error}</ErrorBanner> : null}
     </Card>
   );

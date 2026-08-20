@@ -46,4 +46,10 @@ describe("shareurl", () => {
       parseShareUrl("https://ooshare.io/s/AbCdEf12#AAAA"),
     ).toThrow(/master key/i);
   });
+
+  it("rejects an invalid base64 fragment with a clean error", () => {
+    expect(() => parseShareUrl("https://ooshare.io/s/AbCdEf12#!!!")).toThrow(
+      /invalid master key/i,
+    );
+  });
 });
