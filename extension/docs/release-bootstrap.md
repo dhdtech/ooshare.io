@@ -64,7 +64,14 @@ git push origin ext-v1.0.0
    `AMO_API_KEY` (JWT issuer) and an `AMO_API_SECRET` (JWT secret).
 3. Set two repo secrets: `AMO_API_KEY`, `AMO_API_SECRET`.
 4. The pipeline runs `web-ext sign ... --channel unlisted`, producing a signed,
-   installable `.xpi` in the GitHub release (via `dist-artifacts`).
+   installable `.xpi`. Note the `.xpi` is **not** attached to the GitHub release:
+   the `build` job creates the release with the artifacts it built (the unsigned
+   Chrome/Firefox `.zip` builds, `source.tar.gz`, `SHA256SUMS`), and `web-ext sign`
+   runs later in the `publish-firefox` job where the `.xpi` lands only in that
+   job's `extension/dist/` directory. The unsigned `ooshare-firefox-<version>.zip`
+   **is** in the release, but the signed `.xpi` is not uploaded anywhere by the
+   workflow — retrieve it from the `publish-firefox` job's `dist/` artifact if you
+   need to distribute it manually.
 5. **For a public *listed* submission** (what most users install from AMO), the
    `web-ext sign --channel unlisted` step is NOT sufficient — replace it with the
    AMO submit API call. Add the extension to the AMO listing, then use the
@@ -92,7 +99,7 @@ git push origin ext-v1.0.0
    & Profiles in the developer portal).
 3. Create/re-use a **distribution certificate** and a **provisioning profile** for
    the wrapper app. These must be present in the CI runner's keychain for
-   `xcodebuild ... archive` to succeed (the CI job does not currently import them,
+   `xcodebuild ... build` to succeed (the CI job does not currently import them,
    so install them in the GitHub runner keychain when wiring this job up).
 4. Create an **App Store Connect API key** (`https://appstoreconnect.apple.com/access/api`):
    - Download the `AuthKey_<id>.p8` file.
@@ -100,9 +107,24 @@ git push origin ext-v1.0.0
      `base64 < AuthKey_<KEY_ID>.p8`
    - Set `APPLE_API_KEY_ID` to the key ID.
    - Set `APPLE_API_ISSUER` to the issuer ID.
-5. The pipeline runs `wxt prepare -b safari`, archives the wrapper with
-   `xcodebuild`, then `notarytool submit` + `altool --upload-app` to upload the
-   `.app` to App Store Connect.
+5. The pipeline runs `wxt prepare -b safari`, builds the wrapper app with
+   `xcodebuild ... -configuration Release` into `extension/.output/safari/build/Release/`,
+   packages `ooshare.app` into `ooshare-safari.zip` with `ditto`, then
+   `xcrun notarytool submit ooshare-safari.zip ... --wait` and
+   `xcrun altool --upload-app -f build/Release/ooshare.app -t macos ...` to upload
+   the app to App Store Connect.
+   (Note: `notarytool` accepts a `.zip`/`.dmg`/`.pkg`, not an `.xcarchive`, so the
+   wrapper is packaged with `ditto` before submission; and `altool --upload-app`
+   targets the app bundle at `build/Release/ooshare.app`, not the archive.)
+6. **Hosted code-signing is required.** Both `notarytool submit` and
+   `altool --upload-app` need a distribution signing identity (certificate +
+   private key) present in the runner's keychain so `xcodebuild` can codesign the
+   app, and the provisioning profile must cover the bundle ID. The workflow does
+   **not** install these automatically — provisioning the macOS runner's keychain
+   with the distribution cert/profile is a human step that must be done before the
+   `publish-safari` job can run. AWS CodeBuild/EC2 macOS runners are the usual
+   place this is wired up; see the Apple "Export a signing certificate" guide to
+   export the `.p12` and install it in the runner keychain.
 
 ## Store CI secrets (on dhdtech/ooshare.io)
 
