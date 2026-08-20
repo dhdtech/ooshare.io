@@ -69,7 +69,7 @@ func TestCreateJSON(t *testing.T) {
 	}
 }
 
-func TestCreateHumanPrintsURLToStdoutOnly(t *testing.T) {
+func TestCreateNonTTYPrintsBareURL(t *testing.T) {
 	api := createServer(t, 24)
 	var out, errw bytes.Buffer
 	code := Create(&out, &errw, []string{"--api-url", api, "--text", "s3cr3t"})
@@ -77,14 +77,11 @@ func TestCreateHumanPrintsURLToStdoutOnly(t *testing.T) {
 		t.Fatalf("exit = %d", code)
 	}
 	trimmed := strings.TrimSpace(out.String())
-	if !strings.HasPrefix(trimmed, "https://ooshare.io/s/Kx7mP2nQ?lng=en#") {
-		t.Fatalf("stdout = %q", trimmed)
+	if !strings.HasPrefix(trimmed, "https://ooshare.io/s/Kx7mP2nQ?lng=en#") || strings.Contains(trimmed, "\n") {
+		t.Fatalf("stdout = %q, want a single bare URL line", trimmed)
 	}
-	if strings.Contains(trimmed, "\n") {
-		t.Fatalf("stdout should be a single URL line, got %q", trimmed)
-	}
-	if !strings.Contains(errw.String(), "Secret created") {
-		t.Fatalf("decoration missing from stderr: %q", errw.String())
+	if errw.Len() != 0 {
+		t.Fatalf("stderr should be empty when stdout is not a TTY: %q", errw.String())
 	}
 }
 
@@ -155,25 +152,24 @@ func TestCreateWithFileAttachment(t *testing.T) {
 	}
 }
 
-func TestCreateAttachmentHumanMode(t *testing.T) {
-	api := createServer(t, 24)
+func TestCreateAttachmentRichOutputOnTTY(t *testing.T) {
 	dir := t.TempDir()
-	path := filepath.Join(dir, "photo.jpeg")
-	// ~2 KB so formatBytes hits the KB branch in the human attachment line.
-	data := bytes.Repeat([]byte{0xff}, 2048)
-	if err := os.WriteFile(path, data, 0o600); err != nil {
+	path := filepath.Join(dir, "contract.pdf")
+	if err := os.WriteFile(path, bytes.Repeat([]byte{0x61}, 2048), 0o600); err != nil {
 		t.Fatal(err)
 	}
+	api := createServer(t, 24)
+	oldTTY := stdoutIsTTY
+	stdoutIsTTY = func() bool { return true }
+	defer func() { stdoutIsTTY = oldTTY }()
 	var out, errw bytes.Buffer
-	code := Create(&out, &errw, []string{"--api-url", api, "--file", path, "--text", "cap"})
+	code := Create(&out, &errw, []string{"--api-url", api, "--text", "x", "--file", path})
 	if code != 0 {
 		t.Fatalf("exit = %d, stderr = %q", code, errw.String())
 	}
-	if !strings.Contains(errw.String(), "Attachment") {
-		t.Fatalf("attachment line missing from stderr: %q", errw.String())
-	}
-	if !strings.Contains(errw.String(), "KB") {
-		t.Fatalf("attachment size should use KB: %q", errw.String())
+	s := out.String()
+	if !strings.Contains(s, "📎  contract.pdf · 2.0 KB") {
+		t.Fatalf("attachment row missing from rich output:\n%s", s)
 	}
 }
 
@@ -364,5 +360,66 @@ func TestDetectMIME(t *testing.T) {
 		} else if err != nil || got != want {
 			t.Fatalf("%s: got %q, %v; want %q", name, got, err, want)
 		}
+	}
+}
+
+func TestCreateRichOutputOnTTY(t *testing.T) {
+	api := createServer(t, 1)
+	oldTTY := stdoutIsTTY
+	stdoutIsTTY = func() bool { return true }
+	defer func() { stdoutIsTTY = oldTTY }()
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--text", "x", "--ttl", "1"})
+	if code != 0 {
+		t.Fatalf("exit = %d, stderr = %q", code, errw.String())
+	}
+	s := out.String()
+	for _, want := range []string{
+		"Secret created — opens exactly once",
+		"after 1h",
+		"destroyed forever",
+		"https://ooshare.io/s/Kx7mP2nQ?lng=en#",
+		"Share it over a private channel",
+	} {
+		if !strings.Contains(s, want) {
+			t.Fatalf("rich output missing %q:\n%s", want, s)
+		}
+	}
+	if !strings.Contains(s, "\x1b[") {
+		t.Fatalf("expected ANSI colors in TTY output:\n%q", s)
+	}
+}
+
+func TestCreateRichOutputNoColor(t *testing.T) {
+	api := createServer(t, 24)
+	oldTTY := stdoutIsTTY
+	stdoutIsTTY = func() bool { return true }
+	defer func() { stdoutIsTTY = oldTTY }()
+	t.Setenv("NO_COLOR", "1")
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--text", "x"})
+	if code != 0 {
+		t.Fatalf("exit = %d", code)
+	}
+	if strings.Contains(out.String(), "\x1b[") {
+		t.Fatalf("NO_COLOR should disable ANSI:\n%q", out.String())
+	}
+	if !strings.Contains(out.String(), "Secret created") {
+		t.Fatalf("plain panel missing:\n%s", out.String())
+	}
+}
+
+func TestCreateQuietOnTTYPrintsBareURL(t *testing.T) {
+	api := createServer(t, 24)
+	oldTTY := stdoutIsTTY
+	stdoutIsTTY = func() bool { return true }
+	defer func() { stdoutIsTTY = oldTTY }()
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--text", "x", "--quiet"})
+	if code != 0 {
+		t.Fatalf("exit = %d", code)
+	}
+	if trimmed := strings.TrimSpace(out.String()); !strings.HasPrefix(trimmed, "https://ooshare.io/s/") {
+		t.Fatalf("--quiet on TTY should print the bare URL, got %q", trimmed)
 	}
 }

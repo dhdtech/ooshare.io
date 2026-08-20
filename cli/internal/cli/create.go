@@ -147,18 +147,22 @@ func Create(out, errw io.Writer, args []string) int {
 		return 0
 	}
 
-	fmt.Fprintln(out, shareURL) // stdout: URL only
-	if !*quiet {
-		fmt.Fprintln(errw, "✔ Secret created — reads once, expires in 24h")
-		fmt.Fprintf(errw, "\n  TTL        %dh\n", *ttl)
-		fmt.Fprintf(errw, "  ID         %s\n", res.ID)
-		if res.Alias != "" {
-			fmt.Fprintf(errw, "  Alias      %s\n", res.Alias)
-		}
+	if !*quiet && stdoutIsTTY() {
+		var att *attachmentInfo
 		if attachment != nil {
-			fmt.Fprintf(errw, "  Attachment %s · %s\n", *filePath, formatBytes(int64(len(attachment.Data))))
+			att = &attachmentInfo{
+				Name: filepath.Base(*filePath),
+				Size: formatBytes(int64(len(attachment.Data))),
+			}
 		}
+		fmt.Fprint(out, renderCreateSuccess(createSuccessData{
+			TTLHours:   *ttl,
+			URL:        shareURL,
+			Attachment: att,
+		}, noColorEnv()))
+		return 0
 	}
+	fmt.Fprintln(out, shareURL)
 	return 0
 }
 
