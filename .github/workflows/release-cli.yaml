@@ -264,6 +264,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
+      - name: Install createrepo_c
+        run: sudo apt-get update && sudo apt-get install -y createrepo-c
       - name: Download rpm + set up key
         env:
           GH_TOKEN: ${{ github.token }}
@@ -310,7 +312,7 @@ jobs:
         run: |
           gh release download $env:GITHUB_REF_NAME -p 'ooshare_*_windows_amd64.zip' -D ./rel
       - name: Open winget PR
-        uses: vedantmgoyal2009/winget-releaser@latest
+        uses: vedantmgoyal2009/winget-releaser@v2
         with:
           identifier: dhdtech.ooshare
           installers-regex: 'ooshare_.*windows_amd64\.zip$'
