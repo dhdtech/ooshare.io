@@ -1,0 +1,60 @@
+version: 2
+
+project_name: ooshare
+
+builds:
+  - id: ooshare
+    main: ./cmd/ooshare
+    binary: ooshare
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - >-
+        -s -w
+        -X github.com/dhdtech/only-once-share/cli/internal/cli.Version={{ .Version }}
+    flags:
+      - -trimpath
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: ooshare
+    formats: [tar.gz, zip]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: SHA256SUMS
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+
+nfpms:
+  - id: ooshare
+    package_name: ooshare
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    vendor: Only Once Share
+    homepage: https://ooshare.io
+    maintainer: dhdtech <bot@ooshare.io>
+    description: Only Once Share CLI — one-time secret sharing from the terminal
+    license: MIT
+    formats: [deb, rpm]
+    contents:
+      - src: LICENSE
+        dst: /usr/share/doc/ooshare/copyright
+    bindir: /usr/bin
+
+# brew/scoop/winget/apt/yum publishing is done by the dedicated deploy jobs
+# (Tasks 4-7) so each job holds only its own token. GoReleaser only BUILDS here.

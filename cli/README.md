@@ -5,13 +5,18 @@ Create and view one-time secrets from the terminal, exactly like the web
 
 ## Install
 
-Download the binary for your platform from the [releases](https://github.com/dhdtech/only-once-share/releases)
-page (`ooshare-<os>-<arch>`). macOS and Linux:
+Download the release for your platform from the [releases](https://github.com/dhdtech/only-once-share/releases)
+page. Releases are tagged `v*` and ship as `ooshare_<version>_<os>_<arch>.tar.gz` (`.zip` on Windows),
+plus `.deb`/`.rpm` packages and a `SHA256SUMS` checksum file. macOS and Linux:
 
 ```bash
-curl -fsSL -o ooshare https://github.com/dhdtech/only-once-share/releases/download/<tag>/ooshare-linux-amd64
-chmod +x ooshare && sudo mv ooshare /usr/local/bin/
+curl -fsSL https://github.com/dhdtech/only-once-share/releases/download/v0.1.0/ooshare_0.1.0_linux_amd64.tar.gz -o ooshare.tgz
+tar -xzf ooshare.tgz ooshare
+sudo mv ooshare /usr/local/bin/
 ```
+
+Note the tag keeps its leading `v` in the download path, but the asset filename uses the
+version without it (e.g. tag `v0.1.0` → `ooshare_0.1.0_linux_amd64.tar.gz`).
 
 ## Create a secret
 

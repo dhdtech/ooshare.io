@@ -2,42 +2,35 @@ name: Release CLI
 
 on:
   push:
-    tags: ["cli-v*"]
+    tags: ["v*"]
 
 permissions:
+  id-token: write
   contents: write
+  packages: write
 
 jobs:
-  release:
-    name: Build & publish
+  build:
+    name: Build & sign
     runs-on: ubuntu-latest
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
-
-      - name: Build all targets
-        env:
-          VERSION: ${{ github.ref_name }}
-        run: |
-          set -eux
-          cd cli
-          for target in "darwin amd64" "darwin arm64" "linux amd64" "linux arm64" "windows amd64"; do
-            set -- $target
-            ext=""
-            [ "$1" = "windows" ] && ext=".exe"
-            GOOS="$1" GOARCH="$2" go build -trimpath \
-              -ldflags "-s -w -X github.com/dhdtech/only-once-share/cli/internal/cli.Version=${VERSION}" \
-              -o "dist/ooshare-$1-$2${ext}" ./cmd/ooshare
-          done
-
-      - name: Checksums
-        working-directory: cli
-        run: shasum -a 256 dist/* > dist/SHA256SUMS.txt
-
-      - name: Create release
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean --skip=publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "${GITHUB_REF_NAME}" cli/dist/* --generate-notes --title "${GITHUB_REF_NAME}"
+
+      - name: Hash artifacts (for SLSA subjects)
+        id: hash
+        working-directory: cli
+        run: |
+          set -euo pipefail
+          echo "hashes=$(sha256sum dist/* | base64 -w0)" >> "$GITHUB_OUTPUT"
