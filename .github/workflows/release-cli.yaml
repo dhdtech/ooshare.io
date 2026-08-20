@@ -207,3 +207,42 @@ jobs:
           git add -A
           git commit -m "apt: ooshare ${GITHUB_REF_NAME}" || true
           git push
+
+  deploy-yum:
+    name: Deploy yum repo
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download rpm + set up key
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GPG_KEY: ${{ secrets.OOSHARE_GPG_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          gh release download "$GITHUB_REF_NAME" -p 'ooshare_*_linux_amd64.rpm' -D /tmp/rel
+          mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
+          echo "$GPG_KEY" | base64 -d > /tmp/key.asc
+          gpg --batch --import /tmp/key.asc
+      - name: Append rpm + regenerate yum index
+        env:
+          GPG_PASSPHRASE: ${{ secrets.OOSHARE_GPG_PASSPHRASE }}
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          rm -rf repo && git clone --depth 1 \
+            "https://x-access-token:${PACKAGES_TOKEN}@github.com/dhdtech/ooshare-packages" repo
+          mkdir -p repo/rpm
+          cp /tmp/rel/ooshare_*_linux_amd64.rpm repo/rpm/
+          cd repo/rpm
+          createrepo_c .   # generates repodata/repomd.xml
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" \
+            --detach-sign --armor -o repodata/repomd.xml.asc repodata/repomd.xml
+          cd "$GITHUB_WORKSPACE/repo"
+          gpg --armor --export ooshare@ooshare.io > rpm/ooshare.gpg
+          git config user.name "ooshare-bot"
+          git config user.email "bot@ooshare.io"
+          git add -A
+          git commit -m "yum: ooshare ${GITHUB_REF_NAME}" || true
+          git push
