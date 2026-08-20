@@ -4,10 +4,13 @@ on:
   push:
     tags: ["v*"]
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: write
-  packages: write
 
 jobs:
   build:
@@ -73,14 +76,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download darwin_arm64 archive + checksums
+        id: rel
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
           gh release download "$TAG" \
             -p 'ooshare_*_darwin_arm64.tar.gz' -p 'SHA256SUMS' -D /tmp/rel
-          echo "sha=$(grep 'darwin_arm64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')" >> "$GITHUB_OUTPUT"
-        id: rel
+          sha="$(grep 'darwin_arm64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')"
+          test -n "$sha"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
       - name: Generate formula
         env:
           TAG: ${{ github.ref_name }}
@@ -120,14 +127,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download windows_amd64 zip + checksums
+        id: rel
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
           gh release download "$TAG" \
             -p 'ooshare_*_windows_amd64.zip' -p 'SHA256SUMS' -D /tmp/rel
-          echo "sha=$(grep 'windows_amd64.zip' /tmp/rel/SHA256SUMS | awk '{print $1}')" >> "$GITHUB_OUTPUT"
-        id: rel
+          sha="$(grep 'windows_amd64.zip' /tmp/rel/SHA256SUMS | awk '{print $1}')"
+          test -n "$sha"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
       - name: Generate scoop manifest
         env:
           TAG: ${{ github.ref_name }}
@@ -265,4 +276,7 @@ jobs:
         with:
           identifier: dhdtech.ooshare
           installers-regex: 'ooshare_.*windows_amd64\.zip$'
+          # GITHUB_TOKEN (scoped to this repo only) is sufficient: the
+          # winget-releaser action opens the winget-pkgs PR itself using its
+          # own short-lived token, not ours.
           token: ${{ secrets.GITHUB_TOKEN }}
