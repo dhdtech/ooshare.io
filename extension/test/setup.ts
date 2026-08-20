@@ -3,6 +3,10 @@ import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 import { webcrypto } from "node:crypto";
 
+// Initialize the shared i18n instance once so `useTranslation()` resolves real
+// strings (English) in component tests.
+import "../src/i18n";
+
 // jsdom does not ship WebCrypto; the extension core depends on it.
 if (!globalThis.crypto?.subtle) {
   Object.defineProperty(globalThis, "crypto", {

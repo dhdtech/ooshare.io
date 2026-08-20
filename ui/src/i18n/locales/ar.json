@@ -203,5 +203,36 @@
   "notFound": {
     "title": "404 — الصفحة غير موجودة",
     "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+  },
+  "extension": {
+    "contextReveal": "كشف سر ooshare",
+    "contextCreate": "مشاركة عبر ooshare",
+    "tabCreate": "إنشاء",
+    "tabReveal": "كشف",
+    "createLabel": "السر",
+    "createPlaceholder": "الصق نص السر…",
+    "createExpires": "ينتهي خلال",
+    "createSubmit": "إنشاء رابط المشاركة",
+    "createEncrypting": "جارٍ التشفير…",
+    "createCreated": "تم إنشاء رابط المشاركة",
+    "createAnother": "إنشاء آخر",
+    "revealPlaceholder": "الصق رابط مشاركة ooshare…",
+    "revealButton": "كشف السر",
+    "revealLoading": "جارٍ فك التشفير…",
+    "revealDestroyed": "يمكن قراءة هذا السر مرة واحدة فقط.",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "toastCopied": "تم النسخ إلى الحافظة",
+    "download": "تنزيل",
+    "openInSite": "فتح في ooshare.io",
+    "notFoundTitle": "السر غير موجود",
+    "notFoundMsg": "تمت مشاهدة هذا السر بالفعل أو لم يكن موجوداً من الأساس.",
+    "errorTitle": "تعذر الكشف",
+    "optionsTitle": "إعدادات ooshare",
+    "optionsTtl": "الانتهاء الافتراضي",
+    "optionsLang": "اللغة",
+    "optionsAnnotator": "إظهار شارات على روابط المشاركة",
+    "optionsAnnotatorDesc": "قم أيضاً بتمييز روابط المشاركة على كل موقع تزوره (اختياري).",
+    "optionsSaved": "تم الحفظ"
   }
 }

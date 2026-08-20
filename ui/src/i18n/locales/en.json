@@ -260,5 +260,36 @@
   "notFound": {
     "title": "404 — Page Not Found",
     "message": "The page you're looking for doesn't exist or has been moved."
+  },
+  "extension": {
+    "contextReveal": "Reveal ooshare secret",
+    "contextCreate": "Share with ooshare",
+    "tabCreate": "Create",
+    "tabReveal": "Reveal",
+    "createLabel": "Secret",
+    "createPlaceholder": "Paste the secret text…",
+    "createExpires": "Expires in",
+    "createSubmit": "Create share link",
+    "createEncrypting": "Encrypting…",
+    "createCreated": "Share link created",
+    "createAnother": "Create another",
+    "revealPlaceholder": "Paste an ooshare share URL…",
+    "revealButton": "Reveal secret",
+    "revealLoading": "Decrypting…",
+    "revealDestroyed": "This secret can only be read once.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "toastCopied": "Copied to clipboard",
+    "download": "Download",
+    "openInSite": "Open in ooshare.io",
+    "notFoundTitle": "Secret not found",
+    "notFoundMsg": "This secret was already viewed or never existed.",
+    "errorTitle": "Could not reveal",
+    "optionsTitle": "ooshare settings",
+    "optionsTtl": "Default expiry",
+    "optionsLang": "Language",
+    "optionsAnnotator": "Show badges on share links",
+    "optionsAnnotatorDesc": "Also mark share links on every site you visit (opt-in).",
+    "optionsSaved": "Saved"
   }
 }

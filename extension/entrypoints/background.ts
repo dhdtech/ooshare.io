@@ -1,6 +1,7 @@
 import { browser } from "wxt/browser";
 import { MENU_CREATE, MENU_REVEAL, type ContentMessage } from "../src/lib/messages";
 import { createShare, revealShare } from "../src/lib/secret-service";
+import i18n from "../src/i18n";
 
 async function injectContent(tabId: number): Promise<void> {
   try {
@@ -22,13 +23,13 @@ export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
     await browser.contextMenus.create({
       id: MENU_REVEAL,
-      title: "Reveal ooshare secret",
+      title: i18n.t("extension.contextReveal"),
       contexts: ["link"],
       targetUrlPatterns: ["*://ooshare.io/s/*"],
     });
     await browser.contextMenus.create({
       id: MENU_CREATE,
-      title: "Share with ooshare",
+      title: i18n.t("extension.contextCreate"),
       contexts: ["selection"],
     });
   });
@@ -56,5 +57,29 @@ export default defineBackground(() => {
         fallbackUrl: info.linkUrl,
       });
     }
+  });
+
+  browser.runtime.onMessage.addListener((msg: unknown, sender) => {
+    if (
+      msg &&
+      typeof msg === "object" &&
+      (msg as { type: string }).type === "ooshare:reveal-request" &&
+      sender.tab?.id != null
+    ) {
+      const { url } = msg as { url: string };
+      revealShare(url)
+        .then((res) =>
+          sendToTab(sender.tab!.id!, { type: "ooshare:reveal", payload: res }),
+        )
+        .catch(async (err) =>
+          sendToTab(sender.tab!.id!, {
+            type: "ooshare:error",
+            title: "ooshare",
+            message: err instanceof Error ? err.message : "Failed to reveal",
+            fallbackUrl: url,
+          }),
+        );
+    }
+    return undefined;
   });
 });

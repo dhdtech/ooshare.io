@@ -202,5 +202,36 @@
   "notFound": {
     "title": "404 — पृष्ठ नहीं मिला",
     "message": "आप जिस पृष्ठ की तलाश कर रहे हैं वह मौजूद नहीं है या स्थानांतरित कर दिया गया है।"
+  },
+  "extension": {
+    "contextReveal": "ooshare रहस्य प्रकट करें",
+    "contextCreate": "ooshare के साथ साझा करें",
+    "tabCreate": "बनाएँ",
+    "tabReveal": "प्रकट करें",
+    "createLabel": "रहस्य",
+    "createPlaceholder": "रहस्य का टेक्स्ट चिपकाएँ…",
+    "createExpires": "समाप्त होता है",
+    "createSubmit": "साझा लिंक बनाएँ",
+    "createEncrypting": "एन्क्रिप्ट हो रहा है…",
+    "createCreated": "साझा लिंक बन गया",
+    "createAnother": "दूसरा बनाएँ",
+    "revealPlaceholder": "ooshare साझा लिंक चिपकाएँ…",
+    "revealButton": "रहस्य प्रकट करें",
+    "revealLoading": "डिक्रिप्ट हो रहा है…",
+    "revealDestroyed": "यह रहस्य केवल एक बार पढ़ा जा सकता है।",
+    "copy": "कॉपी करें",
+    "copied": "कॉपी हो गया",
+    "toastCopied": "क्लिपबोर्ड पर कॉपी हो गया",
+    "download": "डाउनलोड",
+    "openInSite": "ooshare.io में खोलें",
+    "notFoundTitle": "रहस्य नहीं मिला",
+    "notFoundMsg": "यह रहस्य पहले देखा जा चुका है या कभी अस्तित्व में नहीं था।",
+    "errorTitle": "प्रकट नहीं किया जा सका",
+    "optionsTitle": "ooshare सेटिंग्स",
+    "optionsTtl": "डिफ़ॉल्ट समाप्ति",
+    "optionsLang": "भाषा",
+    "optionsAnnotator": "साझा लिंक पर बैज दिखाएँ",
+    "optionsAnnotatorDesc": "आपके द्वारा देखी जाने वाली हर साइट पर साझा लिंक को भी चिह्नित करें (वैकल्पिक)।",
+    "optionsSaved": "सहेज लिया गया"
   }
 }

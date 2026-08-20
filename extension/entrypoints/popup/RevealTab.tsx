@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Card from "@ui/components/ui/Card";
 import Button from "@ui/components/ui/Button";
 import ErrorBanner from "@ui/components/ui/ErrorBanner";
@@ -6,6 +7,7 @@ import { LoadingState } from "@ui/components/ui/State";
 import { revealShare } from "../../src/lib/secret-service";
 
 export default function RevealTab() {
+  const { t } = useTranslation();
   const [url, setUrl] = useState("");
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
@@ -33,12 +35,12 @@ export default function RevealTab() {
         rows={4}
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        placeholder="Paste an ooshare share URL…"
+        placeholder={t("extension.revealPlaceholder")}
       />
       <Button variant="primary" full loading={loading} disabled={!url.trim()} onClick={handleReveal}>
-        Reveal secret
+        {t("extension.revealButton")}
       </Button>
-      {loading && <LoadingState label="Decrypting…" />}
+      {loading && <LoadingState label={t("extension.revealLoading")} />}
       {result && <div className="secret-content" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{result}</div>}
       {error ? <ErrorBanner>{error}</ErrorBanner> : null}
     </Card>

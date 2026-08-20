@@ -206,5 +206,36 @@
   "notFound": {
     "title": "404 — Página não encontrada",
     "message": "A página que você procura não existe ou foi movida."
+  },
+  "extension": {
+    "contextReveal": "Revelar segredo ooshare",
+    "contextCreate": "Compartilhar com ooshare",
+    "tabCreate": "Criar",
+    "tabReveal": "Revelar",
+    "createLabel": "Segredo",
+    "createPlaceholder": "Cole o texto do segredo…",
+    "createExpires": "Expira em",
+    "createSubmit": "Criar link de compartilhamento",
+    "createEncrypting": "Criptografando…",
+    "createCreated": "Link de compartilhamento criado",
+    "createAnother": "Criar outro",
+    "revealPlaceholder": "Cole um link de compartilhamento do ooshare…",
+    "revealButton": "Revelar segredo",
+    "revealLoading": "Descriptografando…",
+    "revealDestroyed": "Este segredo só pode ser lido uma única vez.",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "toastCopied": "Copiado para a área de transferência",
+    "download": "Baixar",
+    "openInSite": "Abrir em ooshare.io",
+    "notFoundTitle": "Segredo não encontrado",
+    "notFoundMsg": "Este segredo já foi visualizado ou nunca existiu.",
+    "errorTitle": "Não foi possível revelar",
+    "optionsTitle": "Configurações do ooshare",
+    "optionsTtl": "Expiração padrão",
+    "optionsLang": "Idioma",
+    "optionsAnnotator": "Mostrar selos nos links de compartilhamento",
+    "optionsAnnotatorDesc": "Marcar também links de compartilhamento em todos os sites que você visita (opcional).",
+    "optionsSaved": "Salvo"
   }
 }

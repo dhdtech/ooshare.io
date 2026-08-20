@@ -205,5 +205,36 @@
   "notFound": {
     "title": "404 — 页面未找到",
     "message": "您要查找的页面不存在或已被移动。"
+  },
+  "extension": {
+    "contextReveal": "查看 ooshare 秘密",
+    "contextCreate": "通过 ooshare 分享",
+    "tabCreate": "创建",
+    "tabReveal": "查看",
+    "createLabel": "秘密",
+    "createPlaceholder": "粘贴要分享的秘密文本…",
+    "createExpires": "有效期限",
+    "createSubmit": "创建分享链接",
+    "createEncrypting": "正在加密…",
+    "createCreated": "分享链接已创建",
+    "createAnother": "再创建一个",
+    "revealPlaceholder": "粘贴 ooshare 分享链接…",
+    "revealButton": "查看秘密",
+    "revealLoading": "正在解密…",
+    "revealDestroyed": "此秘密只能被读取一次。",
+    "copy": "复制",
+    "copied": "已复制",
+    "toastCopied": "已复制到剪贴板",
+    "download": "下载",
+    "openInSite": "在 ooshare.io 中打开",
+    "notFoundTitle": "未找到秘密",
+    "notFoundMsg": "此秘密已被查看过或从未存在。",
+    "errorTitle": "无法查看",
+    "optionsTitle": "ooshare 设置",
+    "optionsTtl": "默认有效期限",
+    "optionsLang": "语言",
+    "optionsAnnotator": "在分享链接上显示标记",
+    "optionsAnnotatorDesc": "同时在你访问的每个网站上标记分享链接（可选）。",
+    "optionsSaved": "已保存"
   }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Card from "@ui/components/ui/Card";
 import CopyButton from "@ui/components/ui/CopyButton";
 import Button from "@ui/components/ui/Button";
@@ -14,6 +15,7 @@ type OverlayState =
   | { phase: "error"; title: string; message: string; fallbackUrl?: string };
 
 export default function RevealView() {
+  const { t } = useTranslation();
   const [state, setState] = useState<OverlayState>({ phase: "loading" });
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function RevealView() {
     <div className="view-container" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ maxWidth: 560, width: "100%", margin: 16 }}>
         <Card>
-        {state.phase === "loading" && <LoadingState label="Decrypting…" />}
+        {state.phase === "loading" && <LoadingState label={t("extension.revealLoading")} />}
         {state.phase === "created" && <CreatedResult url={state.url} />}
         {state.phase === "error" && (
           <ErrorState
@@ -41,7 +43,7 @@ export default function RevealView() {
             actions={
               state.fallbackUrl ? (
                 <Button href={state.fallbackUrl} target="_blank" rel="noopener noreferrer" variant="secondary">
-                  Open in ooshare.io
+                  {t("extension.openInSite")}
                 </Button>
               ) : undefined
             }
@@ -55,6 +57,7 @@ export default function RevealView() {
 }
 
 function RevealedResult({ payload }: { payload: RevealPayload }) {
+  const { t } = useTranslation();
   const { text, attachment } = payload;
   const [imageUrl, setImageUrl] = useState("");
   const [archive, setArchive] = useState<{ url: string; mime: string } | null>(null);
@@ -76,18 +79,18 @@ function RevealedResult({ payload }: { payload: RevealPayload }) {
       {text && (
         <>
           <div className="secret-content" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</div>
-          <CopyButton text={text} copyLabel="Copy" copiedLabel="Copied" toastMessage="Copied to clipboard" variant="secondary" className="ui-btn--full" />
+          <CopyButton text={text} copyLabel={t("extension.copy")} copiedLabel={t("extension.copied")} toastMessage={t("extension.toastCopied")} variant="secondary" className="ui-btn--full" />
         </>
       )}
       {imageUrl && <img src={imageUrl} alt="" style={{ maxWidth: "100%", borderRadius: "var(--radius-sm)" }} />}
       {pdfUrl && (
         <Button href={pdfUrl} download="secret.pdf" variant="secondary" className="ui-btn--full">
-          Download PDF
+          {t("extension.download")} PDF
         </Button>
       )}
       {archive && (
         <Button href={archive.url} download="secret.bin" variant="secondary" className="ui-btn--full">
-          Download attachment
+          {t("extension.download")} {t("extension.createLabel")}
         </Button>
       )}
     </>
@@ -95,13 +98,14 @@ function RevealedResult({ payload }: { payload: RevealPayload }) {
 }
 
 function CreatedResult({ url }: { url: string }) {
+  const { t } = useTranslation();
   return (
     <div className="result">
-      <p className="result-info" style={{ marginBottom: 12 }}>Share link created:</p>
+      <p className="result-info" style={{ marginBottom: 12 }}>{t("extension.createCreated")}:</p>
       <div className="link-box" style={{ marginBottom: 12 }}>
         <div className="link-display" style={{ wordBreak: "break-all" }}>{url}</div>
       </div>
-      <CopyButton text={url} copyLabel="Copy link" copiedLabel="Copied" toastMessage="Link copied" className="ui-btn--full" />
+      <CopyButton text={url} copyLabel={t("extension.copy")} copiedLabel={t("extension.copied")} toastMessage={t("extension.toastCopied")} className="ui-btn--full" />
     </div>
   );
 }

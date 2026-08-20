@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Lock, CheckCircle2, Plus, Clock } from "lucide-react";
 import Card from "@ui/components/ui/Card";
 import TextareaField from "@ui/components/ui/TextareaField";
@@ -19,6 +20,7 @@ const TTL_OPTIONS = [
 ];
 
 export default function CreateTab() {
+  const { t } = useTranslation();
   const [secret, setSecret] = useState("");
   const [ttlHours, setTtlHours] = useState(24);
   const [link, setLink] = useState("");
@@ -53,12 +55,12 @@ export default function CreateTab() {
   if (link) {
     return (
       <Card className="result">
-        <p className="result-header"><CheckCircle2 size={16} /> Share link created</p>
+        <p className="result-header"><CheckCircle2 size={16} /> {t("extension.createCreated")}</p>
         <p className="result-info">Anyone with this link can read the secret once.</p>
         <div className="link-box"><div className="link-display">{link}</div></div>
-        <CopyButton text={link} copyLabel="Copy link" copiedLabel="Copied" toastMessage="Link copied" className="ui-btn--full" />
+        <CopyButton text={link} copyLabel={t("extension.copy")} copiedLabel={t("extension.copied")} toastMessage={t("extension.toastCopied")} className="ui-btn--full" />
         <Button variant="secondary" full icon={<Plus size={16} />} onClick={() => { setLink(""); setFormKey((k) => k + 1); }}>
-          Create another
+          {t("extension.createAnother")}
         </Button>
       </Card>
     );
@@ -69,11 +71,11 @@ export default function CreateTab() {
       <form onSubmit={handleSubmit}>
         <TextareaField
           id="secret-input"
-          label="Secret"
+          label={t("extension.createLabel")}
           icon={<Lock size={14} />}
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
-          placeholder="Paste the secret text…"
+          placeholder={t("extension.createPlaceholder")}
           rows={5}
           maxLength={50000}
         />
@@ -92,12 +94,12 @@ export default function CreateTab() {
           onChange={setFile}
         />
         <div className="ttl-group">
-          <span className="form-label"><Clock size={14} /> Expires in</span>
-          <SegmentedControl options={TTL_OPTIONS} value={ttlHours} onChange={setTtlHours} aria-label="Expires in" />
+          <span className="form-label"><Clock size={14} /> {t("extension.createExpires")}</span>
+          <SegmentedControl options={TTL_OPTIONS} value={ttlHours} onChange={setTtlHours} aria-label={t("extension.createExpires")} />
         </div>
         {error ? <ErrorBanner>{error}</ErrorBanner> : null}
         <Button type="submit" variant="primary" full loading={loading} disabled={!canSubmit} icon={!loading ? <Lock size={16} /> : null}>
-          {loading ? "Encrypting…" : "Create share link"}
+          {loading ? t("extension.createEncrypting") : t("extension.createSubmit")}
         </Button>
       </form>
     </Card>
