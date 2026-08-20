@@ -33,4 +33,34 @@ jobs:
         working-directory: cli
         run: |
           set -euo pipefail
-          echo "hashes=$(sha256sum dist/* | base64 -w0)" >> "$GITHUB_OUTPUT"
+          echo "hashes=$(sha256sum dist/*.tar.gz dist/*.zip dist/*.deb dist/*.rpm | base64 -w0)" >> "$GITHUB_OUTPUT"
+
+      - uses: sigstore/cosign-installer@v3.5.0
+
+      - name: Sign artifacts (keyless)
+        working-directory: cli
+        env:
+          COSIGN_EXPERIMENTAL: "1"
+        run: |
+          set -euo pipefail
+          for f in $(find dist -maxdepth 1 -type f | grep -E '\.(tar\.gz|zip|deb|rpm)$'); do
+            cosign sign-blob --yes "$f" \
+              --output-signature "$f.sig" \
+              --output-certificate "$f.pem"
+          done
+
+      - name: Attest provenance
+        uses: slsa-framework/slsa-github-generator@v2.0.0
+        with:
+          base64-subjects: "${{ steps.hash.outputs.hashes }}"
+
+      - name: Create release with all artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: cli
+        run: |
+          set -euo pipefail
+          # attach the SLSA attestation produced by the previous step
+          cp "${{ github.workspace }}/attestation.intoto.jsonl" dist/
+          gh release create "$GITHUB_REF_NAME" dist/* --generate-notes \
+            --title "$GITHUB_REF_NAME"
