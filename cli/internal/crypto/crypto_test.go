@@ -199,6 +199,33 @@ func TestDecryptBadVersionFails(t *testing.T) {
 	}
 }
 
+func TestBase64urlRoundTrip(t *testing.T) {
+	key := bytes.Repeat([]byte{0x5a}, 32)
+	enc := Base64urlEncode(key)
+	if enc == "" {
+		t.Fatal("empty encoding")
+	}
+	dec, err := Base64urlDecode(enc)
+	if err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if !bytes.Equal(dec, key) {
+		t.Fatalf("round trip mismatch: got %d bytes, want %d", len(dec), len(key))
+	}
+	// A 32-byte key encodes to exactly 43 base64url chars (no padding).
+	if len(enc) != 43 {
+		t.Fatalf("encoded length = %d, want 43", len(enc))
+	}
+}
+
+func TestBase64urlDecodeMalformed(t *testing.T) {
+	for _, in := range []string{"!!not-base64!!", "A", "===="} {
+		if _, err := Base64urlDecode(in); err == nil {
+			t.Fatalf("expected error for %q", in)
+		}
+	}
+}
+
 func TestGenerateKeyIs256BitAndZeroize(t *testing.T) {
 	key, err := GenerateKey()
 	if err != nil {

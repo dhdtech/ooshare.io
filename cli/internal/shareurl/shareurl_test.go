@@ -53,3 +53,17 @@ func TestParseMissingIDFails(t *testing.T) {
 		t.Fatal("expected missing-id error")
 	}
 }
+
+func TestParseInvalidURLErrors(t *testing.T) {
+	// A malformed URL triggers url.Parse to fail.
+	if _, err := Parse("https://%zz"); err == nil {
+		t.Fatal("expected url parse error")
+	}
+}
+
+func TestParseWrongKeyLengthFails(t *testing.T) {
+	// A valid base64url string that decodes to something other than 32 bytes.
+	if _, err := Parse("https://ooshare.io/s/Kx7mP2nQ?lng=en#AAAAAA"); err == nil {
+		t.Fatal("expected wrong-key-length error")
+	}
+}

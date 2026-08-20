@@ -39,3 +39,16 @@ func TestRunHelpExits0(t *testing.T) {
 		t.Fatalf("help output = %q", out.String())
 	}
 }
+
+func TestRunDispatchesCreateAndView(t *testing.T) {
+	// Create via Run straight into an error path so no server is needed.
+	var out, errw bytes.Buffer
+	if code := Run([]string{"create", "--text", "x", "--ttl", "99"}, &out, &errw); code != 2 {
+		t.Fatalf("create exit = %d, want 2", code)
+	}
+	out.Reset()
+	errw.Reset()
+	if code := Run([]string{"view"}, &out, &errw); code != 2 {
+		t.Fatalf("view exit = %d, want 2", code)
+	}
+}

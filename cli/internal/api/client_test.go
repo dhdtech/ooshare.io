@@ -102,3 +102,42 @@ func TestGetSecretOtherError(t *testing.T) {
 		t.Fatalf("err = %v", err)
 	}
 }
+
+func TestCreateSecretTransportError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	url := srv.URL
+	srv.Close() // now refusing connections -> c.HTTP.Do fails
+	c := &Client{BaseURL: url, HTTP: srv.Client()}
+	if _, err := c.CreateSecret(context.Background(), "ct", 24, "id"); err == nil {
+		t.Fatal("expected transport error")
+	}
+}
+
+func TestCreateSecretBadJSON(t *testing.T) {
+	c := newServer(t, func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprint(w, `{not json`)
+	})
+	if _, err := c.CreateSecret(context.Background(), "ct", 24, "id"); err == nil {
+		t.Fatal("expected decode error")
+	}
+}
+
+func TestGetSecretTransportError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	url := srv.URL
+	srv.Close()
+	c := &Client{BaseURL: url, HTTP: srv.Client()}
+	if _, _, err := c.GetSecret(context.Background(), "id"); err == nil {
+		t.Fatal("expected transport error")
+	}
+}
+
+func TestGetSecretBadJSON(t *testing.T) {
+	c := newServer(t, func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, `{not json`)
+	})
+	if _, _, err := c.GetSecret(context.Background(), "id"); err == nil {
+		t.Fatal("expected decode error")
+	}
+}

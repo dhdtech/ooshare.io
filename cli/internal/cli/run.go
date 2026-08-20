@@ -36,11 +36,6 @@ func Run(args []string, out, errw io.Writer) int {
 	}
 }
 
-func runNotImplemented(out, errw io.Writer, cmd string) int {
-	fmt.Fprintf(errw, "ooshare: %q not implemented yet\n", cmd)
-	return 1
-}
-
 func usage(w io.Writer) {
 	fmt.Fprintln(w, `ooshare — only-once secret sharing CLI
 

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -127,6 +128,169 @@ func TestCreateServerErrorExits1(t *testing.T) {
 	}
 	if !strings.Contains(errw.String(), "ciphertext is required") {
 		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateWithFileAttachment(t *testing.T) {
+	api := createServer(t, 24)
+	dir := t.TempDir()
+	path := filepath.Join(dir, "report.pdf")
+	if err := os.WriteFile(path, []byte("%PDF-1.7 fake pdf data"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--file", path, "--json"})
+	if code != 0 {
+		t.Fatalf("exit = %d, stderr = %q", code, errw.String())
+	}
+	var got struct {
+		HasAttachment bool `json:"has_attachment"`
+	}
+	if err := json.Unmarshal(out.Bytes(), &got); err != nil {
+		t.Fatalf("stdout %q is not JSON: %v", out.Bytes(), err)
+	}
+	if !got.HasAttachment {
+		t.Fatalf("has_attachment = false, want true")
+	}
+}
+
+func TestCreateAttachmentHumanMode(t *testing.T) {
+	api := createServer(t, 24)
+	dir := t.TempDir()
+	path := filepath.Join(dir, "photo.jpeg")
+	// ~2 KB so formatBytes hits the KB branch in the human attachment line.
+	data := bytes.Repeat([]byte{0xff}, 2048)
+	if err := os.WriteFile(path, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--api-url", api, "--file", path, "--text", "cap"})
+	if code != 0 {
+		t.Fatalf("exit = %d, stderr = %q", code, errw.String())
+	}
+	if !strings.Contains(errw.String(), "Attachment") {
+		t.Fatalf("attachment line missing from stderr: %q", errw.String())
+	}
+	if !strings.Contains(errw.String(), "KB") {
+		t.Fatalf("attachment size should use KB: %q", errw.String())
+	}
+}
+
+func TestCreateFileTooLargeExits1(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "big.pdf")
+	f, err := os.Create(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Write maxFileSize+1 bytes without holding them in memory at once.
+	if err := f.Truncate(maxFileSize + 1); err != nil {
+		t.Fatal(err)
+	}
+	f.Close()
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--file", path, "--json"})
+	if code != 1 {
+		t.Fatalf("exit = %d, want 1", code)
+	}
+	if !strings.Contains(errw.String(), "exceeds 25 MB") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateFileUnsupportedExtExits1(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "notes.txt")
+	if err := os.WriteFile(path, []byte("plain text"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--file", path, "--json"})
+	if code != 1 {
+		t.Fatalf("exit = %d, want 1", code)
+	}
+	if !strings.Contains(errw.String(), "unsupported file type") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateFileMissingExits1(t *testing.T) {
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--file", filepath.Join(t.TempDir(), "nope.png"), "--json"})
+	if code != 1 {
+		t.Fatalf("exit = %d, want 1", code)
+	}
+}
+
+func TestCreateInvalidLangExits2(t *testing.T) {
+	var out, errw bytes.Buffer
+	code := Create(&out, &errw, []string{"--text", "x", "--lang", "fr"})
+	if code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+	if !strings.Contains(errw.String(), "invalid --lang") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateTTLBoundaries(t *testing.T) {
+	for _, ttl := range []string{"0", "73"} {
+		var out, errw bytes.Buffer
+		if code := Create(&out, &errw, []string{"--text", "x", "--ttl", ttl}); code != 2 {
+			t.Fatalf("ttl %s: exit = %d, want 2", ttl, code)
+		}
+	}
+}
+
+func TestCreateTextTooLongExits2(t *testing.T) {
+	long := strings.Repeat("x", maxTextChars+1)
+	var out, errw bytes.Buffer
+	if code := Create(&out, &errw, []string{"--text", long}); code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+	if !strings.Contains(errw.String(), "exceeds") {
+		t.Fatalf("stderr = %q", errw.String())
+	}
+}
+
+func TestCreateUnknownFlagExits2(t *testing.T) {
+	var out, errw bytes.Buffer
+	if code := Create(&out, &errw, []string{"--text", "x", "--bogus"}); code != 2 {
+		t.Fatalf("exit = %d, want 2", code)
+	}
+}
+
+func TestEnvDefault(t *testing.T) {
+	t.Setenv("OOSHARE_TEST_ENV", "from-env")
+	if got := envDefault("not-default", "OOSHARE_TEST_ENV", "def"); got != "not-default" {
+		t.Fatalf("flag value should win, got %q", got)
+	}
+	// flag == default, env set -> env wins
+	if got := envDefault("def", "OOSHARE_TEST_ENV", "def"); got != "from-env" {
+		t.Fatalf("env should win, got %q", got)
+	}
+	// flag == default, env empty -> default
+	t.Setenv("OOSHARE_TEST_ENV", "")
+	if got := envDefault("def", "OOSHARE_TEST_ENV", "def"); got != "def" {
+		t.Fatalf("default should win, got %q", got)
+	}
+}
+
+func TestNewUUIDIsV4(t *testing.T) {
+	u1, err := newUUID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	u2, err := newUUID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if u1 == u2 {
+		t.Fatal("UUIDs should be unique")
+	}
+	// RFC 4122 v4: version nibble = 4, variant = 8..b.
+	if !strings.Contains(u1, "-") {
+		t.Fatalf("not a UUID: %q", u1)
 	}
 }
 
