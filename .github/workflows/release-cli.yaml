@@ -113,7 +113,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
-      - name: Download darwin_arm64 archive + checksums
+      - name: Download darwin archives + checksums
         id: rel
         shell: bash
         env:
@@ -122,24 +122,36 @@ jobs:
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
           gh release download "$TAG" \
-            -p 'ooshare_*_darwin_arm64.tar.gz' -p 'SHA256SUMS' -D /tmp/rel
-          sha="$(grep 'darwin_arm64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')"
-          test -n "$sha"
-          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+            -p 'ooshare_*_darwin_arm64.tar.gz' -p 'ooshare_*_darwin_amd64.tar.gz' \
+            -p 'SHA256SUMS' -D /tmp/rel
+          arm64="$(grep 'darwin_arm64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')"
+          amd64="$(grep 'darwin_amd64.tar.gz' /tmp/rel/SHA256SUMS | awk '{print $1}')"
+          test -n "$arm64" && test -n "$amd64"
+          echo "arm64=${arm64}" >> "$GITHUB_OUTPUT"
+          echo "amd64=${amd64}" >> "$GITHUB_OUTPUT"
       - name: Generate formula
         env:
           TAG: ${{ github.ref_name }}
-          SHA: ${{ steps.rel.outputs.sha }}
+          ARM64: ${{ steps.rel.outputs.arm64 }}
+          AMD64: ${{ steps.rel.outputs.amd64 }}
         run: |
           cat > /tmp/ooshare.rb <<EOF
           class Ooshare < Formula
             desc "Only Once Share CLI — one-time secret sharing from the terminal"
             homepage "https://ooshare.io"
-            url "https://github.com/dhdtech/ooshare.io/releases/download/${TAG}/ooshare_${TAG#v}_darwin_arm64.tar.gz"
-            sha256 "${SHA}"
             license "MIT"
             def install
               bin.install "ooshare"
+            end
+            on_macos do
+              on_arm do
+                url "https://github.com/dhdtech/ooshare.io/releases/download/${TAG}/ooshare_${TAG#v}_darwin_arm64.tar.gz"
+                sha256 "${ARM64}"
+              end
+              on_intel do
+                url "https://github.com/dhdtech/ooshare.io/releases/download/${TAG}/ooshare_${TAG#v}_darwin_amd64.tar.gz"
+                sha256 "${AMD64}"
+              end
             end
           end
           EOF
