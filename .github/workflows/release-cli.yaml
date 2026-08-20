@@ -246,3 +246,23 @@ jobs:
           git add -A
           git commit -m "yum: ooshare ${GITHUB_REF_NAME}" || true
           git push
+
+  deploy-winget:
+    name: Deploy winget (PR)
+    needs: build
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download windows archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          gh release download $env:GITHUB_REF_NAME -p 'ooshare_*_windows_amd64.zip' -D ./rel
+      - name: Open winget PR
+        uses: vedantmgoyal2009/winget-releaser@latest
+        with:
+          identifier: dhdtech.ooshare
+          installers-regex: 'ooshare_.*windows_amd64\.zip$'
+          token: ${{ secrets.GITHUB_TOKEN }}
