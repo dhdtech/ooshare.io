@@ -1,9 +1,0 @@
-PackageIdentifier: dhdtech.ooshare
-PackageVersion: 1.0.1
-InstallerType: zip
-Installers:
-  - Architecture: x64
-    InstallerUrl: https://github.com/dhdtech/ooshare.io/releases/download/v1.0.1/ooshare_1.0.1_windows_amd64.zip
-    InstallerSha256: cc74c0d68e3cb3dd048964179ae7391741791970794e8a46bc9b82f85fdbebc5
-ManifestType: installer
-ManifestVersion: 1.6.0
