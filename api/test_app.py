@@ -132,7 +132,7 @@ def test_create_secret_non_string_ciphertext(client):
 
 
 def test_create_secret_too_large(client):
-    big = "A" * (15 * 1024 * 1024 + 1)
+    big = "A" * (40 * 1024 * 1024 + 1)
     res = client.post("/api/secrets", json={"ciphertext": big})
     assert res.status_code == 413
     assert "too large" in res.get_json()["error"].lower()

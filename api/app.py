@@ -25,7 +25,7 @@ else:
     posthog = None
     log.info("PostHog disabled (POSTHOG_API_KEY not set)")
 
-MAX_CIPHERTEXT_SIZE = 15 * 1024 * 1024  # 15MB (supports 10MB images after base64 expansion)
+MAX_CIPHERTEXT_SIZE = 40 * 1024 * 1024  # 40MB (supports 25MB files after base64 expansion)
 ALIAS_ALPHABET = string.ascii_letters + string.digits
 ALIAS_LENGTH = 8
 ALIAS_RE = re.compile(r"^[a-zA-Z0-9]{8}$")
@@ -80,7 +80,7 @@ def create_secret():
 
     if len(ciphertext) > MAX_CIPHERTEXT_SIZE:
         log.warning("Payload too large: %d bytes", len(ciphertext))
-        return jsonify({"error": "Payload too large (max 15MB)"}), 413
+        return jsonify({"error": "Payload too large (max 40MB)"}), 413
 
     try:
         base64.b64decode(ciphertext)
