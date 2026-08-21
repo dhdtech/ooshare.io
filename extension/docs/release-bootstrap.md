@@ -1,10 +1,10 @@
 # Extension release bootstrap (one-time)
 
 This runbook covers the one-time store setup required before the
-`.github/workflows/release-extension.yaml` store-publish jobs can run. Each store
-has its own account plus a set of repo secrets that must exist before that store's
-job will execute. Re-run any section only if the corresponding resource needs to be
-recreated.
+`.github/workflows/release-extension.yaml` store-publish jobs can publish. Each
+store has its own account plus a set of repo secrets that must exist before that
+store's publish will run. Re-run any section only if the corresponding resource
+needs to be recreated.
 
 > **Where secrets live:** Actions/CI secrets are stored on the upstream repo
 > `dhdtech/ooshare.io` (the same repo that houses the CLI release pipeline). Set
@@ -30,7 +30,8 @@ git push origin ext-v1.0.0
 
 - The `build` job runs on every push of an `ext-v*` tag and always succeeds or
   fails deterministically (it has no secret dependency).
-- Each store job runs only if its secrets are configured.
+- Each store job runs as a no-op (every publish step is skipped) until its
+  secrets are configured; once configured, it performs the publish.
 - Version is derived from the tag: `ooshare-chrome-<version>.zip`,
   `ooshare-firefox-<version>.zip`, plus a `source.tar.gz` and `SHA256SUMS`, all
   attached to the GitHub release.
@@ -143,8 +144,10 @@ gh secret set EDGE_API_TOKEN        --repo dhdtech/ooshare.io
 
 ## Troubleshooting
 
-- **A store job never runs** → its `if:` guard found an empty secret. Set the
-  missing secret(s) above and re-push the tag (or re-run the workflow).
+- **A store job did nothing (all its steps skipped)** → the job's first step
+  (`Check … credentials configured`) found one or more secrets empty, so every
+  publish step was skipped. Set the missing secret(s) above and re-push the tag
+  (or re-run the workflow) — the job will then perform the publish.
 - **`web-ext sign` fails with a 401/403** → re-generate the AMO API key; the secret
   pair must match a currently active key.
 - **CWS keeps the previous version** → ensure `EXTENSION_ITEM_ID` matches the item
