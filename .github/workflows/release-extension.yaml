@@ -26,7 +26,15 @@ jobs:
           cache-dependency-path: extension/package-lock.json
       - name: Install
         working-directory: extension
-        run: npm ci && npm run icons
+        run: |
+          set -euo pipefail
+          npm ci
+          # The extension imports shared components from ui/src via the @ui
+          # alias. Their bare imports (react, motion, …) resolve by walking up
+          # from ui/src, so ui/node_modules must exist in CI too. Dev deps
+          # (puppeteer, vite, …) are not needed for the extension build.
+          npm ci --omit=dev --prefix ../ui
+          npm run icons
       - name: Build + lint
         working-directory: extension
         run: |
@@ -126,6 +134,7 @@ jobs:
         run: |
           set -euo pipefail
           npm ci
+          npm ci --omit=dev --prefix ../ui
           npm run build:firefox
       - name: Sign + submit to AMO (unlisted)
         if: steps.check.outputs.configured == 'true'
