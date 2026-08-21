@@ -5,7 +5,7 @@
 # Submit to Homebrew/homebrew-core at Formula/o/ooshare.rb.
 
 class Ooshare < Formula
-  desc "One-time secret sharing from the terminal — end-to-end encrypted"
+  desc "One-time secret sharing from the terminal, end-to-end encrypted"
   homepage "https://ooshare.io"
   url "https://github.com/dhdtech/ooshare.io/archive/refs/tags/v1.0.3.tar.gz"
   sha256 "a9340aef2475e9e5b138e938b70623270f0fa3ca4f1acd54f01759c4d85c745c"
