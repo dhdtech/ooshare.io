@@ -8,11 +8,11 @@ Only Once Share lets you send passwords, images, PDFs, API keys, and sensitive d
 
 - **Encryption**: AES-256-GCM with HKDF-SHA-256 key derivation (client-side, Web Crypto API)
 - **Architecture**: Zero-knowledge — the server stores only encrypted blobs
-- **Image Sharing**: Drag-and-drop encrypted image sharing (JPEG, PNG, GIF, WebP up to 10 MB) — password protected photo sharing
-- **PDF/Document Sharing**: Encrypted PDF sharing up to 10 MB with one-time self-destructing links
+- **Image Sharing**: Drag-and-drop encrypted image sharing (JPEG, PNG, GIF, WebP up to 25 MB) — password protected photo sharing
+- **PDF/Document Sharing**: Encrypted PDF sharing up to 25 MB with one-time self-destructing links
 - **Content Types**: Text only, image only, PDF only, or any combination together in one secret
 - **Pricing**: Completely free, no limits, no account required
-- **License**: MIT open source (https://github.com/dhdtech/only-once-share)
+- **License**: MIT open source (https://github.com/dhdtech/ooshare.io)
 - **Deployment**: Cloud at ooshare.io or self-hosted via Docker
 - **Languages**: English, Chinese, Spanish, Hindi, Arabic, Portuguese
 - **TTL Options**: 1, 4, 12, 24, 48, or 72 hours
@@ -35,7 +35,7 @@ Only Once Share lets you send passwords, images, PDFs, API keys, and sensitive d
 Only Once Share is the only secret sharing tool that combines encrypted image and PDF sharing with zero-knowledge architecture and one-time viewing. Unlike competitors (OneTimeSecret, Privnote, scrt.link, Password.link) which only support text, Only Once Share encrypts images and documents client-side with the same AES-256-GCM standard. It offers password protected photo sharing and secure document sharing in one tool.
 
 - Drag-and-drop or click to upload images or PDFs
-- Supports JPEG, PNG, GIF, WebP, and PDF up to 10 MB
+- Supports JPEG, PNG, GIF, WebP, and PDF up to 25 MB
 - Files are encrypted in the browser before upload — the server never sees the original content
 - View images in a secure modal; download or view PDFs in a new tab
 - Send text + image + PDF together in one self-destructing link
@@ -50,10 +50,32 @@ Only Once Share is the only secret sharing tool that combines encrypted image an
 - 6-language support for global accessibility
 - No account required — zero friction
 
+## CLI
+
+The ooshare CLI is a single static binary for macOS, Linux, and Windows that creates and reveals one-time secrets from the terminal. It uses the identical AES-256-GCM + HKDF-SHA-256 encryption as the web — a secret created in the CLI opens in the browser and vice versa. Free, open source (MIT), no runtime required.
+
+### Install
+
+- **macOS (Homebrew):** `brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare`
+- **Linux (Debian/Ubuntu, apt):** install the signing key from https://dhdtech.github.io/packages-ooshare/apt/ooshare.gpg, add `deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main`, then `sudo apt install ooshare`
+- **Linux (RHEL/Fedora, dnf):** add a `.repo` with `baseurl=https://dhdtech.github.io/packages-ooshare/rpm` and `gpgcheck=1`, then `sudo dnf install ooshare`
+- **Windows (winget):** `winget install dhdtech.ooshare`
+- **Windows (Scoop):** `scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare`
+- **Direct binary:** download from the releases page and verify with `sha256sum -c SHA256SUMS`
+
+### Usage
+
+- `ooshare create --text "secret"` → prints a one-time link
+- `ooshare view "<link>"` → reveals the secret once, then it self-destructs
+- `ooshare create --json --text "$SECRET" | jq -r .url` → CI/script-friendly JSON output
+- Full page: https://ooshare.io/cli
+
 ## Links
 
 - Website: https://ooshare.io
-- GitHub: https://github.com/dhdtech/only-once-share
+- CLI Page: https://ooshare.io/cli
+- GitHub: https://github.com/dhdtech/ooshare.io
+- Releases: https://github.com/dhdtech/ooshare.io/releases
 - Security Details: https://ooshare.io/security
 - Blog: https://ooshare.io/blog
 - FAQ: https://ooshare.io/faq

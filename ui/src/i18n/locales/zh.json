@@ -36,7 +36,16 @@
     "file.invalidType": "仅允许图像（JPEG、PNG、GIF、WebP）、PDF和压缩文件（ZIP、RAR、7Z、TAR.GZ）",
     "file.tooLarge": "文件必须小于 25 MB",
     "file.remove": "删除文件",
-    "file.preview": "文件预览"
+    "file.preview": "文件预览",
+    "cliSection": {
+      "header": "从您的终端使用",
+      "body": "相同的端到端加密，可从命令行编写脚本。在 CI、cron 和 shell 脚本中创建和查看秘密 — 免费、单一二进制文件、macOS/Linux/Windows。",
+      "cta": "安装 CLI"
+    },
+    "cliCallout": {
+      "text": "想直接从终端生成秘密？试试我们的 CLI。",
+      "link": "安装 CLI"
+    }
   },
   "whySection": {
     "ctaBanner": "了解为什么 OOShare 是最安全的密钥分享工具"
@@ -67,6 +76,7 @@
     "blog": "博客",
     "faq": "常见问题",
     "about": "关于",
+    "cli": "CLI",
     "backHome": "返回首页",
     "allPosts": "所有文章",
     "why": "为什么选择 OOShare？"
@@ -183,7 +193,8 @@
     "encryption": "AES-256-GCM",
     "zeroKnowledge": "零知识",
     "autoDelete": "自动删除",
-    "openSource": "开源项目"
+    "openSource": "开源项目",
+    "cli": "CLI"
   },
   "security": {
     "title": "工作原理",
@@ -200,7 +211,70 @@
     "oneTimeTitle": "一次性查看",
     "oneTimeDesc": "当秘密被检索时，它会在同一操作中从存储中被原子性删除。不存在第二次读取的可能。",
     "expiryTitle": "自动过期",
-    "expiryDesc": "秘密在选定的TTL（1-72小时）后自动过期，即使未被查看。没有数据会在过期时间后持续存在。"
+    "expiryDesc": "秘密在选定的TTL（1-72小时）后自动过期，即使未被查看。没有数据会在过期时间后持续存在。",
+    "cliSection": {
+      "title": "相同的加密，就在您的终端",
+      "body": "更喜欢命令行？CLI 使用完全相同的 AES-256-GCM + HKDF 流程 — 在终端创建的秘密可在浏览器中打开，反之亦然。",
+      "link": "安装 CLI"
+    }
+  },
+  "cliPage": {
+    "metaTitle": "ooshare CLI — 从终端分享一次性秘密 | Only Once Share",
+    "metaDesc": "使用免费的 ooshare CLI，从终端创建和查看一次性秘密。AES-256-GCM、零知识，并支持 macOS/Linux/Windows 单一二进制文件。",
+    "hero": {
+      "title": "ooshare CLI",
+      "subtitle": "从终端创建和查看一次性秘密。免费、单一二进制文件，加密方式与网络版完全相同。"
+    },
+    "trust": {
+      "encryption": "AES-256-GCM 端到端",
+      "free": "免费、开源（MIT）",
+      "platforms": "macOS · Linux · Windows"
+    },
+    "install": {
+      "title": "安装",
+      "subtitle": "选择您的操作系统并复制命令。",
+      "verifyLabel": "验证：",
+      "verifyCmd": "ooshare version",
+      "downloadLink": "或下载二进制文件",
+      "tabs": {
+        "macos": "macOS — Homebrew",
+        "apt": "Linux — apt (Debian/Ubuntu)",
+        "dnf": "Linux — dnf (RHEL/Fedora)",
+        "winget": "Windows — winget",
+        "scoop": "Windows — Scoop",
+        "binary": "直接下载"
+      }
+    },
+    "examples": {
+      "title": "几秒即可试用",
+      "subtitle": "三个单行命令。每个链接只读取一次，然后自动销毁。",
+      "create": { "label": "创建秘密，获取一次性链接" },
+      "view": { "label": "仅查看一次 — 查看后即被删除" },
+      "ci": { "label": "在 CI 中编写脚本 — JSON 输出，可直接与 jq 配合" }
+    },
+    "security": {
+      "title": "与网络版相同的保证",
+      "1": "相同的加密 — AES-256-GCM + HKDF-SHA-256，与浏览器逐字节兼容",
+      "2": "零知识 — 主密钥仅存在于 URL 片段中，绝不发送到服务器",
+      "3": "一次性 — 秘密在首次查看时被原子删除",
+      "link": "了解更多关于我们的安全"
+    },
+    "cta": {
+      "title": "从终端开始分享",
+      "button": "在网络上创建秘密"
+    }
+  },
+  "why": {
+    "cli": {
+      "title": "可从终端编写脚本",
+      "body": "使用免费的 ooshare CLI 自动化一次性秘密 — 适用于 CI，具有相同的端到端加密。"
+    }
+  },
+  "faq": {
+    "cli": {
+      "q": "有命令行（CLI）版本吗？",
+      "a": "有 — ooshare CLI 是免费的，使用与网络版相同的端到端加密。可从 Homebrew、Scoop、winget、apt 或 yum 安装，或查看 CLI 页面。"
+    }
   },
   "notFound": {
     "title": "404 — 页面未找到",

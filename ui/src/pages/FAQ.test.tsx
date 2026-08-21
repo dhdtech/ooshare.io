@@ -11,10 +11,10 @@ describe("FAQ", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders all 12 FAQ items as details elements", () => {
+  it("renders all 13 FAQ items as details elements", () => {
     renderWithProviders(<FAQ />);
     const details = document.querySelectorAll("details.ui-accordion");
-    expect(details.length).toBe(12);
+    expect(details.length).toBe(13);
   });
 
   it("renders the first FAQ open and links to GitHub", () => {

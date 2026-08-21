@@ -36,7 +36,16 @@
     "file.invalidType": "Apenas imagens (JPEG, PNG, GIF, WebP), PDFs e arquivos compactados (ZIP, RAR, 7Z, TAR.GZ) são permitidos",
     "file.tooLarge": "O arquivo deve ter menos de 25 MB",
     "file.remove": "Remover arquivo",
-    "file.preview": "Visualização do arquivo"
+    "file.preview": "Visualização do arquivo",
+    "cliSection": {
+      "header": "Do seu terminal",
+      "body": "A mesma criptografia ponta a ponta, automatizável pela linha de comando. Crie e revele segredos em CI, cron e scripts de shell — grátis, binário único, macOS/Linux/Windows.",
+      "cta": "Instalar a CLI"
+    },
+    "cliCallout": {
+      "text": "Quer gerar segredos direto do seu terminal? Experimente nossa CLI.",
+      "link": "Instalar a CLI"
+    }
   },
   "whySection": {
     "ctaBanner": "Descubra por que o OOShare é a ferramenta mais segura para compartilhar segredos"
@@ -67,6 +76,7 @@
     "blog": "Blog",
     "faq": "Perguntas frequentes",
     "about": "Sobre",
+    "cli": "CLI",
     "backHome": "Voltar ao início",
     "allPosts": "Todos os artigos",
     "why": "Por que OOShare?"
@@ -184,7 +194,8 @@
     "encryption": "AES-256-GCM",
     "zeroKnowledge": "Conhecimento zero",
     "autoDelete": "Auto-exclusão",
-    "openSource": "Código Aberto"
+    "openSource": "Código Aberto",
+    "cli": "CLI"
   },
   "security": {
     "title": "Como funciona",
@@ -201,7 +212,70 @@
     "oneTimeTitle": "Visualização única",
     "oneTimeDesc": "Quando um segredo é recuperado, ele é atomicamente excluído do armazenamento na mesma operação.",
     "expiryTitle": "Expiração automática",
-    "expiryDesc": "Segredos expiram automaticamente após o TTL escolhido (1-72 horas), mesmo se nunca forem visualizados."
+    "expiryDesc": "Segredos expiram automaticamente após o TTL escolhido (1-72 horas), mesmo se nunca forem visualizados.",
+    "cliSection": {
+      "title": "A mesma criptografia, no seu terminal",
+      "body": "Prefere a linha de comando? A CLI usa exatamente o mesmo fluxo AES-256-GCM + HKDF — um segredo criado no terminal abre no navegador e vice-versa.",
+      "link": "Instalar a CLI"
+    }
+  },
+  "cliPage": {
+    "metaTitle": "ooshare CLI — Segredos de uso único a partir do terminal | Only Once Share",
+    "metaDesc": "Crie e revele segredos de uso único a partir do terminal com a CLI gratuita do ooshare. AES-256-GCM, zero-knowledge e um único binário para macOS/Linux/Windows.",
+    "hero": {
+      "title": "ooshare CLI",
+      "subtitle": "Crie e revele segredos de uso único a partir do terminal. Grátis, binário único e criptografado exatamente como a web."
+    },
+    "trust": {
+      "encryption": "AES-256-GCM ponta a ponta",
+      "free": "Grátis, código aberto (MIT)",
+      "platforms": "macOS · Linux · Windows"
+    },
+    "install": {
+      "title": "Instalação",
+      "subtitle": "Escolha seu sistema operacional e copie o comando.",
+      "verifyLabel": "Verificar:",
+      "verifyCmd": "ooshare version",
+      "downloadLink": "ou baixe o binário",
+      "tabs": {
+        "macos": "macOS — Homebrew",
+        "apt": "Linux — apt (Debian/Ubuntu)",
+        "dnf": "Linux — dnf (RHEL/Fedora)",
+        "winget": "Windows — winget",
+        "scoop": "Windows — Scoop",
+        "binary": "Download direto"
+      }
+    },
+    "examples": {
+      "title": "Experimente em segundos",
+      "subtitle": "Três comandos de uma linha. Cada link é lido uma vez e depois se autodestrói.",
+      "create": { "label": "Crie um segredo e obtenha um link de uso único" },
+      "view": { "label": "Revele uma vez — é excluído após a visualização" },
+      "ci": { "label": "Automatize em CI — saída JSON, pronta para jq" }
+    },
+    "security": {
+      "title": "As mesmas garantias da web",
+      "1": "Mesma criptografia — AES-256-GCM + HKDF-SHA-256, compatível byte a byte com o navegador",
+      "2": "Zero-knowledge — a chave mestra vive apenas no fragmento da URL, nunca enviada ao servidor",
+      "3": "Uso único — segredos são excluídos atomicamente na primeira visualização",
+      "link": "Saiba mais sobre nossa segurança"
+    },
+    "cta": {
+      "title": "Comece a compartilhar a partir do seu terminal",
+      "button": "Criar um segredo na web"
+    }
+  },
+  "why": {
+    "cli": {
+      "title": "Automatizável pelo seu terminal",
+      "body": "Automatize segredos de uso único com a CLI gratuita do ooshare — pronta para CI, com a mesma criptografia ponta a ponta."
+    }
+  },
+  "faq": {
+    "cli": {
+      "q": "Existe uma versão de linha de comando (CLI)?",
+      "a": "Sim — a CLI do ooshare é gratuita e usa a mesma criptografia ponta a ponta da web. Instale-a via Homebrew, Scoop, winget, apt ou yum, ou veja a página da CLI."
+    }
   },
   "notFound": {
     "title": "404 — Página não encontrada",

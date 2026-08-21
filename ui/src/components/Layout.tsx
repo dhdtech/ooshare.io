@@ -85,6 +85,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <Logo size={30} />
           <div className="ui-header-actions">
             <nav className="ui-header-nav" aria-label="Primary">
+              <NavLink to="/cli">{t("nav.cli")}</NavLink>
               <NavLink to="/security">{t("nav.security")}</NavLink>
               <NavLink to="/blog">{t("nav.blog")}</NavLink>
               <NavLink to="/faq">{t("nav.faq")}</NavLink>
@@ -111,6 +112,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <FooterNav
             links={[
               { to: "/security", label: t("nav.security") },
+              { to: "/cli", label: t("footer.cli") },
               { to: "/blog", label: t("nav.blog") },
               { to: "/faq", label: t("nav.faq") },
               { to: "/about", label: t("nav.about") },

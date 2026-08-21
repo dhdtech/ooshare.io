@@ -36,7 +36,16 @@
     "file.invalidType": "Only images (JPEG, PNG, GIF, WebP), PDFs, and archives (ZIP, RAR, 7Z, TAR.GZ) are allowed",
     "file.tooLarge": "File must be under 25 MB",
     "file.remove": "Remove file",
-    "file.preview": "File preview"
+    "file.preview": "File preview",
+    "cliSection": {
+      "header": "From your terminal",
+      "body": "The same end-to-end encryption, scriptable from the command line. Create and reveal secrets in CI, cron, and shell scripts — free, single binary, macOS/Linux/Windows.",
+      "cta": "Install the CLI"
+    },
+    "cliCallout": {
+      "text": "Want to generate secrets right from your terminal? Try our CLI.",
+      "link": "Install the CLI"
+    }
   },
   "whySection": {
     "ctaBanner": "See why OOShare is the most secure secret sharing tool"
@@ -67,6 +76,7 @@
     "blog": "Blog",
     "faq": "FAQ",
     "about": "About",
+    "cli": "CLI",
     "backHome": "Back to home",
     "allPosts": "All posts",
     "why": "Why OOShare?"
@@ -238,7 +248,8 @@
     "encryption": "AES-256-GCM",
     "zeroKnowledge": "Zero Knowledge",
     "autoDelete": "Auto-Delete",
-    "openSource": "Open Source"
+    "openSource": "Open Source",
+    "cli": "CLI"
   },
   "security": {
     "title": "How It Works",
@@ -255,7 +266,70 @@
     "oneTimeTitle": "One-Time Viewing",
     "oneTimeDesc": "When a secret is retrieved, it is atomically deleted from storage in the same operation. There is no window where a second read is possible.",
     "expiryTitle": "Auto-Expiration",
-    "expiryDesc": "Secrets automatically expire after the chosen TTL (1–72 hours), even if never viewed. No data persists beyond the expiration window."
+    "expiryDesc": "Secrets automatically expire after the chosen TTL (1–72 hours), even if never viewed. No data persists beyond the expiration window.",
+    "cliSection": {
+      "title": "Same encryption, in your terminal",
+      "body": "Prefer the command line? The CLI uses the identical AES-256-GCM + HKDF flow — a secret created in the terminal opens in the browser and vice versa.",
+      "link": "Install the CLI"
+    }
+  },
+  "cliPage": {
+    "metaTitle": "ooshare CLI — One-Time Secrets From the Terminal | Only Once Share",
+    "metaDesc": "Create and reveal one-time secrets from the terminal with the free ooshare CLI. AES-256-GCM, zero-knowledge, and a single binary for macOS/Linux/Windows.",
+    "hero": {
+      "title": "ooshare CLI",
+      "subtitle": "Create and reveal one-time secrets from the terminal. Free, single binary, and encrypted exactly like the web."
+    },
+    "trust": {
+      "encryption": "AES-256-GCM end-to-end",
+      "free": "Free, open source (MIT)",
+      "platforms": "macOS · Linux · Windows"
+    },
+    "install": {
+      "title": "Install",
+      "subtitle": "Pick your operating system and copy the command.",
+      "verifyLabel": "Verify:",
+      "verifyCmd": "ooshare version",
+      "downloadLink": "or download the binary",
+      "tabs": {
+        "macos": "macOS — Homebrew",
+        "apt": "Linux — apt (Debian/Ubuntu)",
+        "dnf": "Linux — dnf (RHEL/Fedora)",
+        "winget": "Windows — winget",
+        "scoop": "Windows — Scoop",
+        "binary": "Direct download"
+      }
+    },
+    "examples": {
+      "title": "Try it in seconds",
+      "subtitle": "Three one-liners. Each link reads once, then self-destructs.",
+      "create": { "label": "Create a secret, get a one-time link" },
+      "view": { "label": "Reveal it once — it is deleted after viewing" },
+      "ci": { "label": "Script it in CI — JSON output, jq-ready" }
+    },
+    "security": {
+      "title": "The same guarantees as the web",
+      "1": "Same encryption — AES-256-GCM + HKDF-SHA-256, byte-for-byte compatible with the browser",
+      "2": "Zero-knowledge — the master key lives only in the URL fragment, never sent to the server",
+      "3": "One-time — secrets are atomically deleted on first view",
+      "link": "Learn more about our security"
+    },
+    "cta": {
+      "title": "Start sharing from your terminal",
+      "button": "Create a secret on the web"
+    }
+  },
+  "why": {
+    "cli": {
+      "title": "Scriptable from your terminal",
+      "body": "Automate one-time secrets with the free ooshare CLI — CI-ready, with the same end-to-end encryption."
+    }
+  },
+  "faq": {
+    "cli": {
+      "q": "Is there a command-line (CLI) version?",
+      "a": "Yes — the ooshare CLI is free and uses the same end-to-end encryption as the web. Install it from Homebrew, Scoop, winget, apt, or yum, or see the CLI page."
+    }
   },
   "notFound": {
     "title": "404 — Page Not Found",

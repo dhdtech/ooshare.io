@@ -12,6 +12,7 @@ import WhyOOShare from "./pages/WhyOOShare";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import CLI from "./pages/CLI";
 import NotFound from "./pages/NotFound";
 import Components from "./pages/Components";
 import "./i18n";
@@ -31,6 +32,7 @@ const app = (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/cli" element={<CLI />} />
             <Route path="/components" element={<Components />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

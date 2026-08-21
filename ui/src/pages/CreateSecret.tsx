@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Plus,
   ArrowRight,
+  Terminal,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { generateKey, exportKey, encrypt, encodePayload } from "../lib/crypto";
@@ -23,6 +24,8 @@ import {
   TrustBadges,
   ShareButtons,
   ErrorBanner,
+  SectionHeader,
+  CtaBlock,
   isPdf,
   isArchive,
 } from "../components/ui";
@@ -213,6 +216,14 @@ export default function CreateSecret() {
               <Button variant="secondary" full icon={<Plus size={16} />} onClick={handleReset}>
                 {t("create.createAnother")}
               </Button>
+
+              <div className="cli-callout">
+                <p className="cli-callout-text">{t("create.cliCallout.text")}</p>
+                <Link className="cli-callout-link" to="/cli">
+                  <Terminal size={14} aria-hidden="true" />
+                  {t("create.cliCallout.link")}
+                </Link>
+              </div>
             </div>
           )}
         </Card>
@@ -225,6 +236,15 @@ export default function CreateSecret() {
           ]}
         />
       </div>
+
+      <section className="cli-section" aria-label={t("create.cliSection.header")}>
+        <SectionHeader title={t("create.cliSection.header")} sub={t("create.cliSection.body")} />
+        <CtaBlock>
+          <Button to="/cli" icon={<Terminal size={16} />}>
+            {t("create.cliSection.cta")}
+          </Button>
+        </CtaBlock>
+      </section>
 
       <div className="why-cta-banner">
         <Link to="/why" className="why-cta-link">

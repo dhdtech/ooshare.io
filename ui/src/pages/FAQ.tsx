@@ -61,6 +61,9 @@ export default function FAQ() {
               <p>{faq.a}</p>
             </FaqItem>
           ))}
+          <FaqItem question={t("faq.cli.q")}>
+            <p>{t("faq.cli.a")}</p>
+          </FaqItem>
         </div>
 
         <CtaBlock text={t("pages.faq.moreQuestions")}>

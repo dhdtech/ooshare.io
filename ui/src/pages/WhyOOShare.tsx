@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Shield, ImagePlus, Infinity, Github, Lock } from "lucide-react";
 import {
   ArticleHeader,
@@ -122,6 +123,10 @@ export default function WhyOOShare() {
           <p>{t("pages.why.detail2Desc")}</p>
           <h3>{t("pages.why.detail3Title")}</h3>
           <p>{t("pages.why.detail3Desc")}</p>
+          <h3>
+            <Link to="/cli">{t("why.cli.title")}</Link>
+          </h3>
+          <p>{t("why.cli.body")}</p>
         </ProseSection>
 
         <CtaBlock text={t("pages.why.ctaText")}>

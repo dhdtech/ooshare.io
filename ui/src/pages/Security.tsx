@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Shield, Lock, Key, Eye, Trash2, Hash, Server } from "lucide-react";
+import { Shield, Lock, Key, Eye, Trash2, Hash, Server, Terminal } from "lucide-react";
 import {
   ArticleHeader,
   InfoCard,
@@ -52,6 +52,13 @@ export default function Security() {
         <ProseSection title={t("pages.security.whyTitle")}>
           <p dangerouslySetInnerHTML={{ __html: t("pages.security.whyP1") }} />
           <p dangerouslySetInnerHTML={{ __html: t("pages.security.whyP2") }} />
+        </ProseSection>
+
+        <ProseSection title={t("security.cliSection.title")}>
+          <p>{t("security.cliSection.body")}</p>
+          <Button to="/cli" icon={<Terminal size={16} />}>
+            {t("security.cliSection.link")}
+          </Button>
         </ProseSection>
 
         <CtaBlock>
