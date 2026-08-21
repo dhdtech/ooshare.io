@@ -1160,5 +1160,77 @@ docker compose up -d</code></pre>
 <h2>结论</h2>
 <p>ZIP文件将敏感信息集中到一个包中，使安全处理变得更加重要——而不是更不重要。密码保护的ZIP文件提供了虚假的安全感，而电子邮件或云链接会让压缩包无限期暴露。加密自毁链接确保你的压缩包仅在需要的那一刻存在，并在之后被永久销毁。下次你需要发送项目交接包、人力资源文档包或任何敏感ZIP文件时，跳过电子邮件附件，<a href="/">创建一个安全的一次性链接</a>。</p>
 `
+  },
+  "ooshare-cli-one-time-secrets-from-terminal": {
+    title: "从终端自动化一次性密码：介绍 ooshare CLI",
+    description: "使用 ooshare CLI 从命令行创建和查看一次性密码——与网页相同、端到端的 AES-256-GCM 加密，免费，并可通过 Homebrew、apt、dnf、winget、Scoop 或 Go 安装。附带了 GitHub Actions 示例。",
+    content: `
+<p>我们都做过这样的事：队友私信发给你一个数据库密码，你把生产环境的令牌粘贴到电子邮件里，或者有人把 API 密钥丢进共享的 Slack 频道\"只是临时用一下\"。而这些密码中的每一个现在都留在了日志、收件箱或聊天记录里——可被搜索、长期保留，并且距泄露只差一次入侵。用脚本自动化你的密码交接比粘贴要好得多，而现在你甚至无需离开终端就能做到。</p>
+
+<h2>认识 ooshare CLI</h2>
+<p><a href="https://ooshare.io/cli">ooshare CLI</a> 是一个适用于 macOS、Linux 和 Windows 的单一静态二进制文件。无需安装运行时，也无需配置任何服务——下载它，运行它，就完成了。它使用与网页应用完全相同的 AES-256-GCM 加密和 HKDF-SHA-256 密钥派生算法，因此在终端中创建的密码可以在浏览器中打开，反之亦然。主密钥只存在于 URL fragment 中，绝不会发送到服务器，从而保持整个流程的零知识。它是免费、MIT 许可且开源的。</p>
+
+<h2>几秒内完成安装</h2>
+<pre><code># macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (apt)
+echo "deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main" | sudo tee /etc/apt/sources.list.d/ooshare.list
+sudo apt update && sudo apt install ooshare
+
+# Linux (dnf)
+sudo dnf install ooshare   # 添加 .repo（baseurl=https://dhdtech.github.io/packages-ooshare/rpm）后
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# 或任何已安装 Go 的地方
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+# 验证
+ooshare version</code></pre>
+<p>通过 Homebrew、apt、dnf、winget、Scoop 或 Go 安装——选用你团队的标准即可。快速执行 <code>ooshare version</code> 即可确认二进制文件已在你的 <code>PATH</code> 中并准备好使用。</p>
+
+<h2>三条一行命令</h2>
+<p>安装完成后，日常使用出奇地简短：</p>
+<pre><code># 创建一个一次性密码
+ooshare create --text "你好"
+
+# 查看它（链接在读取一次后被消费）
+ooshare view "https://ooshare.io/s/AbC123#..."
+
+# 适合机器读取的输出
+ooshare create --text "你好" --json | jq '.url'</code></pre>
+<p><code>ooshare create</code> 会在本地加密你的密码，只上传密文，然后打印一个链接。链接在第一次成功查看后自毁。借助 <code>--json</code>，CLI 会输出结构化结果，可导入 <code>jq</code> 或任何其他工具，这让它很容易集成到脚本中。</p>
+
+<h2>在 CI 中编写脚本</h2>
+<p>一次性密码 CLI 最好的用途之一，是在构建步骤之间——或完全交接给他人——传递密码。这里是一个真实的 GitHub Actions 示例：</p>
+<pre><code>jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+      - run: go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+      # 第一步：创建密码并捕获 URL
+      - id: share
+        run: echo "url=$(ooshare create --json --text "$SECRET" | jq -r .url)" >> "$GITHUB_OUTPUT"
+        env:
+          SECRET: \${{ secrets.DEPLOY_TOKEN }}
+
+      # ... 稍后，或完全在另一个 job 中 ...
+      # 第二步：查看它，仍在服务器端
+      - run: ooshare view "\${{ steps.share.outputs.url }}"</code></pre>
+<p>密码绝不会进入你的工作流日志或任何中间产出物。明文永远不会到达服务器，链接一旦被读取就立即失效。这把人与人之间脆弱的复制粘贴依赖，变成了干净、可审计、一次性的交接。</p>
+
+<h2>与网页相同的保障</h2>
+<p>转移到终端并不会削弱安全模型。每个密码都在客户端使用 AES-256-GCM 加密，密钥通过 HKDF-SHA-256 派生，主密钥只存在于 URL fragment 中。服务器只存储密文，并在首次读取时原子删除。这与你在网站上获得的零知识保障完全相同，只是打包成了一个脚本可以调用的工具。</p>
+
+<h2>立即开始</h2>
+<p><a href="https://ooshare.io/cli">一次性密码 CLI</a> 免费且开源。前往 CLI 页面查看完整的安装指南和示例，在 <a href="https://github.com/dhdtech/ooshare.io/releases">GitHub Releases</a> 获取最新构建和版本说明，并立即开始自动化你的密码交接。无论你是需要<a href="https://ooshare.io/blog/devops-secret-sharing-best-practices">从终端分享密码</a>，还是想把一次性密码 CLI 接入你的流水线，你的密码都值得比一条粘贴的消息更好。</p>
+`
   }
 };

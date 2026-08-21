@@ -2063,4 +2063,83 @@ docker compose up -d</code></pre>
 <p>ZIP files concentrate sensitive information into a single package, making secure handling more important — not less. Password-protected ZIPs provide a false sense of security, and email or cloud links leave archives exposed indefinitely. Encrypted, self-destructing links ensure your archive exists only for the moment it's needed and is permanently destroyed afterward. The next time you need to send a project handoff, an HR document bundle, or any sensitive ZIP file, skip the email attachment and <a href="/">create a secure one-time link instead</a>.</p>
 `
   },
+  // ──────────────────────────────────────────────
+  // Post — August 2026
+  // ──────────────────────────────────────────────
+  {
+    slug: "ooshare-cli-one-time-secrets-from-terminal",
+    title: "Automate One-Time Secrets From the Terminal: Introducing the ooshare CLI",
+    date: "2026-08-21",
+    description: "Create and reveal one-time secrets from the command line with the ooshare CLI — the same end-to-end AES-256-GCM encryption as the web, free, and installable from Homebrew, apt, dnf, winget, Scoop, or Go. Includes a GitHub Actions example.",
+    readingTime: 7,
+    tags: ["cli", "automation", "security", "devtools", "encryption"],
+    content: `
+<p>We've all done it: a teammate DMs you a database password, you paste a production token into email, or someone drops an API key into a shared Slack channel "just for now." Every one of those secrets is now sitting in a log, an inbox, or a chat history — searchable, persistent, and one breach away from leaking. Scripting your secret handoff is strictly better than pasting, and now you can do it without leaving your terminal.</p>
+
+<h2>Meet the ooshare CLI</h2>
+<p>The <a href="https://ooshare.io/cli">ooshare CLI</a> is a single static binary for macOS, Linux, and Windows. There's no runtime to install and no service to configure — download it, run it, and you're done. It uses the identical AES-256-GCM encryption and HKDF-SHA-256 key derivation as the web app, so a secret you create in the terminal opens in the browser and vice versa. The master key travels only in the URL fragment and is never sent to the server, keeping the whole flow zero-knowledge. It's free, MIT-licensed, and open source.</p>
+
+<h2>Install in seconds</h2>
+<pre><code># macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (apt)
+echo "deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main" | sudo tee /etc/apt/sources.list.d/ooshare.list
+sudo apt update && sudo apt install ooshare
+
+# Linux (dnf)
+sudo dnf install ooshare   # after adding the .repo (baseurl=https://dhdtech.github.io/packages-ooshare/rpm)
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# Or anywhere with Go
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+# Verify
+ooshare version</code></pre>
+<p>Install via Homebrew, apt, dnf, winget, Scoop, or Go — whatever you standardize on. A quick <code>ooshare version</code> confirms the binary is on your <code>PATH</code> and ready to go.</p>
+
+<h2>Three one-liners</h2>
+<p>Once it's installed, the day-to-day is wonderfully short:</p>
+<pre><code># Create a one-time secret
+ooshare create --text "hello"
+
+# Reveal it (the link is consumed after one read)
+ooshare view "https://ooshare.io/s/AbC123#..."
+
+# Machine-friendly output
+ooshare create --text "hello" --json | jq '.url'</code></pre>
+<p><code>ooshare create</code> encrypts your secret locally, uploads only the ciphertext, and prints a link. The link self-destructs after the first successful view. With <code>--json</code>, the CLI emits structured output you can pipe into <code>jq</code> or any other tool, which makes it trivial to drop into a script.</p>
+
+<h2>Script it in CI</h2>
+<p>One of the best uses for a one-time secret CLI is handing off secrets between build steps — or to someone else entirely. Here's a real GitHub Actions example:</p>
+<pre><code>jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+      - run: go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+      # Step one: author the secret and capture the URL
+      - id: share
+        run: echo "url=$(ooshare create --json --text "$SECRET" | jq -r .url)" >> "$GITHUB_OUTPUT"
+        env:
+          SECRET: \${{ secrets.DEPLOY_TOKEN }}
+
+      # ... later, or in a different job entirely ...
+      # Step two: reveal it, still server-side
+      - run: ooshare view "\${{ steps.share.outputs.url }}"</code></pre>
+<p>The secret never touches your workflow logs or any intermediate artifact. No plaintext ever hits the server, and the link is useless the moment it's read. This turns a fragile copy-paste dependency between humans into a clean, auditable, one-time handshake.</p>
+
+<h2>The same guarantees as the web</h2>
+<p>Moving to the terminal doesn't weaken the security model. Every secret is encrypted client-side with AES-256-GCM, the key is derived with HKDF-SHA-256, and the master key lives only in the URL fragment. The server stores nothing but ciphertext and deletes it atomically on first retrieval. It's the exact same zero-knowledge guarantee you get from the website, packaged as a tool your scripts can call.</p>
+
+<h2>Get started</h2>
+<p>The <a href="https://ooshare.io/cli">one-time secret CLI</a> is free and open source. Check out the full install guide and examples on the CLI page, grab the latest builds and release notes on <a href="https://github.com/dhdtech/ooshare.io/releases">GitHub Releases</a>, and start automating your secret handoff today. Whether you need to <a href="https://ooshare.io/blog/devops-secret-sharing-best-practices">share a secret from the terminal</a> or wire up a one-time secret CLI into your pipeline, your secrets deserve better than a pasted message.</p>
+`
+  },
 ];

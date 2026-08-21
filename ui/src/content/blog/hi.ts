@@ -1040,5 +1040,77 @@ docker run -p 3000:3000 ghcr.io/dhdtech/only-once-share:latest</code></pre>
 <h2>निष्कर्ष</h2>
 <p>ZIP फ़ाइलें संवेदनशील जानकारी को एक पैकेज में केंद्रित करती हैं, जिससे सुरक्षित संचालन और भी महत्वपूर्ण हो जाता है — कम नहीं। पासवर्ड-संरक्षित ZIP सुरक्षा का झूठा एहसास देती हैं, और ईमेल या क्लाउड लिंक आर्काइव को अनिश्चित काल तक उजागर छोड़ देते हैं। एन्क्रिप्टेड, स्वयं-नष्ट होने वाले लिंक सुनिश्चित करते हैं कि आपका आर्काइव केवल उस क्षण के लिए मौजूद हो जब उसकी आवश्यकता हो और उसके बाद स्थायी रूप से नष्ट हो जाए। अगली बार जब आपको प्रोजेक्ट हैंडऑफ़, HR दस्तावेज़ बंडल, या कोई भी संवेदनशील ZIP फ़ाइल भेजनी हो, तो ईमेल अटैचमेंट छोड़ें और <a href="/">एक सुरक्षित एक-बार का लिंक बनाएं</a>।</p>
 `
+  },
+  "ooshare-cli-one-time-secrets-from-terminal": {
+    title: "टर्मिनल से एक-बार के रहस्यों को स्वचालित करें: ooshare CLI का परिचय",
+    description: "ooshare CLI के साथ कमांड लाइन से एक-बार के रहस्य बनाएँ और देखें — वेब जैसी ही एंड-टू-एंड AES-256-GCM एन्क्रिप्शन, मुफ़्त, और Homebrew, apt, dnf, winget, Scoop या Go से इंस्टॉल करने योग्य। GitHub Actions उदाहरण भी शामिल है।",
+    content: `
+<p>हम सभी ने यह किया है: एक साथी आपको डेटाबेस पासवर्ड डीएम करता है, आप प्रोडक्शन टोकन ईमेल में चिपकाते हैं, या कोई API key साझा Slack चैनल में \"बस अभी के लिए\" डाल देता है। वे सभी रहस्य अब एक लॉग, इनबॉक्स या चैट हिस्ट्री में पड़े हैं — खोजने योग्य, स्थायी, और लीक होने से बस एक जोखिम दूर। अपने रहस्यों की सुपुर्दगी को स्क्रिप्ट करना पेस्ट करने से बेहतर है, और अब आप इसे अपना टर्मिनल छोड़े बिना भी कर सकते हैं।</p>
+
+<h2>ooshare CLI से मिलिए</h2>
+<p><a href="https://ooshare.io/cli">ooshare CLI</a> macOS, Linux और Windows के लिए एक एकल स्टैटिक बाइनरी है। इंस्टॉल करने के लिए कोई runtime नहीं और कॉन्फ़िगर करने के लिए कोई सेवा नहीं — बस इसे डाउनलोड करें, चलाएँ, और हो गया। यह वेब ऐप जैसी ही AES-256-GCM एन्क्रिप्शन और HKDF-SHA-256 कुंजी व्युत्पत्ति का उपयोग करता है, इसलिए टर्मिनल में बनाया गया रहस्य ब्राउज़र में खुलता है और इसके विपरीत। मास्टर कुंजी केवल URL fragment में सफ़र करती है और कभी सर्वर को नहीं भेजी जाती, जिससे पूरा प्रवाह जीरो-नॉलेज बना रहता है। यह मुफ़्त, MIT लाइसेंस वाला और ओपन-सोर्स है।</p>
+
+<h2>सेकंडों में इंस्टॉल करें</h2>
+<pre><code># macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (apt)
+echo "deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main" | sudo tee /etc/apt/sources.list.d/ooshare.list
+sudo apt update && sudo apt install ooshare
+
+# Linux (dnf)
+sudo dnf install ooshare   # .repo जोड़ने के बाद (baseurl=https://dhdtech.github.io/packages-ooshare/rpm)
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# या कहीं भी जहाँ Go है
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+# सत्यापित करें
+ooshare version</code></pre>
+<p>Homebrew, apt, dnf, winget, Scoop या Go से इंस्टॉल करें — जो भी आपका मानक हो। एक त्वरित <code>ooshare version</code> यह सुनिश्चित करता है कि बाइनरी आपके <code>PATH</code> में है और उपयोग के लिए तैयार है।</p>
+
+<h2>तीन एक-लाइनर</h2>
+<p>एक बार इंस्टॉल हो जाने पर, दैनिक उपयोग आश्चर्यजनक रूप से छोटा होता है:</p>
+<pre><code># एक-बार का रहस्य बनाएँ
+ooshare create --text "हेलो"
+
+# इसे देखें (लिंक एक बार पढ़ने पर खत्म हो जाता है)
+ooshare view "https://ooshare.io/s/AbC123#..."
+
+# मशीन-अनुकूल आउटपुट
+ooshare create --text "हेलो" --json | jq '.url'</code></pre>
+<p><code>ooshare create</code> आपके रहस्य को लोकली एन्क्रिप्ट करता है, केवल साइफ़रटेक्स्ट अपलोड करता है और एक लिंक प्रिंट करता है। पहली सफल देखने के बाद लिंक खुद-ब-खुद नष्ट हो जाता है। <code>--json</code> के साथ, CLI संरचित आउटपुट देता है जिसे आप <code>jq</code> या किसी अन्य टूल में डाल सकते हैं, जिससे इसे किसी स्क्रिप्ट में जोड़ना बहुत आसान हो जाता है।</p>
+
+<h2>इसे CI में स्क्रिप्ट करें</h2>
+<p>एक-बार के रहस्य CLI का सबसे अच्छा उपयोग बिल्ड स्टेप्स के बीच — या किसी अन्य व्यक्ति को — रहस्यों की सुपुर्दगी करना है। यहाँ एक वास्तविक GitHub Actions उदाहरण है:</p>
+<pre><code>jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+      - run: go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+      # चरण एक: रहस्य बनाएँ और URL कैप्चर करें
+      - id: share
+        run: echo "url=$(ooshare create --json --text "$SECRET" | jq -r .url)" >> "$GITHUB_OUTPUT"
+        env:
+          SECRET: \${{ secrets.DEPLOY_TOKEN }}
+
+      # ... बाद में, या पूरी तरह किसी अन्य job में ...
+      # चरण दो: इसे देखें, अब भी सर्वर-साइड
+      - run: ooshare view "\${{ steps.share.outputs.url }}"</code></pre>
+<p>रहस्य कभी आपके workflow लॉग या किसी मध्यवर्ती आर्टिफैक्ट को नहीं छूता। सादा टेक्स्ट कभी सर्वर तक नहीं पहुँचता, और जैसे ही लिंक पढ़ा जाता है वह बेकार हो जाता है। यह मनुष्यों के बीच नाज़ुक कॉपी-पेस्ट निर्भरता को एक स्वच्छ, ऑडिट योग्य, एक-बार के हैंडशेक में बदल देता है।</p>
+
+<h2>वेब जैसी ही गारंटियाँ</h2>
+<p>टर्मिनल पर जाने से सुरक्षा मॉडल कमज़ोर नहीं होता। हर रहस्य क्लाइंट-साइड AES-256-GCM से एन्क्रिप्ट होता है, कुंजी HKDF-SHA-256 से व्युत्पन्न होती है, और मास्टर कुंजी केवल URL fragment में रहती है। सर्वर केवल साइफ़रटेक्स्ट संग्रहीत करता है और पहली प्राप्ति पर इसे एटॉमिक रूप से हटा देता है। यह वही जीरो-नॉलेज गारंटी है जो आपको वेबसाइट से मिलती है, बस एक ऐसा टूल बनकर जिसे आपकी स्क्रिप्ट कॉल कर सकती हैं।</p>
+
+<h2>आरंभ करें</h2>
+<p><a href="https://ooshare.io/cli">एक-बार का रहस्य CLI</a> मुफ़्त और ओपन-सोर्स है। CLI पेज पर पूर्ण इंस्टॉल गाइड और उदाहरण देखें, <a href="https://github.com/dhdtech/ooshare.io/releases">GitHub Releases</a> पर नवीनतम बिल्ड और रिलीज़ नोट प्राप्त करें, और आज ही अपनी रहस्य सुपुर्दगी को स्वचालित करना शुरू करें। चाहे आपको <a href="https://ooshare.io/blog/devops-secret-sharing-best-practices">टर्मिनल से रहस्य साझा करना</a> हो या अपनी पाइपलाइन में एक-बार के रहस्य CLI को जोड़ना हो, आपके रहस्य एक चिपकाए गए संदेश से बेहतर के हक़दार हैं।</p>
+`
   }
 };

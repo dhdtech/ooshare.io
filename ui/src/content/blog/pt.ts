@@ -1035,5 +1035,77 @@ docker compose up -d</code></pre>
 <h2>Conclusão</h2>
 <p>Arquivos ZIP concentram informações sensíveis em um único pacote, tornando o manuseio seguro mais importante — e não menos. ZIPs protegidos por senha proporcionam uma falsa sensação de segurança, e e-mails ou links na nuvem deixam arquivos expostos indefinidamente. Links criptografados e autodestrutivos garantem que seu arquivo exista apenas no momento em que é necessário e seja permanentemente destruído depois. Da próxima vez que precisar enviar uma entrega de projeto, um pacote de documentos de RH ou qualquer arquivo ZIP sensível, pule o anexo de e-mail e <a href="/">crie um link seguro de uso único</a>.</p>
 `
+  },
+  "ooshare-cli-one-time-secrets-from-terminal": {
+    title: "Automatize segredos de uso único a partir do terminal: conheça a CLI do ooshare",
+    description: "Crie e revele segredos de uso único a partir da linha de comando com a CLI do ooshare — a mesma criptografia AES-256-GCM de ponta a ponta do web, grátis e instalável via Homebrew, apt, dnf, winget, Scoop ou Go. Inclui um exemplo para GitHub Actions.",
+    content: `
+<p>Todos nós já fizemos isso: um colega te envia uma senha de banco de dados por mensagem, você cola um token de produção em um e-mail ou alguém joga uma API key em um canal compartilhado do Slack \"só por enquanto\". Cada um desses segredos agora está em um log, uma caixa de entrada ou um histórico de chat — pesquisável, persistente e a uma violação de distância de vazar. Automatizar a entrega de segredos é estritamente melhor do que copiar e colar, e agora você pode fazer isso sem sair do seu terminal.</p>
+
+<h2>Conheça a CLI do ooshare</h2>
+<p>A <a href="https://ooshare.io/cli">CLI do ooshare</a> é um único binário estático para macOS, Linux e Windows. Não há runtime para instalar nem serviço para configurar — baixe, execute e pronto. Ela usa o mesmo AES-256-GCM e a mesma derivação de chave HKDF-SHA-256 do aplicativo web, de modo que um segredo criado no terminal abre no navegador e vice-versa. A chave mestre viaja apenas no fragmento da URL e nunca é enviada ao servidor, mantendo todo o fluxo com zero conhecimento. É gratuita, licenciada sob MIT e de código aberto.</p>
+
+<h2>Instale em segundos</h2>
+<pre><code># macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (apt)
+echo "deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main" | sudo tee /etc/apt/sources.list.d/ooshare.list
+sudo apt update && sudo apt install ooshare
+
+# Linux (dnf)
+sudo dnf install ooshare   # após adicionar o .repo (baseurl=https://dhdtech.github.io/packages-ooshare/rpm)
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# Ou em qualquer lugar com Go
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+# Verificar
+ooshare version</code></pre>
+<p>Instale via Homebrew, apt, dnf, winget, Scoop ou Go — o que você padronizar. Um rápido <code>ooshare version</code> confirma que o binário está no seu <code>PATH</code> e pronto para uso.</p>
+
+<h2>Três comandos simples</h2>
+<p>Depois de instalado, o uso diário é maravilhosamente curto:</p>
+<pre><code># Criar um segredo de uso único
+ooshare create --text "olá"
+
+# Revê-lo (o link é consumido após uma leitura)
+ooshare view "https://ooshare.io/s/AbC123#..."
+
+# Saída pronta para máquinas
+ooshare create --text "olá" --json | jq '.url'</code></pre>
+<p><code>ooshare create</code> criptografa seu segredo localmente, envia apenas o texto cifrado e imprime um link. O link se autodestrói após a primeira visualização bem-sucedida. Com <code>--json</code>, a CLI emite uma saída estruturada que você pode passar para <code>jq</code> ou qualquer outra ferramenta, tornando trivial usá-la em um script.</p>
+
+<h2>Script em CI</h2>
+<p>Um dos melhores usos para uma CLI de segredos de uso único é entregar segredos entre etapas de build — ou para outra pessoa por completo. Aqui está um exemplo real de GitHub Actions:</p>
+<pre><code>jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+      - run: go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+      # Passo um: cria o segredo e captura a URL
+      - id: share
+        run: echo "url=$(ooshare create --json --text "$SECRET" | jq -r .url)" >> "$GITHUB_OUTPUT"
+        env:
+          SECRET: \${{ secrets.DEPLOY_TOKEN }}
+
+      # ... mais tarde, ou em outro job por completo ...
+      # Passo dois: revela, ainda no lado do servidor
+      - run: ooshare view "\${{ steps.share.outputs.url }}"</code></pre>
+<p>O segredo nunca toca os logs do seu workflow nem nenhum artefato intermediário. Nenhum texto simples jamais chega ao servidor, e o link é inútil no momento em que é lido. Isso transforma uma frágil dependência de copiar e colar entre humanos em um aperto de mão limpo, auditável e de uso único.</p>
+
+<h2>As mesmas garantias do web</h2>
+<p>Mudar para o terminal não enfraquece o modelo de segurança. Cada segredo é criptografado no cliente com AES-256-GCM, a chave é derivada com HKDF-SHA-256 e a chave mestre vive apenas no fragmento da URL. O servidor armazena apenas o texto cifrado e o exclui atomicamente na primeira recuperação. É exatamente a mesma garantia de zero conhecimento que você obtém no site, empacotada como uma ferramenta que seus scripts podem chamar.</p>
+
+<h2>Comece agora</h2>
+<p>A <a href="https://ooshare.io/cli">CLI de segredos de uso único</a> é gratuita e de código aberto. Confira o guia completo de instalação e exemplos na página da CLI, baixe as versões mais recentes e as notas de lançamento em <a href="https://github.com/dhdtech/ooshare.io/releases">GitHub Releases</a> e comece a automatizar sua entrega de segredos hoje. Se você precisa <a href="https://ooshare.io/blog/devops-secret-sharing-best-practices">compartilhar um segredo a partir do terminal</a> ou integrar uma CLI de segredos de uso único ao seu pipeline, seus segredos merecem mais do que uma mensagem colada.</p>
+`
   }
 };

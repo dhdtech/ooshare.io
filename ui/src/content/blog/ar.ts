@@ -1160,5 +1160,77 @@ docker compose up -d</code></pre>
 <h2>الخلاصة</h2>
 <p>تركّز ملفات ZIP المعلومات الحساسة في حزمة واحدة، مما يجعل التعامل الآمن أكثر أهمية — لا أقل. ملفات ZIP المحمية بكلمة مرور توفر إحساساً زائفاً بالأمان، والبريد الإلكتروني أو الروابط السحابية تترك الأرشيفات مكشوفة إلى أجل غير مسمى. الروابط المشفرة ذاتية التدمير تضمن وجود أرشيفك فقط في اللحظة التي يُحتاج فيها ويُدمَّر نهائياً بعد ذلك. في المرة القادمة التي تحتاج فيها لإرسال تسليم مشروع أو حزمة وثائق موارد بشرية أو أي ملف ZIP حساس، تخطَّ مرفق البريد الإلكتروني و<a href="/">أنشئ رابطاً آمناً لمرة واحدة</a>.</p>
 `
+  },
+  "ooshare-cli-one-time-secrets-from-terminal": {
+    title: "أتمتة الأسرار لمرة واحدة من الطرفية: تقديم أداة ooshare CLI",
+    description: "أنشئ وكشف الأسرار لمرة واحدة من سطر الأوامر مع أداة ooshare CLI — نفس تشفير AES-256-GCM الشامل للتطبيق على الويب، مجاني، وقابل للتثبيت عبر Homebrew وapt وdnf وwinget وScoop أو Go. يتضمن مثالاً لـ GitHub Actions.",
+    content: `
+<p>جميعنا فعلنا ذلك: زميل يرسل لك كلمة مرور قاعدة بيانات في رسالة خاصة، أو تلصق رمزاً مميزاً للإنتاج في بريد إلكتروني، أو يضع أحدهم مفتاح API في قناة Slack مشتركة "في الوقت الراهن فقط". كل هذه الأسرار الآن موجودة في سجل، أو صندوق وارد، أو محفوظات محادثة — قابلة للبحث، ودائمة، وتبعد خطوة واحدة فقط عن التسريب. كتابة تسليم الأسرار في سكربت أفضل بشكل قاطع من لصقها، والآن يمكنك فعل ذلك دون مغادرة الطرفية.</p>
+
+<h2>تعرّف على أداة ooshare CLI</h2>
+<p><a href="https://ooshare.io/cli">أداة ooshare CLI</a> هي ملف ثنائي ثابت واحد لنظامي macOS وLinux وWindows. لا يوجد runtime لتثبيته ولا خدمة لتكوينها — نزّلها، شغّلها، وانتهيت. تستخدم نفس تشفير AES-256-GCM ونفس اشتقاق المفتاح HKDF-SHA-256 لتطبيق الويب، لذا فإن السر الذي تنشئه في الطرفية يُفتح في المتصفح والعكس صحيح. المفتاح الرئيسي يسافر فقط في جزء عنوان URL ولا يُرسل أبداً إلى الخادم، مما يُبقي التدفق كله بمعرفة صفرية. وهي مجانية، ومُرخصة برخصة MIT، ومفتوحة المصدر.</p>
+
+<h2>ثبّتها في ثوانٍ</h2>
+<pre><code># macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (apt)
+echo "deb [signed-by=/usr/share/keyrings/ooshare.gpg] https://dhdtech.github.io/packages-ooshare/apt stable main" | sudo tee /etc/apt/sources.list.d/ooshare.list
+sudo apt update && sudo apt install ooshare
+
+# Linux (dnf)
+sudo dnf install ooshare   # بعد إضافة ملف .repo (baseurl=https://dhdtech.github.io/packages-ooshare/rpm)
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# أو في أي مكان فيه Go
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+# التحقق
+ooshare version</code></pre>
+<p>ثبّت عبر Homebrew أو apt أو dnf أو winget أو Scoop أو Go — حسب ما تتبناه كمعيار. أمر سريع <code>ooshare version</code> يؤكد أن الملف الثنائي موجود في <code>PATH</code> وجاهز للاستخدام.</p>
+
+<h2>ثلاثة أوامر من سطر واحد</h2>
+<p>بعد التثبيت، يكون الاستخدام اليومي قصيراً بشكل رائع:</p>
+<pre><code># إنشاء سر لمرة واحدة
+ooshare create --text "مرحباً"
+
+# كشفه (يُستهلك الرابط بعد قراءة واحدة)
+ooshare view "https://ooshare.io/s/AbC123#..."
+
+# مخرجات مناسبة للآلات
+ooshare create --text "مرحباً" --json | jq '.url'</code></pre>
+<p><code>ooshare create</code> يشفّر سرك محلياً، ويرفع النص المشفر فقط، ويطبع رابطاً. يدمِّر الرابط نفسه بعد أول مشاهدة ناجحة. مع <code>--json</code>، تصدر الأداة مخرجات منظمة يمكنك تمريرها إلى <code>jq</code> أو أي أداة أخرى، ما يسهّل دمجها في سكربت.</p>
+
+<h2>اكتبه في سكربت داخل CI</h2>
+<p>من أفضل استخدامات أداة CLI للأسرار لمرة واحدة تسليم الأسرار بين خطوات البناء — أو لشخص آخر بالكامل. إليك مثالاً حقيقياً لـ GitHub Actions:</p>
+<pre><code>jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+      - run: go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+
+      # الخطوة الأولى: أنشئ السر والتقط عنوان URL
+      - id: share
+        run: echo "url=$(ooshare create --json --text "$SECRET" | jq -r .url)" >> "$GITHUB_OUTPUT"
+        env:
+          SECRET: \${{ secrets.DEPLOY_TOKEN }}
+
+      # ... لاحقاً، أو في مهمة أخرى بالكامل ...
+      # الخطوة الثانية: كشفه، ما يزال على جانب الخادم
+      - run: ooshare view "\${{ steps.share.outputs.url }}"</code></pre>
+<p>لا يلمس السر أبداً سجلات سير عملك أو أي منتج وسيط. لا يصل أي نص صريح إلى الخادم أبداً، ويصبح الرابط عديم الفائدة لحظة قراءته. هذا يحوّل اعتماد النسخ واللصق الهش بين البشر إلى مصافحة نظيفة وقابلة للتدقيق ولمرة واحدة.</p>
+
+<h2>نفس ضمانات الويب</h2>
+<p>الانتقال إلى الطرفية لا يُضعف نموذج الأمان. كل سر يُشفَّر من جهة العميل باستخدام AES-256-GCM، ويُشتق المفتاح عبر HKDF-SHA-256، ويعيش المفتاح الرئيسي فقط في جزء عنوان URL. لا يخزّن الخادم سوى النص المشفر ويحذفه بطريقة ذرية عند أول استرجاع. إنها نفس ضمانات المعرفة الصفرية التي تحصل عليها من الموقع، معبأة كأداة تستطيع سكربتاتك استدعاءها.</p>
+
+<h2>ابدأ الآن</h2>
+<p><a href="https://ooshare.io/cli">أداة CLI للأسرار لمرة واحدة</a> مجانية ومفتوحة المصدر. اطّلع على دليل التثبيت الكامل والأمثلة في صفحة CLI، ونزّل أحدث الإصدارات وملاحظات الإصدار من <a href="https://github.com/dhdtech/ooshare.io/releases">GitHub Releases</a>، وابدأ اليوم في أتمتة تسليم أسرارك. سواء كنت بحاجة إلى <a href="https://ooshare.io/blog/devops-secret-sharing-best-practices">مشاركة سر من الطرفية</a> أو توصيل أداة CLI للأسرار لمرة واحدة في خط الإنتاج الخاص بك، فإن أسرارك تستحق أفضل من رسالة ملصوقة.</p>
+`
   }
 };
