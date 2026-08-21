@@ -61,14 +61,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-      EXTENSION_ITEM_ID: ${{ secrets.EXTENSION_ITEM_ID }}
+      # chrome-webstore-upload-cli@4 reads these exact names.
+      CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+      REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+      PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+      EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
     steps:
       - name: Check Chrome credentials configured
         id: check
-        run: echo "configured=${{ env.GOOGLE_CLIENT_ID != '' && env.GOOGLE_CLIENT_SECRET != '' && env.GOOGLE_REFRESH_TOKEN != '' && env.EXTENSION_ITEM_ID != '' && 'true' || 'false' }}" >> "$GITHUB_OUTPUT"
+        run: echo "configured=${{ env.CLIENT_ID != '' && env.CLIENT_SECRET != '' && env.REFRESH_TOKEN != '' && env.PUBLISHER_ID != '' && env.EXTENSION_ID != '' && 'true' || 'false' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         if: steps.check.outputs.configured == 'true'
       - uses: actions/download-artifact@v4
@@ -86,13 +88,18 @@ jobs:
         if: steps.check.outputs.configured == 'true'
         working-directory: extension
         run: npm ci
-      - name: Upload + publish to CWS
+      - name: Upload to CWS
         if: steps.check.outputs.configured == 'true'
         working-directory: extension
         run: |
           set -euo pipefail
           npx chrome-webstore-upload-cli upload --source ../dist/ooshare-chrome-*.zip
-          npx chrome-webstore-upload-cli publish --target default
+      - name: Publish to CWS
+        if: steps.check.outputs.configured == 'true'
+        working-directory: extension
+        run: |
+          set -euo pipefail
+          npx chrome-webstore-upload-cli publish --extension-id "$EXTENSION_ID"
 
   publish-firefox:
     name: Publish Firefox AMO

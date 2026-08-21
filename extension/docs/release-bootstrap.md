@@ -38,22 +38,30 @@ git push origin ext-v1.0.0
 
 ## Chrome (Google Web Store)
 
+The CI uses `chrome-webstore-upload-cli@4`, which reads exactly these env vars
+(`CLIENT_ID`, `CLIENT_SECRET`, `REFRESH_TOKEN`, `PUBLISHER_ID`, `EXTENSION_ID`);
+they are mapped from the repo secrets below.
+
 1. Create the extension item in the **Chrome Web Store dashboard**
    (`https://chrome.google.com/webstore/devconsole/`) — "Add new item". Uploads
-   there are required once before the API can publish.
+   there are required once before the API can publish. This gives you the
+   **extension ID** and the **publisher ID** (both visible in the item's
+   dashboard URL / account page).
 2. To use the upload/publish API you need an OAuth client:
    - In **Google Cloud Console** (`https://console.cloud.google.com/`), create an
-     OAuth **desktop** client ID and secret for the Chrome Web Store API scopes.
+     OAuth **desktop** client ID and secret, and enable the **Chrome Web Store
+     API**.
    - Run the OAuth dance to obtain a long-lived **refresh token** for those
-     client credentials (the CWS API calls go through
-     `https://chrome-webstore-upload.google.com`).
-3. Set four repo secrets:
-   - `GOOGLE_CLIENT_ID` — OAuth client ID
-   - `GOOGLE_CLIENT_SECRET` — OAuth client secret
-   - `GOOGLE_REFRESH_TOKEN` — the refresh token from step 2
-   - `EXTENSION_ITEM_ID` — the extension's item ID as shown in the dashboard
+     client credentials. Follow the canonical guide:
+     `https://github.com/fregante/chrome-webstore-upload-keys`.
+3. Set five repo secrets (`gh secret set <NAME> --repo dhdtech/ooshare.io`):
+   - `CWS_CLIENT_ID` — OAuth client ID
+   - `CWS_CLIENT_SECRET` — OAuth client secret
+   - `CWS_REFRESH_TOKEN` — the refresh token from step 2
+   - `CWS_PUBLISHER_ID` — the publisher ID from step 1
+   - `CWS_EXTENSION_ID` — the extension's item ID from step 1
 4. First publish is subject to **manual review** by Google. Subsequent tagged
-   releases auto-upload and auto-publish to the `default` target.
+   releases auto-upload and auto-publish (100% deploy) to the default target.
 
 ## Firefox (addons.mozilla.org)
 
