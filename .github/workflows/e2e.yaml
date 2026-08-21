@@ -30,6 +30,10 @@ jobs:
   e2e-action:
     name: ooshare-action E2E
     runs-on: ubuntu-latest
+    env:
+      # The API defaults to host "redis"; the service container exposes 6379 on localhost.
+      REDIS_HOST: localhost
+      REDIS_PORT: '6379'
     services:
       redis:
         image: redis:7-alpine
