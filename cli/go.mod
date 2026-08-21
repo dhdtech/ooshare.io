@@ -1,4 +1,4 @@
-module github.com/dhdtech/only-once-share/cli
+module github.com/dhdtech/ooshare.io/cli
 
 go 1.22
 

@@ -16,9 +16,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/dhdtech/only-once-share/cli/internal/api"
-	"github.com/dhdtech/only-once-share/cli/internal/crypto"
-	"github.com/dhdtech/only-once-share/cli/internal/shareurl"
+	"github.com/dhdtech/ooshare.io/cli/internal/api"
+	"github.com/dhdtech/ooshare.io/cli/internal/crypto"
+	"github.com/dhdtech/ooshare.io/cli/internal/shareurl"
 )
 
 const (

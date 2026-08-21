@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/dhdtech/only-once-share/cli/internal/cli"
+	"github.com/dhdtech/ooshare.io/cli/internal/cli"
 )
 
 func main() {

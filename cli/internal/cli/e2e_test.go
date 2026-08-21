@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dhdtech/only-once-share/cli/internal/crypto"
+	"github.com/dhdtech/ooshare.io/cli/internal/crypto"
 )
 
 // e2eServer is a fake API that stores one secret in memory and serves it once,

@@ -16,7 +16,7 @@ builds:
     ldflags:
       - >-
         -s -w
-        -X github.com/dhdtech/only-once-share/cli/internal/cli.Version={{ .Version }}
+        -X github.com/dhdtech/ooshare.io/cli/internal/cli.Version={{ .Version }}
     flags:
       - -trimpath
     mod_timestamp: "{{ .CommitTimestamp }}"

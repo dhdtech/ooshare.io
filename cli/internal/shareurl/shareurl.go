@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/dhdtech/only-once-share/cli/internal/crypto"
+	"github.com/dhdtech/ooshare.io/cli/internal/crypto"
 )
 
 const keyBytes = 32

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dhdtech/only-once-share/cli/internal/crypto"
+	"github.com/dhdtech/ooshare.io/cli/internal/crypto"
 )
 
 // errReader is an io.Reader that always fails, to exercise stdin error branches.
