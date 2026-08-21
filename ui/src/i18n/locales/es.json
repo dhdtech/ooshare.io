@@ -244,9 +244,21 @@
     "examples": {
       "title": "Pruébalo en segundos",
       "subtitle": "Tres comandos de una línea. Cada enlace se lee una vez y luego se autodestruye.",
-      "create": { "label": "Crea un secreto y obtén un enlace de un solo uso" },
-      "view": { "label": "Revélalo una vez — se elimina después de verlo" },
-      "ci": { "label": "Automáticalo en CI — salida JSON, lista para jq" }
+      "create": {
+        "label": "Crea un secreto y obtén un enlace de un solo uso"
+      },
+      "view": {
+        "label": "Revélalo una vez — se elimina después de verlo"
+      },
+      "ci": {
+        "label": "Automáticalo en CI — salida JSON, lista para jq"
+      }
+    },
+    "gha": {
+      "title": "GitHub Actions",
+      "subtitle": "Crea secretos de un solo uso directamente desde tus flujos de trabajo — la misma CLI, sin configuración. Ahora en el GitHub Marketplace.",
+      "codeLabel": "Pégalo en cualquier flujo de trabajo",
+      "button": "Ver en el GitHub Marketplace"
     },
     "security": {
       "title": "Las mismas garantías que la web",

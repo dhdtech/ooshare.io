@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Download, ShieldCheck } from "lucide-react";
+import { Download, Github, ShieldCheck } from "lucide-react";
 import useSEO from "../lib/useSEO";
 import {
   PageHeader,
@@ -50,6 +50,18 @@ const EXAMPLES = [
   'ooshare view "https://ooshare.io/s/…"',
   'ooshare create --json --text "$SECRET" | jq -r .url',
 ];
+
+/** GitHub Actions workflow snippet — language-neutral code, not i18n copy. */
+const GHA_SNIPPET = [
+  "- uses: dhdtech/ooshare-action@v1",
+  "  id: share",
+  "  with:",
+  "    command: create",
+  "    text: ${{ secrets.MY_SECRET }}   # always a GitHub secret, never a literal",
+  "# → steps.share.outputs.url  (one-time link, TTL 24h, self-destructs on reveal)",
+].join("\n");
+
+const GHA_MARKETPLACE_URL = "https://github.com/marketplace/actions/ooshare-action";
 
 const OS_TAB_VALUES = ["macos", "apt", "dnf", "winget", "scoop", "binary"] as const;
 type OsTab = (typeof OS_TAB_VALUES)[number];
@@ -186,6 +198,35 @@ export default function CLI() {
           <Button to="/security" variant="secondary" icon={<ShieldCheck size={16} />}>
             {t("cliPage.security.link")}
           </Button>
+        </Card>
+      </section>
+
+      <section className="cli-section cli-gha">
+        <SectionHeader title={t("cliPage.gha.title")} sub={t("cliPage.gha.subtitle")} />
+
+        <Card className="cli-code-card">
+          <p className="cli-label">{t("cliPage.gha.codeLabel")}</p>
+          <pre className="cli-code">
+            <code>{GHA_SNIPPET}</code>
+          </pre>
+          <div className="cli-code-footer">
+            <CopyButton
+              text={GHA_SNIPPET}
+              copyLabel={t("create.copy")}
+              copiedLabel={t("create.copied")}
+              toastMessage={t("pages.components.toastCopied")}
+              variant="secondary"
+            />
+            <Button
+              href={GHA_MARKETPLACE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="secondary"
+              icon={<Github size={16} />}
+            >
+              {t("cliPage.gha.button")}
+            </Button>
+          </div>
         </Card>
       </section>
 

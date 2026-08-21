@@ -307,6 +307,12 @@
       "view": { "label": "Reveal it once — it is deleted after viewing" },
       "ci": { "label": "Script it in CI — JSON output, jq-ready" }
     },
+    "gha": {
+      "title": "GitHub Actions",
+      "subtitle": "Create one-time secrets straight from your workflows — the same CLI, zero setup. Now on the GitHub Marketplace.",
+      "codeLabel": "Drop this into any workflow",
+      "button": "View on GitHub Marketplace"
+    },
     "security": {
       "title": "The same guarantees as the web",
       "1": "Same encryption — AES-256-GCM + HKDF-SHA-256, byte-for-byte compatible with the browser",

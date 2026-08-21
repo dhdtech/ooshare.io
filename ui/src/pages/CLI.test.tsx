@@ -1,10 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../test/render";
 import CLI from "./CLI";
 
 const RELEASES_URL = "https://github.com/dhdtech/ooshare.io/releases";
+const GHA_MARKETPLACE_URL = "https://github.com/marketplace/actions/ooshare-action";
+
+const GHA_SNIPPET = [
+  "- uses: dhdtech/ooshare-action@v1",
+  "  id: share",
+  "  with:",
+  "    command: create",
+  "    text: ${{ secrets.MY_SECRET }}   # always a GitHub secret, never a literal",
+  "# → steps.share.outputs.url  (one-time link, TTL 24h, self-destructs on reveal)",
+].join("\n");
 
 describe("CLI page", () => {
   beforeEach(() => {
@@ -100,6 +110,51 @@ describe("CLI page", () => {
     expect(
       screen.getByRole("link", { name: "Learn more about our security" }),
     ).toHaveAttribute("href", "/security");
+  });
+
+  it("renders the GitHub Actions promo section", () => {
+    renderWithProviders(<CLI />);
+    expect(
+      screen.getByRole("heading", { name: "GitHub Actions" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Create one-time secrets straight from your workflows/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Drop this into any workflow/i)).toBeInTheDocument();
+  });
+
+  it("renders the GitHub Actions workflow snippet verbatim", () => {
+    renderWithProviders(<CLI />);
+    expect(screen.getAllByText(/dhdtech\/ooshare-action@v1/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/secrets\.MY_SECRET/)).toBeInTheDocument();
+    expect(screen.getByText(/steps\.share\.outputs\.url/)).toBeInTheDocument();
+  });
+
+  it("links the promo button to the GitHub Marketplace", () => {
+    renderWithProviders(<CLI />);
+    const link = screen.getByRole("link", {
+      name: "View on GitHub Marketplace",
+    });
+    expect(link).toHaveAttribute("href", GHA_MARKETPLACE_URL);
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("copies the GitHub Actions snippet to the clipboard", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<CLI />);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator.clipboard, { writeText });
+
+    const section = screen.getByText("GitHub Actions").closest("section")!;
+    const copyButton = within(section).getByRole("button", { name: "Copy" });
+
+    await user.click(copyButton);
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith(GHA_SNIPPET);
+      expect(screen.getByText("Copied")).toBeInTheDocument();
+    });
   });
 
   it("renders the final CTA linked to /", () => {

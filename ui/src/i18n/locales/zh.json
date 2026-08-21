@@ -248,9 +248,21 @@
     "examples": {
       "title": "几秒即可试用",
       "subtitle": "三个单行命令。每个链接只读取一次，然后自动销毁。",
-      "create": { "label": "创建秘密，获取一次性链接" },
-      "view": { "label": "仅查看一次 — 查看后即被删除" },
-      "ci": { "label": "在 CI 中编写脚本 — JSON 输出，可直接与 jq 配合" }
+      "create": {
+        "label": "创建秘密，获取一次性链接"
+      },
+      "view": {
+        "label": "仅查看一次 — 查看后即被删除"
+      },
+      "ci": {
+        "label": "在 CI 中编写脚本 — JSON 输出，可直接与 jq 配合"
+      }
+    },
+    "gha": {
+      "title": "GitHub Actions",
+      "subtitle": "直接从您的工作流程中创建一次性秘密 — 相同的 CLI，零配置。现已上架 GitHub Marketplace。",
+      "codeLabel": "将其粘贴到任意工作流程中",
+      "button": "在 GitHub Marketplace 中查看"
     },
     "security": {
       "title": "与网络版相同的保证",

@@ -249,9 +249,21 @@
     "examples": {
       "title": "Experimente em segundos",
       "subtitle": "Três comandos de uma linha. Cada link é lido uma vez e depois se autodestrói.",
-      "create": { "label": "Crie um segredo e obtenha um link de uso único" },
-      "view": { "label": "Revele uma vez — é excluído após a visualização" },
-      "ci": { "label": "Automatize em CI — saída JSON, pronta para jq" }
+      "create": {
+        "label": "Crie um segredo e obtenha um link de uso único"
+      },
+      "view": {
+        "label": "Revele uma vez — é excluído após a visualização"
+      },
+      "ci": {
+        "label": "Automatize em CI — saída JSON, pronta para jq"
+      }
+    },
+    "gha": {
+      "title": "GitHub Actions",
+      "subtitle": "Crie segredos de uso único direto dos seus fluxos de trabalho — a mesma CLI, zero configuração. Agora no GitHub Marketplace.",
+      "codeLabel": "Cole isto em qualquer fluxo de trabalho",
+      "button": "Ver no GitHub Marketplace"
     },
     "security": {
       "title": "As mesmas garantias da web",
