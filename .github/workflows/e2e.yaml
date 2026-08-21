@@ -1,0 +1,69 @@
+name: E2E — ooshare-action
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Test target: local (spins up API + Redis) or prod (live api.ooshare.io)'
+        required: false
+        default: 'local'
+        type: choice
+        options:
+          - local
+          - prod
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Push → local hermetic stack. Dispatch with target=prod → live service.
+  E2E_API_URL: ${{ github.event.inputs.target == 'prod' && 'https://api.ooshare.io' || 'http://localhost:5000' }}
+  E2E_ORIGIN: ${{ github.event.inputs.target == 'prod' && 'https://ooshare.io' || 'http://localhost:8080' }}
+
+jobs:
+  e2e-action:
+    name: ooshare-action E2E
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start local API (local target only)
+        if: env.E2E_API_URL == 'http://localhost:5000'
+        shell: bash
+        run: |
+          set -euo pipefail
+          pip install -q -r api/requirements.txt
+          (cd api && nohup gunicorn --bind 0.0.0.0:5000 app:app > /tmp/api.log 2>&1 &)
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:5000/api/health >/dev/null 2>&1; then
+              echo "API ready after ${i}s"
+              curl -fsS http://localhost:5000/api/health
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::API failed to start within 60s"
+          cat /tmp/api.log
+          exit 1
+
+      - name: Run full ooshare-action E2E matrix
+        uses: ./.github/actions/ooshare-e2e
+        with:
+          api-url: ${{ env.E2E_API_URL }}
+          origin: ${{ env.E2E_ORIGIN }}

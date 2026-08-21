@@ -1,0 +1,257 @@
+name: 'ooshare-e2e'
+description: >-
+  Exercise every ooshare-action path end-to-end: create (text/file/text+file),
+  view, one-time delete, unknown secret, attachment reveal (dir + exact path),
+  lang, and error handling — against a live API.
+author: 'dhdtech'
+
+inputs:
+  api-url:
+    description: 'API base URL the scenarios run against'
+    required: false
+    default: 'http://localhost:5000'
+  origin:
+    description: 'Site origin used to build the share URLs'
+    required: false
+    default: 'http://localhost:8080'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Prepare test fixtures
+      shell: bash
+      run: |
+        set -euo pipefail
+        mkdir -p /tmp/e2e/out
+        printf 'E2EFILE-DATA-123' > /tmp/e2e/secret.png
+
+    # ── 1. create — plain text ─────────────────────────────────────────
+    - name: '1. Create — text'
+      id: create-text
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        text: 'e2e text secret'
+        ttl: 1
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '1. assert url / id / has_attachment outputs'
+      shell: bash
+      env:
+        URL: ${{ steps.create-text.outputs.url }}
+        ID: ${{ steps.create-text.outputs.id }}
+      run: |
+        test -n "$URL"
+        test -n "$ID"
+        test "${{ steps.create-text.outputs.has_attachment }}" = "false"
+        echo "OK 1 (create text)"
+
+    # ── 2. view — reveal text ──────────────────────────────────────────
+    - name: '2. View — reveal text'
+      id: view-text
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: ${{ steps.create-text.outputs.url }}
+        api-url: ${{ inputs.api-url }}
+
+    - name: '2. assert revealed text'
+      shell: bash
+      env:
+        TEXT: ${{ steps.view-text.outputs.text }}
+      run: |
+        test "$TEXT" = "e2e text secret"
+        echo "OK 2 (view text)"
+
+    # ── 3. view again — must fail (one-time delete) ────────────────────
+    - name: '3. View again — must fail (one-time delete)'
+      id: view-again
+      continue-on-error: true
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: ${{ steps.create-text.outputs.url }}
+        api-url: ${{ inputs.api-url }}
+
+    - name: '3. assert second view failed'
+      shell: bash
+      run: |
+        test "${{ steps.view-again.outcome }}" = "failure"
+        echo "OK 3 (one-time delete)"
+
+    # ── 4. view an unknown secret — must fail ──────────────────────────
+    - name: '4. View unknown secret — must fail'
+      id: view-unknown
+      continue-on-error: true
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: 'http://localhost:8080/s/00000000-0000-4000-8000-000000000000?lng=en#AA'
+        api-url: ${{ inputs.api-url }}
+
+    - name: '4. assert unknown secret failed'
+      shell: bash
+      run: |
+        test "${{ steps.view-unknown.outcome }}" = "failure"
+        echo "OK 4 (unknown secret rejected)"
+
+    # ── 5. create — text + file attachment ─────────────────────────────
+    - name: '5. Create — text + file attachment'
+      id: create-file
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        text: 'with attachment'
+        file: /tmp/e2e/secret.png
+        ttl: 1
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '5. assert has_attachment=true'
+      shell: bash
+      run: |
+        test "${{ steps.create-file.outputs.has_attachment }}" = "true"
+        echo "OK 5 (create text+file)"
+
+    # ── 6. view the attachment (output dir) ────────────────────────────
+    - name: '6. View — reveal attachment to dir'
+      id: view-file
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: ${{ steps.create-file.outputs.url }}
+        output: /tmp/e2e/out
+        api-url: ${{ inputs.api-url }}
+
+    - name: '6. assert attachment mime + content + text'
+      shell: bash
+      env:
+        TEXT: ${{ steps.view-file.outputs.text }}
+        ATT: ${{ steps.view-file.outputs.attachment }}
+        MIME: ${{ steps.view-file.outputs.attachment-mime }}
+      run: |
+        test "$TEXT" = "with attachment"
+        test "$MIME" = "image/png"
+        test -n "$ATT"
+        test "$(cat "$ATT")" = "E2EFILE-DATA-123"
+        echo "OK 6 (reveal attachment, mime=$MIME)"
+
+    # ── 7. create file-only (no text) ──────────────────────────────────
+    - name: '7. Create — file only, no text'
+      id: create-fileonly
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        file: /tmp/e2e/secret.png
+        ttl: 1
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '7. View — reveal file-only secret'
+      id: view-fileonly
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: ${{ steps.create-fileonly.outputs.url }}
+        output: /tmp/e2e/out
+        api-url: ${{ inputs.api-url }}
+
+    - name: '7. assert file-only round-trip (empty text + attachment)'
+      shell: bash
+      env:
+        TEXT: ${{ steps.view-fileonly.outputs.text }}
+        ATT: ${{ steps.view-fileonly.outputs.attachment }}
+      run: |
+        test -z "$TEXT"
+        test -n "$ATT"
+        test "$(cat "$ATT")" = "E2EFILE-DATA-123"
+        echo "OK 7 (file-only)"
+
+    # ── 8. lang ────────────────────────────────────────────────────────
+    - name: '8. Create — lang es'
+      id: create-lang
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        text: 'hola'
+        ttl: 1
+        lang: es
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '8. assert lng=es in URL'
+      shell: bash
+      env:
+        URL: ${{ steps.create-lang.outputs.url }}
+      run: |
+        case "$URL" in
+          *'lng=es'*) echo "OK 8 (lang es)" ;;
+          *) echo "lng=es missing in $URL"; exit 1 ;;
+        esac
+
+    # ── 9. exact-path output ───────────────────────────────────────────
+    - name: '9. Create — text + file (exact-path reveal)'
+      id: create-exact
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        text: 'exact path'
+        file: /tmp/e2e/secret.png
+        ttl: 1
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '9. View — reveal to exact path'
+      id: view-exact
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: view
+        url: ${{ steps.create-exact.outputs.url }}
+        output: /tmp/e2e/out/custom.bin
+        api-url: ${{ inputs.api-url }}
+
+    - name: '9. assert exact-path write'
+      shell: bash
+      env:
+        ATT: ${{ steps.view-exact.outputs.attachment }}
+      run: |
+        test "$ATT" = "/tmp/e2e/out/custom.bin"
+        test "$(cat "$ATT")" = "E2EFILE-DATA-123"
+        echo "OK 9 (exact-path output)"
+
+    # ── 10. invalid ttl — must fail ────────────────────────────────────
+    - name: '10. Create — invalid ttl 999 — must fail'
+      id: create-bad-ttl
+      continue-on-error: true
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: create
+        text: 'x'
+        ttl: 999
+        api-url: ${{ inputs.api-url }}
+        origin: ${{ inputs.origin }}
+
+    - name: '10. assert invalid ttl rejected'
+      shell: bash
+      run: |
+        test "${{ steps.create-bad-ttl.outcome }}" = "failure"
+        echo "OK 10 (invalid ttl rejected)"
+
+    # ── 11. invalid command — must fail ────────────────────────────────
+    - name: '11. Invalid command — must fail'
+      id: bad-command
+      continue-on-error: true
+      uses: dhdtech/ooshare-action@v1
+      with:
+        command: explode
+
+    - name: '11. assert invalid command rejected'
+      shell: bash
+      run: |
+        test "${{ steps.bad-command.outcome }}" = "failure"
+        echo "OK 11 (invalid command rejected)"
+
+    - name: All E2E scenarios passed
+      shell: bash
+      run: echo "ooshare-action E2E matrix green against ${{ inputs.api-url }}"
