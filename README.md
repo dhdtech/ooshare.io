@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <a href="#cli">CLI</a> ·
   <a href="#how-it-works">How It Works</a> ·
   <a href="#deployment">Deployment</a> ·
   <a href="#getting-started">Getting Started</a> ·
@@ -17,6 +18,42 @@
   <a href="#i18n">Internationalization</a> ·
   <a href="#license">License</a>
 </p>
+
+---
+
+## CLI
+
+Create and reveal one-time secrets **from the terminal** — the same end-to-end AES-256-GCM encryption as the web, in a single static binary. Free, open source (MIT), no runtime, macOS/Linux/Windows. Scriptable for CI and shell pipelines (`--json`, stdin input, exit codes).
+
+```
+ooshare create --text "hello"                    # → one-time link
+ooshare view "https://ooshare.io/s/…"            # reveal it once, then it's gone
+ooshare create --json --text "$SECRET" | jq -r .url   # CI-ready
+```
+
+**Install:**
+
+```bash
+# macOS (Homebrew)
+brew tap dhdtech/ooshare && brew trust dhdtech/ooshare && brew install ooshare
+
+# Linux (Debian/Ubuntu, apt) — add the repo, then:
+sudo apt install ooshare
+
+# Linux (RHEL/Fedora, dnf) — add the .repo, then:
+sudo dnf install ooshare
+
+# Windows (winget)
+winget install dhdtech.ooshare
+
+# Windows (Scoop)
+scoop bucket add ooshare https://github.com/dhdtech/scoop-ooshare && scoop install ooshare
+
+# Go (any platform)
+go install github.com/dhdtech/ooshare.io/cli/cmd/ooshare@latest
+```
+
+Full install guide and examples: **[https://ooshare.io/cli](https://ooshare.io/cli)** · [Releases](https://github.com/dhdtech/ooshare.io/releases)
 
 ---
 
