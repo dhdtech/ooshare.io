@@ -23,6 +23,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = join(__dirname, "..", "dist");
 const SITEMAP_PATH = join(DIST_DIR, "sitemap.xml");
 
+/**
+ * Prerender runs the page in headless Chromium, which executes the inline Meta
+ * pixel bootstrap. That bootstrap dynamically creates a
+ * <script src="https://connect.facebook.net/en_US/fbevents.js"> element (and
+ * Meta injects a signals/config script), and page.content() serializes those
+ * runtime-added tags into the pre-rendered HTML. Strip them so the shipped
+ * index.html only contains the static inline bootstrap; real browsers still
+ * load fbevents.js at runtime via that bootstrap.
+ */
+function stripRuntimeInjectedScripts(html) {
+  return html.replace(
+    /<script[^>]*src="https:\/\/(connect\.facebook\.net|www\.facebook\.com)\/[^"]*"[^>]*><\/script>/gi,
+    "",
+  );
+}
+
 // Parse sitemap.xml to extract all routes
 function getRoutesFromSitemap() {
   const xml = readFileSync(SITEMAP_PATH, "utf-8");
@@ -114,8 +130,8 @@ async function prerender() {
     // Small extra wait for useEffect meta tag updates to complete
     await new Promise((r) => setTimeout(r, 500));
 
-    // Get the full HTML document
-    const html = await page.content();
+    // Get the full HTML document (strip runtime-injected third-party scripts)
+    const html = stripRuntimeInjectedScripts(await page.content());
     await page.close();
     rendered.set(route, html);
   }
@@ -140,7 +156,7 @@ async function prerender() {
   });
   await page404.waitForSelector("#root > *", { timeout: 10000 });
   await new Promise((r) => setTimeout(r, 500));
-  const html404 = await page404.content();
+  const html404 = stripRuntimeInjectedScripts(await page404.content());
   await page404.close();
   writeFileSync(join(DIST_DIR, "404.html"), html404);
 
