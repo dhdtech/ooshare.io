@@ -17,9 +17,11 @@ func isBoolFlag(f *flag.Flag) bool {
 // argument, which made `view "$url" --output …` fail.
 func reorderArgs(fs *flag.FlagSet, args []string) []string {
 	var flagArgs, posArgs []string
+	hadTerminator := false
 	for i := 0; i < len(args); i++ {
 		a := args[i]
 		if a == "--" {
+			hadTerminator = true
 			posArgs = append(posArgs, args[i+1:]...)
 			break
 		}
@@ -38,6 +40,14 @@ func reorderArgs(fs *flag.FlagSet, args []string) []string {
 		} else {
 			posArgs = append(posArgs, a)
 		}
+	}
+	if len(posArgs) == 0 {
+		return flagArgs
+	}
+	// A positional that starts with '-' (or an explicit '--') needs the
+	// terminator so flag.Parse treats it as positional, not a flag.
+	if hadTerminator || strings.HasPrefix(posArgs[0], "-") {
+		return append(append(flagArgs, "--"), posArgs...)
 	}
 	return append(flagArgs, posArgs...)
 }
