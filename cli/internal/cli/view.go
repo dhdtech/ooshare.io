@@ -25,7 +25,7 @@ func View(out, errw io.Writer, args []string) int {
 	asJSON := fs.Bool("json", false, "emit machine-readable JSON on stdout")
 	quiet := fs.Bool("quiet", false, "suppress stderr decoration")
 	apiURL := fs.String("api-url", defaultAPIURL, "API base URL (env OOSHARE_API_URL)")
-	if err := fs.Parse(args); err != nil {
+	if err := fs.Parse(reorderArgs(fs, args)); err != nil {
 		return 2
 	}
 

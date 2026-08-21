@@ -54,7 +54,7 @@ func Create(out, errw io.Writer, args []string) int {
 	origin := fs.String("origin", defaultOrigin, "site origin for the share URL (env OOSHARE_ORIGIN)")
 	asJSON := fs.Bool("json", false, "emit machine-readable JSON on stdout")
 	quiet := fs.Bool("quiet", false, "suppress stderr decoration")
-	if err := fs.Parse(args); err != nil {
+	if err := fs.Parse(reorderArgs(fs, args)); err != nil {
 		return 2
 	}
 	if fs.NArg() > 0 {
