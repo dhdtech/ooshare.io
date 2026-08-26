@@ -46,6 +46,12 @@ function getRoutesFromSitemap() {
   return urls.map((m) => m[1] || "/");
 }
 
+// Internal routes that must be reachable (HTTP 200) but are never indexed.
+// These are NOT in sitemap.xml (noindex URLs don't belong there); they are
+// pre-rendered here so the runtime-applied `<meta name="robots" noindex>`
+// is baked into their static HTML for non-JS crawlers.
+const NOINDEX_ROUTES = ["/components"];
+
 // Simple static file server for the dist folder
 function startServer() {
   return new Promise((resolve) => {
@@ -95,8 +101,8 @@ function startServer() {
 }
 
 async function prerender() {
-  const routes = getRoutesFromSitemap();
-  console.log(`Pre-rendering ${routes.length} routes from sitemap.xml...`);
+  const routes = [...getRoutesFromSitemap(), ...NOINDEX_ROUTES];
+  console.log(`Pre-rendering ${routes.length} routes from sitemap.xml + noindex routes...`);
 
   const server = await startServer();
   const port = server.address().port;
