@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /s/
 Disallow: /components/
+Disallow: /components
 
 # AI Crawlers - Allowed for AI search visibility
 User-agent: GPTBot
