@@ -1204,7 +1204,7 @@ textarea.ui-field-control {
 .comp-demo {
   padding: 28px 0;
   border-top: 1px solid var(--border);
-  scroll-margin-top: 16px;
+  scroll-margin-top: 80px;
   animation: ui-rise-in var(--dur-panel) var(--ease-out) both;
 }
 .comp-demo:nth-of-type(odd) { animation-delay: 0ms; }
@@ -1240,7 +1240,6 @@ textarea.ui-field-control {
 .comp-wrap { flex-wrap: wrap; }
 .comp-caption { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 8px; }
 @media (prefers-reduced-motion: reduce) {
-  .comp-page .ui-page-header,
   .comp-demo {
     animation: none;
   }

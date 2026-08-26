@@ -137,7 +137,7 @@ export default function Components() {
           id="brand"
           title="Logo · TrustBadges"
           note="Monochrome wordmark (size in px). TrustBadges is the mono chip strip: AES-256-GCM · Zero Knowledge · Auto-Delete."
-          props="Logo: size · TrustBadges: items: { label, icon }[]"
+          props="Logo: size · TrustBadges: items: string[]"
         >
           <div className="comp-col">
             <div className="comp-row">
@@ -159,7 +159,7 @@ export default function Components() {
           id="actions"
           title="Button · IconButton · CopyButton"
           note="Button is the primary action. loading shows an inline spinner; to → router Link, href → external anchor. CopyButton writes to the clipboard and fires a toast."
-          props="Button: variant: primary | secondary | success · size: default | sm · loading · disabled · icon · to | href · fullWidth · buttonClassName (export) · IconButton: icon · aria-label (required) · CopyButton: text · copyLabel · copiedLabel · toastMessage"
+          props="Button: variant: primary | secondary | success · size: default | sm · loading · disabled · icon · to | href · full · buttonClassName (export) · IconButton: icon · aria-label (required) · CopyButton: text · copyLabel · copiedLabel · toastMessage"
         >
           <div className="comp-row comp-wrap">
             <Button variant="primary" icon={<Lock size={16} />}>{t("create.submit")}</Button>
