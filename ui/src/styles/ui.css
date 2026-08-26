@@ -1177,6 +1177,10 @@ textarea.ui-field-control {
   max-width: 980px;
 }
 .comp-toc {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-dropdown);
+  background: var(--bg);
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

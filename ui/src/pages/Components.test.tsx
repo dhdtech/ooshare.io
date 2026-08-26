@@ -54,12 +54,15 @@ describe("Components showcase", () => {
     expect(screen.getByText("Heads up")).toBeInTheDocument();
   });
 
-  it("toggles the showcase button loading state", async () => {
+  it("toggles the loading state of a Button", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Components />);
-    await user.click(screen.getByRole("button", { name: "Toggle loading" }));
-    // loading shows the <span class="ui-btn__spinner">; click toggles state immediately.
-    expect(screen.getByRole("button", { name: "Toggle loading" })).toBeInTheDocument();
+    const btn = () => screen.getByRole("button", { name: "Toggle loading" });
+    expect(btn()).not.toBeDisabled();
+    await user.click(btn());
+    expect(btn()).toBeDisabled();
+    // the demo reverts after 800ms; wait for it to clear (also avoids a pending timer on unmount)
+    await waitFor(() => expect(btn()).not.toBeDisabled(), { timeout: 1500 });
   });
 
   it("opens and closes the modal via the showcase", async () => {
