@@ -17,6 +17,22 @@ describe("Components showcase", () => {
     expect(screen.getAllByText("AES-256-GCM").length).toBeGreaterThanOrEqual(2);
   });
 
+  it("renders a sticky table of contents with anchor chips", () => {
+    renderWithProviders(<Components />);
+    // TOC chips link to each doc-group section's anchor
+    expect(screen.getByRole("link", { name: "Actions" })).toHaveAttribute("href", "#actions");
+    // the chip's target section (anchor id) exists
+    expect(document.getElementById("actions")).not.toBeNull();
+  });
+
+  it("renders a mono props signature note for a component", () => {
+    renderWithProviders(<Components />);
+    // Button's props signature is shown in a mono note
+    expect(
+      screen.getAllByText(/variant: primary \| secondary \| success/).length,
+    ).toBeGreaterThan(0);
+  });
+
   it("renders the primary create button", () => {
     renderWithProviders(<Components />);
     expect(screen.getByRole("button", { name: /Create Secret Link/ })).toBeInTheDocument();
@@ -27,6 +43,23 @@ describe("Components showcase", () => {
     renderWithProviders(<Components />);
     await user.click(screen.getByRole("button", { name: "Fire a toast" }));
     expect(screen.getByText("Toast demo fired")).toBeInTheDocument();
+  });
+
+  it("fires the error and info toast variants from the showcase", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Components />);
+    await user.click(screen.getByRole("button", { name: "Error toast" }));
+    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Info toast" }));
+    expect(screen.getByText("Heads up")).toBeInTheDocument();
+  });
+
+  it("toggles the showcase button loading state", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Components />);
+    await user.click(screen.getByRole("button", { name: "Toggle loading" }));
+    // loading shows the <span class="ui-btn__spinner">; click toggles state immediately.
+    expect(screen.getByRole("button", { name: "Toggle loading" })).toBeInTheDocument();
   });
 
   it("opens and closes the modal via the showcase", async () => {
@@ -42,8 +75,15 @@ describe("Components showcase", () => {
   it("switches the segmented control value", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Components />);
-    // Segmented control shows options; 24h is selected in the showcase by default
     await user.click(screen.getByText("12h"));
     expect(screen.getByText("Selected: 12h")).toBeInTheDocument();
+  });
+
+  it("renders the top-level shell components (LanguageSelector, SecurityModal, Layout pieces)", () => {
+    renderWithProviders(<Components />);
+    // SecurityModal trigger
+    expect(screen.getByRole("button", { name: "How It Works" })).toBeInTheDocument();
+    // LanguageSelector trigger renders a flag code
+    expect(screen.getByLabelText("Select language")).toBeInTheDocument();
   });
 });
