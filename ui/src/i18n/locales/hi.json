@@ -193,6 +193,12 @@
     "openSource": "ओपन सोर्स",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. सर्वाधिकार सुरक्षित।",
+    "name": "DHDTech.io",
+    "location": "· शेरिडन, व्योमिंग",
+    "poweredBy": "द्वारा संचालित"
+  },
   "security": {
     "title": "यह कैसे काम करता है",
     "e2eTitle": "एंड-टू-एंड एन्क्रिप्शन",

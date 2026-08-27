@@ -53,4 +53,5 @@ export {
   FooterLegal,
   FooterBadgeIcons,
 } from "./Footer";
+export { CompanyBar } from "./CompanyBar";
 export { default as ShareButtons, WhatsAppIcon } from "./ShareButtons";

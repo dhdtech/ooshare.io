@@ -196,6 +196,12 @@
     "openSource": "开源项目",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. 保留所有权利。",
+    "name": "DHDTech.io",
+    "location": "· 谢里登，怀俄明州",
+    "poweredBy": "技术支持"
+  },
   "security": {
     "title": "工作原理",
     "e2eTitle": "端到端加密",

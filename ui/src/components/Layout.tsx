@@ -11,6 +11,7 @@ import {
   FooterBadges,
   FooterNav,
   FooterLegal,
+  CompanyBar,
 } from "./ui";
 
 const GLOBAL_SCHEMA = JSON.stringify([
@@ -122,12 +123,10 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <FooterLegal
             openSourceLabel={t("footer.openSource")}
             openSourceHref="https://github.com/dhdtech/oos"
-            poweredByLabel="Powered by"
-            poweredByHref="https://dhdtech.io"
-            poweredByBrand="DHDTech.io"
           />
         </div>
       </footer>
+      <CompanyBar />
     </div>
   );
 }

@@ -52,18 +52,15 @@ export function FooterNav({ links }: FooterNavProps) {
 interface FooterLegalProps {
   openSourceLabel: string;
   openSourceHref: string;
-  poweredByLabel: string;
-  poweredByHref: string;
-  poweredByBrand: string;
 }
 
-/** Bottom legal row: GitHub "Open Source" link + "Powered by DHDTech.io". */
+/**
+ * Bottom legal row: GitHub "Open Source" link. The "Powered by DHDTech.io"
+ * credit lives only in the pinned CompanyBar.
+ */
 export function FooterLegal({
   openSourceLabel,
   openSourceHref,
-  poweredByLabel,
-  poweredByHref,
-  poweredByBrand,
 }: FooterLegalProps) {
   return (
     <div className="ui-footer-bottom">
@@ -71,12 +68,6 @@ export function FooterLegal({
         <a href={openSourceHref} target="_blank" rel="noopener noreferrer">
           <Github size={14} aria-hidden="true" />
           {openSourceLabel}
-        </a>
-      </span>
-      <span className="ui-footer-powered">
-        {poweredByLabel}{" "}
-        <a href={poweredByHref} target="_blank" rel="noopener noreferrer">
-          {poweredByBrand}
         </a>
       </span>
     </div>

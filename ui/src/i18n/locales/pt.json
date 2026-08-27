@@ -197,6 +197,12 @@
     "openSource": "Código Aberto",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. Todos os direitos reservados.",
+    "name": "DHDTech.io",
+    "location": "· Sheridan, Wyoming",
+    "poweredBy": "Feito por"
+  },
   "security": {
     "title": "Como funciona",
     "e2eTitle": "Criptografia ponta a ponta",

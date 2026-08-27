@@ -251,6 +251,12 @@
     "openSource": "Open Source",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. All rights reserved.",
+    "name": "DHDTech.io",
+    "location": "· Sheridan, Wyoming",
+    "poweredBy": "Powered by"
+  },
   "security": {
     "title": "How It Works",
     "e2eTitle": "End-to-End Encryption",

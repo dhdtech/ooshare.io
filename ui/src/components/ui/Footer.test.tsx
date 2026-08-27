@@ -31,23 +31,17 @@ describe("FooterNav", () => {
 });
 
 describe("FooterLegal", () => {
-  it("renders open-source and powered-by links", () => {
+  it("renders the open-source link only", () => {
     renderWithProviders(
       <FooterLegal
         openSourceLabel="Open Source"
         openSourceHref="https://github.com/dhdtech/oos"
-        poweredByLabel="Powered by"
-        poweredByHref="https://dhdtech.io"
-        poweredByBrand="DHDTech.io"
       />,
     );
     expect(screen.getByRole("link", { name: /Open Source/ })).toHaveAttribute(
       "href",
       "https://github.com/dhdtech/oos",
     );
-    expect(screen.getByRole("link", { name: "DHDTech.io" })).toHaveAttribute(
-      "href",
-      "https://dhdtech.io",
-    );
+    expect(screen.queryByRole("link", { name: "DHDTech.io" })).not.toBeInTheDocument();
   });
 });

@@ -27,6 +27,22 @@
 
 /* Footer / step grids already flow via flex-wrap or their own UI scss. */
 
+/* The pinned company bar (38px) sits over the bottom edge; pad the rich
+ * footer so none of its content is hidden behind the bar when scrolled fully
+ * down. */
+.layout-footer {
+  padding-bottom: calc(1.5rem + 46px);
+}
+
+/* Company bar: hide the location and the "Powered by" label on narrow
+ * screens (the logo + DHDTech.io credit stays). */
+.ui-company-location {
+  display: none;
+}
+.ui-company-powered-label {
+  display: none;
+}
+
 /* ─── Enhanced layouts ─── */
 @media (min-width: 480px) {
   .layout-main {
@@ -42,6 +58,18 @@
   /* Restore the primary header nav on wider viewports. */
   .ui-header-nav {
     display: flex;
+  }
+}
+
+/* Company bar: reveal location + "Powered by" label once there is room. */
+@media (min-width: 400px) {
+  .ui-company-powered-label {
+    display: inline;
+  }
+}
+@media (min-width: 560px) {
+  .ui-company-location {
+    display: block;
   }
 }
 

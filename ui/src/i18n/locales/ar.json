@@ -194,6 +194,12 @@
     "openSource": "مفتوح المصدر",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. جميع الحقوق محفوظة.",
+    "name": "DHDTech.io",
+    "location": "· شيريدان، وايومنغ",
+    "poweredBy": "مشغّل بواسطة"
+  },
   "security": {
     "title": "كيف يعمل",
     "e2eTitle": "تشفير من طرف إلى طرف",

@@ -192,6 +192,12 @@
     "openSource": "Código Abierto",
     "cli": "CLI"
   },
+  "company": {
+    "copyright": "© {{year}} ooshare.io. Todos los derechos reservados.",
+    "name": "DHDTech.io",
+    "location": "· Sheridan, Wyoming",
+    "poweredBy": "Creado por"
+  },
   "security": {
     "title": "Cómo funciona",
     "e2eTitle": "Cifrado de extremo a extremo",
