@@ -28,16 +28,36 @@
   flex-shrink: 0;
 }
 
-/* Proof strip under the hero: subtle fact line, not competing with the form. */
-.hero-badges {
-  margin: 0 auto 20px;
-  max-width: 52ch;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.6;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
+/* Hero proof strip: a clean sans ledger of discrete assurances (no pill).
+   Draws the eye with green --success checks. The single i18n string is split
+   on "·" at render time — translations must keep the "·" delimiter. */
+.hero-proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 18px;
+  margin: 0 auto 22px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-proof-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+}
+
+.hero-proof-item svg {
+  color: var(--success);
+  flex-shrink: 0;
 }
 
 /* Key-in-fragment assurance, below the trust strip. */
@@ -49,12 +69,33 @@
   color: var(--text-muted);
 }
 
-/* Peak–end assurance line inside the revealed card. */
+/* Peak–end reassurance callout inside the revealed card (pairs with the amber
+   "destroyed" banner above it). */
 .destroyed-proof {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 4px 0 0;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--success-glow);
+  border: 1px solid rgba(52, 211, 153, 0.22);
+  color: var(--success-light);
   font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.destroyed-proof svg {
+  flex-shrink: 0;
+}
+
+/* CTAs on the "secret not available" dead-end — reuse the reveal page's
+   reassurance callout + primary CTA to turn the dead-end into action. */
+.notfound-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 /* Comparison-shopper sub-line beneath the /why banner link. */

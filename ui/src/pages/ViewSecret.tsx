@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ShieldOff,
+  ShieldCheck,
   X,
   FileText,
   Download,
@@ -174,7 +175,10 @@ export default function ViewSecret() {
               </div>
             )}
 
-            <p className="destroyed-proof">{t("view.destroyedProof")}</p>
+            <p className="destroyed-proof">
+              <ShieldCheck size={15} aria-hidden="true" />
+              {t("view.destroyedProof")}
+            </p>
             <Button to="/" variant="primary" full>
               {t("view.sendYourOwn")}
             </Button>
@@ -209,6 +213,15 @@ export default function ViewSecret() {
             title={t("view.notFoundTitle")}
             message={t("view.notFoundMsg")}
           />
+          <div className="notfound-cta">
+            <p className="destroyed-proof">
+              <ShieldCheck size={15} aria-hidden="true" />
+              {t("view.notFoundCta")}
+            </p>
+            <Button to="/" variant="primary" full>
+              {t("view.notFoundShare")}
+            </Button>
+          </div>
         </Card>
       )}
 

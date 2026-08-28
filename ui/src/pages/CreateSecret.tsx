@@ -130,7 +130,16 @@ export default function CreateSecret() {
     <div className="create-flow">
       <PageHeader title={t("hero.title")} subtitle={t("hero.subtitle")} />
 
-      <p className="hero-badges">{t("hero.badges")}</p>
+      <ul className="hero-proof" aria-label={t("hero.badges")}>
+        {t("hero.badges")
+          .split("·")
+          .map((item, i) => (
+            <li key={i} className="hero-proof-item">
+              <CheckCircle2 size={13} aria-hidden="true" />
+              <span>{item.trim()}</span>
+            </li>
+          ))}
+      </ul>
 
       <div className="create-wrap">
         <Card>

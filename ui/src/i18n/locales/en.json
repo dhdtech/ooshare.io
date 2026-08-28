@@ -74,7 +74,9 @@
     "archiveAttached": "An archive file is attached to this secret",
     "downloadArchive": "Download Archive",
     "destroyedProof": "It was readable once, by you — that is the guarantee. Nothing was stored after you opened it.",
-    "sendYourOwn": "Send your own secure secret"
+    "sendYourOwn": "Send your own secure secret",
+    "notFoundCta": "That link did its one job — readable once, then gone for good. Now it's your turn: share a secret the same secure way, free and gone after one view.",
+    "notFoundShare": "Share a new secret now"
   },
   "nav": {
     "security": "Security",
@@ -315,9 +317,15 @@
     "examples": {
       "title": "Try it in seconds",
       "subtitle": "Three one-liners. Each link reads once, then self-destructs.",
-      "create": { "label": "Create a secret, get a one-time link" },
-      "view": { "label": "Reveal it once — it is deleted after viewing" },
-      "ci": { "label": "Script it in CI — JSON output, jq-ready" }
+      "create": {
+        "label": "Create a secret, get a one-time link"
+      },
+      "view": {
+        "label": "Reveal it once — it is deleted after viewing"
+      },
+      "ci": {
+        "label": "Script it in CI — JSON output, jq-ready"
+      }
     },
     "gha": {
       "title": "GitHub Actions",
@@ -326,10 +334,10 @@
       "button": "View on GitHub Marketplace"
     },
     "security": {
-      "title": "The same guarantees as the web",
       "1": "Same encryption — AES-256-GCM + HKDF-SHA-256, byte-for-byte compatible with the browser",
       "2": "Zero-knowledge — the master key lives only in the URL fragment, never sent to the server",
       "3": "One-time — secrets are atomically deleted on first view",
+      "title": "The same guarantees as the web",
       "link": "Learn more about our security"
     },
     "cta": {

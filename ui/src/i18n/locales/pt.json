@@ -74,7 +74,9 @@
     "archiveAttached": "Um arquivo compactado está anexado a este segredo",
     "downloadArchive": "Baixar arquivo",
     "destroyedProof": "Ele pôde ser lido uma vez, por você — essa é a garantia. Nada foi armazenado depois que você o abriu.",
-    "sendYourOwn": "Envie seu próprio segredo seguro"
+    "sendYourOwn": "Envie seu próprio segredo seguro",
+    "notFoundCta": "Esse link cumpriu seu único papel — lido uma vez e desapareceu para sempre. Agora é a sua vez: compartilhe um segredo da mesma forma segura, grátis e que se autodestrói após uma visualização.",
+    "notFoundShare": "Compartilhe um novo segredo agora"
   },
   "nav": {
     "security": "Segurança",

@@ -74,7 +74,9 @@
     "archiveAttached": "此密钥附带了一个压缩文件",
     "downloadArchive": "下载压缩文件",
     "destroyedProof": "它只被读取过一次，由你查看 —— 这就是保证。你打开之后，没有任何数据被保存。",
-    "sendYourOwn": "分享你自己的安全机密"
+    "sendYourOwn": "分享你自己的安全机密",
+    "notFoundCta": "那个链接已完成它的使命 —— 只可读取一次，然后就永远消失。现在轮到你了：用同样安全的方式分享一个机密，免费，一次查看后即销毁。",
+    "notFoundShare": "现在分享一个新机密"
   },
   "nav": {
     "security": "安全",
