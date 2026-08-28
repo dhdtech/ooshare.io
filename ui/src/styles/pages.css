@@ -263,9 +263,13 @@
 
 /* Security reassurance bullets */
 .cli-security-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 16px;
 }
 .cli-security-bullets {
+  align-self: stretch;
   list-style: none;
   margin: 0;
   padding: 0;
