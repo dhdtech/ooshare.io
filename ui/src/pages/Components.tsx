@@ -371,7 +371,7 @@ export default function Components() {
           id="nav"
           title="NavLink · BackLink · FooterBadges · FooterNav · FooterLegal · ShareButtons"
           note="Navigation primitives and the footer. ShareButtons (with WhatsAppIcon export) is the sharing row on the created link. FooterBadgeIcons (export) is the Lock/Eye/Trash2 icon set."
-          props="NavLink: to · children · BackLink: to · FooterBadges: badges: { label, icon }[] · FooterNav: links: { to, label }[] · FooterLegal: openSourceLabel · openSourceHref · FooterBadgeIcons (export) · ShareButtons: link · copyLabel · copiedLabel · copyToast · whatsappLabel · whatsappHref · emailLabel · emailHref · WhatsAppIcon (export)"
+          props="NavLink: to · children · BackLink: to · FooterBadges: badges: { label, icon }[] · FooterNav: links: { to, label }[] · FooterLegal: openSourceLabel · openSourceHref · poweredByLabel · poweredByHref · poweredByBrand · FooterBadgeIcons (export) · ShareButtons: link · copyLabel · copiedLabel · copyToast · whatsappLabel · whatsappHref · emailLabel · emailHref · WhatsAppIcon (export)"
         >
           <div className="comp-col">
             <div className="comp-row">
@@ -396,6 +396,9 @@ export default function Components() {
             <FooterLegal
               openSourceLabel="Open Source"
               openSourceHref="https://github.com/dhdtech/oos"
+              poweredByLabel="Powered by"
+              poweredByHref="https://dhdtech.io"
+              poweredByBrand="DHDTech.io"
             />
             <ShareButtons
               link="https://ooshare.io/s/Ab3xYz9Qk1?lng=en#mockkey"
