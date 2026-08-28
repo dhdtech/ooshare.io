@@ -1,0 +1,24 @@
+Permission justifications for ooshare
+
+Single purpose: create and reveal one-time secrets that delete themselves after a single read.
+
+contextMenus
+Adds the two right-click actions that make up the extension's workflow: "Reveal ooshare secret" on ooshare share links and "Share with ooshare" on selected text. The reveal action only appears on links that point to ooshare.io (targetUrlPatterns), so the menu stays out of the way everywhere else.
+
+activeTab
+Scoped access to the tab the user is looking at when they trigger a context-menu action. This is how the reveal panel gets injected into the page they're on, so they can read a secret without opening a new tab. The extension deliberately does not request access to all sites; activeTab means it can only act on the page where the user actively asks it to.
+
+scripting
+Lets the extension inject its content script on demand into that active tab, to draw the reveal panel and mark ooshare share links. This permission exists precisely so the extension can avoid a permanent content script that runs on every page the user visits.
+
+storage
+Saves the user's preferences (default expiry time, language, whether to show link badges) via chrome.storage.sync so settings persist between sessions.
+
+clipboardWrite
+Copies a newly created share link to the clipboard with one click, and, on the reveal panel, copies the revealed secret. Copying the link without friction is part of the core create-and-share flow.
+
+Host: https://ooshare.io/*
+The only site the content script runs on. It adds the shield badge to ooshare share links so they are recognizable and clickable to reveal. No other site is scanned.
+
+Host: https://api.ooshare.io/*
+The extension's single network dependency. It uploads ciphertext when a secret is created and downloads ciphertext (for local decryption) when a secret is revealed. The server never receives the plaintext or the key.

@@ -1,0 +1,74 @@
+Data collection answers for ooshare
+
+Short version: the extension collects no personal data. The only data that ever
+leaves the device is the encrypted secret content a user chooses to share, a
+random secret ID, and an expiry time, sent to https://api.ooshare.io. Settings
+(expiry default, language, badge toggle) live in the user's own browser storage
+and never reach our servers. There is no account, no signup, no analytics, and
+no telemetry in the extension.
+
+Personally identifiable information
+Not collected. No accounts, no signup, no name, email, address, or ID is ever
+requested, stored, or transmitted by the extension.
+
+Health information
+Not collected. The extension has no health-related features.
+
+Financial and payment information
+Not collected. The extension handles no transactions and no payment data.
+
+Authentication information
+Not collected. ooshare is a tool for sharing credentials, so this deserves care:
+when a user chooses to share a secret that happens to be a password or API key,
+it is encrypted on-device before transmission, the decryption key never leaves
+the user's browser, and the plaintext never reaches our servers. The extension
+never reads, stores, or transmits the user's stored passwords.
+
+Personal communications
+Not collected. Secrets are one-off messages a user explicitly sends. They are
+transmitted only as ciphertext, cannot be read by the service, and are deleted
+after first read. They are not retained or analyzed.
+
+Location
+Not collected. No GPS or region data is read or requested. (As with any website,
+the API server sees the connecting IP at the network level; it is not used for
+location tracking.)
+
+Web history
+Not collected. The extension has no history permission and never reads browsing
+history. It only acts on the page the user is currently viewing, and only when
+the user invokes a context-menu action.
+
+User activity
+Not collected. There is no telemetry, no click, scroll, or keystroke logging, and
+no analytics call in the extension.
+
+Website content
+The content script looks at a page in exactly two situations: on ooshare.io, to
+add shield badges to ooshare share links, and on the active tab when the user
+right-clicks a link to reveal a secret. In both cases it only looks for ooshare
+share URLs. No page content is transmitted. The text and files users create or
+reveal are their own input, transmitted as ciphertext and decrypted locally.
+
+Future plans
+None. There is no roadmap to add data collection. If that ever changes, the
+permissions, manifest, and this listing would be updated before any such change
+ships.
+
+Checkbox answers (Chrome Web Store data-safety form)
+- Personally identifiable information: NOT checked
+- Health information: NOT checked
+- Financial and payment information: NOT checked
+- Authentication information: NOT checked
+  (credentials shared through ooshare are encrypted on-device; the key never
+  leaves the browser and plaintext never reaches our servers, so it is not
+  collected)
+- Personal communications: NOT checked
+- Location: NOT checked
+- Web history: NOT checked
+- User activity: NOT checked
+- Website content: NOT checked
+  (the content script only scans for ooshare share links on ooshare.io and on
+  the active tab when the user right-clicks to reveal; nothing is transmitted)
+
+None of the nine categories are checked.

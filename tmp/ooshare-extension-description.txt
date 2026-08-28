@@ -1,0 +1,113 @@
+ooshare: secrets that delete themselves
+
+Most links live forever. Usually that's fine. When the link is a password, an API key, or a private message, forever is the last thing you want.
+
+ooshare is a one-time secret sharing tool. You write something sensitive, get a link, and the moment someone opens it, the secret is destroyed. Read once, gone. Nobody can read it again, not even you.
+
+This extension brings ooshare to your browser: reveal a secret without leaving the page you're on, create one from any text you select, and recognize share links at a glance.
+
+Reveal a secret without leaving the page
+
+Someone sends you an ooshare link in a chat. Right-click it, choose "Reveal ooshare secret," and the plaintext appears in a small panel right on the page you're already reading. No new tab, no hunting for the message again.
+
+It works wherever the link lands. Chat apps, email, pull requests, forum threads. If the link is in front of you, that's where you reveal it.
+
+One thing to know before you do: revealing consumes the secret. The panel makes that explicit. Once you close it, the secret is gone for good.
+
+Share any selected text
+
+Found a password you need to hand to a teammate? An API key for a contractor? A note you don't want sitting in a group chat forever?
+
+Select the text, right-click, choose "Share with ooshare." The tool encrypts it on your device, sends only ciphertext to the server, and hands you a short link, already copied to your clipboard.
+
+Create from the toolbar, files included
+
+Need to compose something longer, or attach a file? Click the ooshare icon in your toolbar. The popup has a text box, an expiry selector (one hour to three days), and a file dropzone.
+
+Files behave the same as text: encrypted, stored, deleted after first read. Images, PDFs, archives, up to 25 MB. A contract, a screenshot of a dashboard, a zipped config.
+
+Spot share links at a glance
+
+On ooshare.io, every share link carries a small shield badge. You can tell a one-time secret from an ordinary link before you click. Click the badge and the secret reveals right there.
+
+How the encryption works
+
+The honest version, minus the jargon.
+
+Your secret is encrypted in your browser, with a key your browser generates on the spot. That key travels inside the link, in the fragment, the part of a URL that never gets sent to a server. The ciphertext goes to ooshare's servers. The key never does.
+
+Which means the people who run the service cannot read your secret. There is no path from our side to the plaintext, even in principle. That's called zero knowledge, and it's the entire point of the product.
+
+Each secret gets its own derived key, tied to the secret's ID. Tamper with the link and the encryption notices, refusing to decrypt. The cipher is AES-256-GCM, the same class used to protect data at rest in a lot of serious infrastructure.
+
+What the service never sees
+
+The plaintext. Never. The master key: it only exists in the URL fragment, on the devices that hold the link. The contents of your file attachments: only ciphertext touches the network.
+
+What the service does hold is a random secret ID, an expiry time, and the ciphertext itself. That's enough to expire the secret and delete it after first read. It's not enough to say what the secret is.
+
+Why the extension asks for so little
+
+The permission list is short: context menus, active tab access, clipboard, and local storage. Those cover the right-click items, writing the reveal panel into the page you're on, and copying links.
+
+The extension does not ask to read your browsing history or your passwords, and it doesn't scan every page you visit. There's no tracker and no analytics call in the extension. The only hosts it talks to are ooshare.io and its API.
+
+When one-time secrets make sense
+
+Some information should not be recoverable. A password read once and deleted can't leak later. A token that expires in an hour can't be replayed next week. A message that destroys itself can't resurface in a compliance review months down the road.
+
+The trade-off deserves naming: lose the link before anyone opens it and the secret is unrecoverable. That's by design. Don't send a secret you might need to retrieve yourself.
+
+Where it beats the usual alternatives
+
+Pasting a password into Slack leaves it searchable forever. Email keeps a copy in at least two inboxes. A shared doc lives in everyone's recent files. Those all have a place. None of them are "read this exactly once and then forget it."
+
+ooshare is a courier, not a vault. Need to store secrets over time? Use a password manager. For the moment when you hand something over and never want to see it again, this is the tool.
+
+Concrete ways people use it
+
+A support engineer shares read-only dashboard access with a customer, and the link dies the moment it's used. A developer drops a database password into an incident channel with a thirty minute expiry, instead of leaving it in the thread forever. Someone hands over a signed PDF to one recipient and doesn't want a copy sitting in sent mail for years. A team onboarding a contractor passes over a single credential that won't be needed again.
+
+The shape is always the same: one thing, one recipient, then nothing left behind.
+
+Who it's for, and who it isn't
+
+If you've ever pasted a password into a chat and felt uneasy about it, ooshare is for you. If you run a small team and want to stop secrets living in Slack history, ooshare is for you.
+
+If you need a record of what was shared, when, and by whom, it isn't. Once a secret is read there's no trace of its contents. That's the feature, not the bug.
+
+The same secrets everywhere
+
+This extension is one of three ways to use ooshare. The identical links work at ooshare.io in your browser, in this extension, and in the ooshare command line tool. Create in one, reveal in another; the encryption and the guarantees are the same everywhere.
+
+It's not Chrome-only, either. The extension runs on Chrome, Firefox, Edge, and Safari.
+
+Quick start
+
+1. Create a secret from the popup, or from any text you select.
+2. Share the link in whatever channel you normally use.
+3. The recipient reveals it once. It's gone.
+
+No account. No sign-up. No config.
+
+Questions people ask
+
+What happens if I open a link twice? The second time there's nothing left to fetch. The secret is destroyed on first read.
+
+Can the recipient forward the link? They can, but it's empty by then.
+
+How long does a secret live? You choose, one hour to 72 hours. If nobody opens it in time, it expires on its own.
+
+Do I need an account? No.
+
+Is encryption done before upload? Yes. It happens on your device before anything is sent. The server only ever holds ciphertext.
+
+Can the server read the secret if it wanted to? No. It holds ciphertext and no key. There is no backdoor by design.
+
+What about file attachments? Same as text: encrypted, stored, deleted after first read. Images render inline in the reveal panel; PDFs and archives get a download button.
+
+Do I need the extension to reveal a secret? No. The same links work at ooshare.io and in the CLI. The extension just makes it faster.
+
+Does it work offline? Creating and revealing both need the network. The encryption happens on your device, but the secret is stored remotely.
+
+Is this a password manager? No. Use a password manager for storage. ooshare is for the moments you need to hand something over.

@@ -1,0 +1,1 @@
+Create and reveal one-time secrets that delete themselves after a single read.

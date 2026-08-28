@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face { font-family:"Inter"; font-style:normal; font-weight:400 700; font-display:block; src:url("/fonts/inter-latin.woff2") format("woff2"); unicode-range:U+0000-00FF,U+2000-206F; }
+  @font-face { font-family:"JetBrains Mono"; font-style:normal; font-weight:400 700; font-display:block; src:url("/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); unicode-range:U+0000-00FF,U+2000-206F; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1400px; height:560px; }
+  body {
+    font-family:"Inter", system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden; position:relative; color:#e7eaf3;
+    background:
+      radial-gradient(55% 130% at 22% 50%, rgba(99,102,241,0.30) 0%, rgba(79,70,229,0.12) 48%, transparent 70%),
+      radial-gradient(60% 120% at 92% -10%, rgba(52,211,153,0.10) 0%, transparent 55%),
+      linear-gradient(160deg, #0b1020 0%, #0e1526 55%, #111831 100%);
+  }
+  .grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+    background-size:34px 34px;
+    mask-image:radial-gradient(130% 110% at 50% 0%, #000 25%, transparent 85%);
+    -webkit-mask-image:radial-gradient(130% 110% at 50% 0%, #000 25%, transparent 85%);
+  }
+  .vig { position:absolute; inset:0; background:radial-gradient(100% 100% at 50% 45%, transparent 60%, rgba(4,6,15,0.55) 100%); }
+
+  /* signal line: from emblem right edge to the copy column — anchored, not floating */
+  .signal { position:absolute; left:374px; top:50%; width:180px; height:1px;
+    background:linear-gradient(90deg, rgba(129,140,248,0.10), rgba(129,140,248,0.60) 70%, rgba(129,140,248,0.9));
+  }
+  .signal::before, .signal::after { content:""; position:absolute; top:50%; transform:translateY(-50%); border-radius:50%; }
+  .signal::before { left:0; width:4px; height:4px; background:rgba(129,140,248,0.35); }
+  .signal::after { right:-1px; width:8px; height:8px; background:#a5b4fc; box-shadow:0 0 18px 3px rgba(165,180,252,0.85); }
+
+  .left { position:absolute; left:0; top:0; bottom:0; width:470px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; }
+  .emblem { position:relative; width:252px; height:252px; display:flex; align-items:center; justify-content:center; }
+
+  .ring { position:absolute; border-radius:50%; }
+  .r1 { inset:0; border:1px dashed rgba(129,140,248,0.28); }
+  .r2 { inset:22px; border:1px solid rgba(99,102,241,0.22); background:radial-gradient(circle at 50% 42%, rgba(99,102,241,0.14), rgba(99,102,241,0.03) 60%, transparent 72%); box-shadow:0 0 90px -18px rgba(99,102,241,0.55), inset 0 0 60px -30px rgba(99,102,241,0.5); }
+  .r3 { inset:44px; border:1px solid rgba(158,168,200,0.14); background:radial-gradient(circle at 50% 45%, rgba(11,16,32,0.85), rgba(17,24,49,0.55) 70%, transparent 75%); }
+
+  .shield-core {
+    position:absolute; inset:64px; border-radius:22px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(180deg, rgba(99,102,241,0.18), rgba(99,102,241,0.06));
+    border:1px solid rgba(129,140,248,0.42);
+    box-shadow:0 0 0 1px rgba(11,16,32,0.6), 0 24px 60px -18px rgba(79,70,229,0.85), inset 0 1px 0 rgba(255,255,255,0.10);
+  }
+  .shield-core svg { width:74px; height:74px; display:block; filter:drop-shadow(0 6px 18px rgba(79,70,229,0.55)); }
+
+  .orbit { position:absolute; }
+  .o1 { top:-6px; left:50%; transform:translateX(-50%); }
+  .o2 { right:-6px; top:44%; }
+  .o3 { left:10px; bottom:16px; }
+
+  .wordmark-big { display:flex; align-items:center; gap:14px; }
+  .wordmark-big .dot { width:9px; height:9px; border-radius:50%; background:#34d399; box-shadow:0 0 0 4px rgba(52,211,153,0.15), 0 0 18px rgba(52,211,153,0.9); }
+  .wordmark-big .wm { font-family:"JetBrains Mono", monospace; font-weight:700; font-size:26px; letter-spacing:0.14em; color:#e7eaf3; }
+  .wordmark-big .wm span { color:#818cf8; }
+  .wordmark-big .lbl { font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:0.18em; color:#828ba4; }
+
+  .right { position:absolute; left:560px; right:0; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; padding-right:110px; gap:0; }
+
+  .eyebrow { display:flex; align-items:center; gap:11px; font-family:"JetBrains Mono", monospace; font-size:13px; letter-spacing:0.22em; color:#6ee7b7; margin-bottom:22px; }
+  .eyebrow .line { width:44px; height:1px; background:linear-gradient(90deg, #34d399, transparent); }
+  .eyebrow b { color:#a5f3d0; font-weight:700; }
+
+  h1 { font-size:66px; line-height:1.05; font-weight:700; letter-spacing:-0.03em; color:#e7eaf3; }
+  h1 .grad {
+    background:linear-gradient(94deg, #c7d2fe 0%, #a5b4fc 34%, #818cf8 68%, #6366f1 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+  }
+  .sub { margin-top:20px; font-size:21px; line-height:1.55; color:#aeb6cc; max-width:720px; font-weight:400; }
+
+  .chips { display:flex; gap:10px; margin-top:30px; flex-wrap:wrap; }
+  .chip {
+    font-family:"JetBrains Mono", monospace; font-size:12.5px; font-weight:400; letter-spacing:0.08em;
+    color:#c7d2fe; padding:8px 16px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(99,102,241,0.14), rgba(99,102,241,0.06));
+    border:1px solid rgba(129,140,248,0.30);
+    box-shadow:0 6px 18px -8px rgba(79,70,229,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+  .chip b { color:#e7eaf3; font-weight:700; }
+
+  .term {
+    margin-top:34px; display:flex; align-items:center; gap:14px; align-self:flex-start;
+    font-family:"JetBrains Mono", monospace; font-size:15.5px; letter-spacing:0.02em;
+    color:#828ba4; padding:13px 20px; border-radius:12px;
+    background:rgba(11,16,32,0.55); border:1px solid rgba(158,168,200,0.16);
+  }
+  .term .prompt { color:#34d399; font-weight:700; }
+  .term .arg { color:#a5b4fc; }
+  .term .meta { color:#5d6782; }
+  .caret { display:inline-block; width:9px; height:17px; background:#818cf8; margin-left:2px; border-radius:1px; box-shadow:0 0 10px rgba(129,140,248,0.8); }
+
+  .float-ico { position:absolute; color:rgba(165,180,252,0.12); }
+  .f1 { left:96px; top:44px; } .f2 { right:120px; bottom:40px; } .f3 { right:330px; top:48px; } .f4 { left:520px; bottom:44px; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="vig"></div>
+  <div class="signal"></div>
+
+  <svg class="float-ico f1" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+  <svg class="float-ico f2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <svg class="float-ico f3" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+  <svg class="float-ico f4" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+
+  <div class="left">
+    <div class="emblem">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="shield-core">
+        <svg viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="sg2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#a5b4fc"/><stop offset="0.5" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" fill="url(#sg2)"/>
+          <path d="M12 9.5c1.4 0 2.5 1.05 2.5 2.4 0 1.02-.63 1.9-1.55 2.28l.6 2.02h-3.1l.6-2.02A2.54 2.54 0 0 1 9.5 11.9c0-1.35 1.1-2.4 2.5-2.4z" fill="#0b1020"/>
+        </svg>
+      </div>
+      <svg class="orbit o1" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+      <svg class="orbit o2" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <svg class="orbit o3" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 19.5 4 17 4 12V6z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+    <div class="wordmark-big">
+      <div class="dot"></div>
+      <div class="wm">oo<span>share</span></div>
+      <div class="lbl">ONLY ONCE · SHARE</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="eyebrow">
+      <div class="line"></div>
+      <b>ZERO-KNOWLEDGE</b> SECRET SHARING
+    </div>
+    <h1>Share secrets<br/>that <span class="grad">self-destruct.</span></h1>
+    <p class="sub">Encrypted on your device before upload. Read once.<br/>Gone forever. The server never sees your plaintext.</p>
+    <div class="chips">
+      <div class="chip"><b>AES-256-GCM</b></div>
+      <div class="chip">ONE-TIME READ</div>
+      <div class="chip"><b>ZERO-KNOWLEDGE</b></div>
+      <div class="chip">AUTO-DELETE</div>
+    </div>
+    <div class="term">
+      <span class="prompt">▸</span>
+      <span>ooshare create <span class="arg">"&lt;secret&gt;"</span></span>
+      <span class="meta">— 1 view · ttl 24h</span>
+      <span class="caret"></span>
+    </div>
+  </div>
+</body>
+</html>
