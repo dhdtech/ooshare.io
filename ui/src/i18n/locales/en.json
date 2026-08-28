@@ -8,7 +8,9 @@
   },
   "hero": {
     "title": "Share secrets securely",
-    "subtitle": "End-to-end encrypted in your browser. Share text, images, PDFs, and archives. The server never sees your data. Links self-destruct after one view."
+    "subtitle": "End-to-end encrypted in your browser. Share text, images, PDFs, and archives. The server never sees your data. Links self-destruct after one view.",
+    "badges": "Free · No account required · Open source (MIT) · 6 languages · Self-hostable",
+    "securityLine": "Your decryption key lives only in the link — it is never sent to a server."
   },
   "create": {
     "label": "Secret content",
@@ -48,7 +50,8 @@
     }
   },
   "whySection": {
-    "ctaBanner": "See why OOShare is the most secure secret sharing tool"
+    "ctaBanner": "See why OOShare is the most secure secret sharing tool",
+    "ctaSub": "Encrypted in your browser — not on our server. See how we compare to other tools."
   },
   "view": {
     "loading": "Retrieving and decrypting secret...",
@@ -69,7 +72,9 @@
     "downloadPdf": "Download PDF",
     "viewPdf": "Open in new tab",
     "archiveAttached": "An archive file is attached to this secret",
-    "downloadArchive": "Download Archive"
+    "downloadArchive": "Download Archive",
+    "destroyedProof": "It was readable once, by you — that is the guarantee. Nothing was stored after you opened it.",
+    "sendYourOwn": "Send your own secure secret"
   },
   "nav": {
     "security": "Security",
@@ -249,7 +254,8 @@
     "zeroKnowledge": "Zero Knowledge",
     "autoDelete": "Auto-Delete",
     "openSource": "Open Source",
-    "cli": "CLI"
+    "cli": "CLI",
+    "tagline": "Secure sharing shouldn't require trusting a third party — or paying for it."
   },
   "company": {
     "copyright": "© {{year}} ooshare.io. All rights reserved.",

@@ -28,6 +28,44 @@
   flex-shrink: 0;
 }
 
+/* Proof strip under the hero: subtle fact line, not competing with the form. */
+.hero-badges {
+  margin: 0 auto 20px;
+  max-width: 52ch;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Key-in-fragment assurance, below the trust strip. */
+.security-line {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Peak–end assurance line inside the revealed card. */
+.destroyed-proof {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Comparison-shopper sub-line beneath the /why banner link. */
+.why-cta-sub {
+  margin: 10px auto 0;
+  max-width: 48ch;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
 .secret-content {
   padding: 1rem;
   background: var(--bg);

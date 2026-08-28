@@ -8,7 +8,9 @@
   },
   "hero": {
     "title": "Comparte secretos de forma segura",
-    "subtitle": "Cifrado de extremo a extremo en tu navegador. Comparte texto, imágenes, PDFs y archivos comprimidos. El servidor nunca ve tus datos. Los enlaces se autodestruyen después de una vista."
+    "subtitle": "Cifrado de extremo a extremo en tu navegador. Comparte texto, imágenes, PDFs y archivos comprimidos. El servidor nunca ve tus datos. Los enlaces se autodestruyen después de una vista.",
+    "badges": "Gratis · Sin cuenta · Código abierto (MIT) · 6 idiomas · Autohospedable",
+    "securityLine": "Tu clave de descifrado vive solo en el enlace — nunca se envía a un servidor."
   },
   "create": {
     "label": "Contenido secreto",
@@ -48,7 +50,8 @@
     }
   },
   "whySection": {
-    "ctaBanner": "Descubre por qué OOShare es la herramienta más segura para compartir secretos"
+    "ctaBanner": "Descubre por qué OOShare es la herramienta más segura para compartir secretos",
+    "ctaSub": "Cifrado en tu navegador — no en nuestro servidor. Mira cómo nos comparamos con otras herramientas."
   },
   "view": {
     "loading": "Recuperando y descifrando secreto...",
@@ -69,7 +72,9 @@
     "downloadPdf": "Descargar PDF",
     "viewPdf": "Abrir en nueva pestaña",
     "archiveAttached": "Un archivo comprimido está adjunto a este secreto",
-    "downloadArchive": "Descargar archivo"
+    "downloadArchive": "Descargar archivo",
+    "destroyedProof": "Se pudo leer una vez, por ti — esa es la garantía. Nada se almacenó después de que lo abrieras.",
+    "sendYourOwn": "Envía tu propio secreto seguro"
   },
   "nav": {
     "security": "Seguridad",
@@ -190,7 +195,8 @@
     "zeroKnowledge": "Conocimiento cero",
     "autoDelete": "Auto-eliminación",
     "openSource": "Código Abierto",
-    "cli": "CLI"
+    "cli": "CLI",
+    "tagline": "Compartir de forma segura no debería requerir confiar en un tercero — ni pagar por ello."
   },
   "company": {
     "copyright": "© {{year}} ooshare.io. Todos los derechos reservados.",
@@ -267,10 +273,10 @@
       "button": "Ver en el GitHub Marketplace"
     },
     "security": {
-      "title": "Las mismas garantías que la web",
       "1": "Mismo cifrado — AES-256-GCM + HKDF-SHA-256, compatible byte a byte con el navegador",
       "2": "Conocimiento cero — la clave maestra vive solo en el fragmento de la URL, nunca se envía al servidor",
       "3": "Un solo uso — los secretos se eliminan atómicamente en la primera vista",
+      "title": "Las mismas garantías que la web",
       "link": "Más información sobre nuestra seguridad"
     },
     "cta": {

@@ -137,7 +137,7 @@ describe("ViewSecret", () => {
     });
   });
 
-  it("shows 'Share a new secret' link when revealed", async () => {
+  it("shows 'Send your own secure secret' CTA when revealed", async () => {
     vi.mocked(api.getSecret).mockResolvedValue({
       ciphertext: "ct",
       id: "uuid",
@@ -146,7 +146,7 @@ describe("ViewSecret", () => {
     renderWithProviders(<ViewSecret />);
 
     await waitFor(() => {
-      expect(screen.getByText("Share a new secret")).toBeInTheDocument();
+      expect(screen.getByText("Send your own secure secret")).toBeInTheDocument();
     });
   });
 

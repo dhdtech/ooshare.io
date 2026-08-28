@@ -8,7 +8,9 @@
   },
   "hero": {
     "title": "安全分享秘密",
-    "subtitle": "在您的浏览器中端到端加密。分享文本、图像、PDF和压缩文件。服务器永远不会看到您的数据。链接在查看一次后自动销毁。"
+    "subtitle": "在您的浏览器中端到端加密。分享文本、图像、PDF和压缩文件。服务器永远不会看到您的数据。链接在查看一次后自动销毁。",
+    "badges": "免费 · 无需账号 · 开源（MIT） · 6 种语言 · 可自托管",
+    "securityLine": "你的解密密钥只存在于链接中 —— 它绝不发送到服务器。"
   },
   "create": {
     "label": "秘密内容",
@@ -48,7 +50,8 @@
     }
   },
   "whySection": {
-    "ctaBanner": "了解为什么 OOShare 是最安全的密钥分享工具"
+    "ctaBanner": "了解为什么 OOShare 是最安全的密钥分享工具",
+    "ctaSub": "在你的浏览器中加密 —— 而不是在我们的服务器上。看看我们如何与其他工具进行比较。"
   },
   "view": {
     "loading": "正在检索和解密秘密...",
@@ -69,7 +72,9 @@
     "downloadPdf": "下载PDF",
     "viewPdf": "在新标签页打开",
     "archiveAttached": "此密钥附带了一个压缩文件",
-    "downloadArchive": "下载压缩文件"
+    "downloadArchive": "下载压缩文件",
+    "destroyedProof": "它只被读取过一次，由你查看 —— 这就是保证。你打开之后，没有任何数据被保存。",
+    "sendYourOwn": "分享你自己的安全机密"
   },
   "nav": {
     "security": "安全",
@@ -194,7 +199,8 @@
     "zeroKnowledge": "零知识",
     "autoDelete": "自动删除",
     "openSource": "开源项目",
-    "cli": "CLI"
+    "cli": "CLI",
+    "tagline": "安全分享不应要求信任第三方 —— 或为此付费。"
   },
   "company": {
     "copyright": "© {{year}} ooshare.io. 保留所有权利。",
@@ -271,10 +277,10 @@
       "button": "在 GitHub Marketplace 中查看"
     },
     "security": {
-      "title": "与网络版相同的保证",
       "1": "相同的加密 — AES-256-GCM + HKDF-SHA-256，与浏览器逐字节兼容",
       "2": "零知识 — 主密钥仅存在于 URL 片段中，绝不发送到服务器",
       "3": "一次性 — 秘密在首次查看时被原子删除",
+      "title": "与网络版相同的保证",
       "link": "了解更多关于我们的安全"
     },
     "cta": {

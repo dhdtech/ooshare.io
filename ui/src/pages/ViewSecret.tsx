@@ -173,6 +173,11 @@ export default function ViewSecret() {
                 </div>
               </div>
             )}
+
+            <p className="destroyed-proof">{t("view.destroyedProof")}</p>
+            <Button to="/" variant="primary" full>
+              {t("view.sendYourOwn")}
+            </Button>
           </div>
         </Card>
       )}
@@ -216,9 +221,9 @@ export default function ViewSecret() {
         </Card>
       )}
 
-      <BackLink to="/">
-        {status === "revealed" ? t("view.newSecret") : t("view.backHome")}
-      </BackLink>
+      {status !== "revealed" && (
+        <BackLink to="/">{t("view.backHome")}</BackLink>
+      )}
     </div>
   );
 }

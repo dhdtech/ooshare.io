@@ -130,6 +130,8 @@ export default function CreateSecret() {
     <div className="create-flow">
       <PageHeader title={t("hero.title")} subtitle={t("hero.subtitle")} />
 
+      <p className="hero-badges">{t("hero.badges")}</p>
+
       <div className="create-wrap">
         <Card>
           {!link ? (
@@ -235,6 +237,7 @@ export default function CreateSecret() {
             t("footer.autoDelete"),
           ]}
         />
+        <p className="security-line">{t("hero.securityLine")}</p>
       </div>
 
       <section className="cli-section" aria-label={t("create.cliSection.header")}>
@@ -251,6 +254,7 @@ export default function CreateSecret() {
           <span>{t("whySection.ctaBanner")}</span>
           <ArrowRight size={16} aria-hidden="true" />
         </Link>
+        <p className="why-cta-sub">{t("whySection.ctaSub")}</p>
       </div>
     </div>
   );

@@ -110,6 +110,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               { label: t("footer.autoDelete"), icon: <Trash2 size={12} /> },
             ]}
           />
+          <p className="footer-tagline">{t("footer.tagline")}</p>
           <FooterNav
             links={[
               { to: "/security", label: t("nav.security") },
