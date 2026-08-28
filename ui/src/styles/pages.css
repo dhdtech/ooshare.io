@@ -162,6 +162,15 @@
   justify-content: center;
 }
 
+/* CLI install tabs have long labels — use content-sized pills that keep each
+   label on one line and wrap into centered rows, instead of cramped equal
+   columns. (Main page TTL labels are short and keep the equal-width look.) */
+.cli-page .ui-segment {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 7px 14px;
+}
+
 .cli-section {
   padding: 26px 0 6px;
 }

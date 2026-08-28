@@ -267,6 +267,8 @@ textarea.ui-field-control {
 }
 .ui-segment {
   position: relative;
+  flex: 1 1 0;
+  min-width: 0;
   border: 0;
   background: transparent;
   font-family: var(--font-mono);
@@ -276,6 +278,7 @@ textarea.ui-field-control {
   border-radius: 7px;
   cursor: pointer;
   transition: color var(--transition);
+  text-align: center;
 }
 .ui-segment-thumb {
   position: absolute;
