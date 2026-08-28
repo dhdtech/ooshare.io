@@ -966,12 +966,15 @@ textarea.ui-field-control {
 .ui-prose-section-body p {
   margin: 0 0 0.75rem;
 }
-.ui-prose-section-body a {
+/* Content-page links inside prose; `:not(.ui-btn)` so buttons (which carry
+ * their own variant colors, e.g. white on the primary gradient) are not
+ * re-tinted by this higher-specificity anchor rule. */
+.ui-prose-section-body a:not(.ui-btn) {
   color: var(--primary-hover);
   text-decoration: none;
   transition: color var(--transition);
 }
-.ui-prose-section-body a:hover {
+.ui-prose-section-body a:not(.ui-btn):hover {
   color: var(--primary);
   text-decoration: underline;
 }
