@@ -56,7 +56,7 @@ export default function Security() {
 
         <ProseSection title={t("security.cliSection.title")}>
           <p>{t("security.cliSection.body")}</p>
-          <Button to="/cli" icon={<Terminal size={16} />}>
+          <Button className="ui-btn-center" to="/cli" icon={<Terminal size={16} />}>
             {t("security.cliSection.link")}
           </Button>
         </ProseSection>

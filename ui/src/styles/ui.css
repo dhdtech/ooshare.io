@@ -44,6 +44,15 @@
 .ui-btn svg {
   flex-shrink: 0;
 }
+/* Centered button CTA — blocks the inline-flex button and centers it in a
+ * prose/block parent (e.g. the "Install the CLI" CTA on the Security page).
+ * Kept as a class rather than a `.ui-prose-section-body .ui-btn` rule so the
+ * design-system gallery (Components) and other pages still render left-aligned. */
+.ui-btn-center {
+  display: flex;
+  width: fit-content;
+  margin-inline: auto;
+}
 .ui-btn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
