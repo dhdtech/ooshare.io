@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{position:relative;background:#0a0e1a;font-family:'Inter',system-ui,-apple-system,sans-serif;color:#fff}
+.bg{position:absolute;inset:0;background:
+  radial-gradient(880px 620px at 50% 20%, rgba(99,102,241,.34), transparent 62%),
+  radial-gradient(720px 520px at 82% 100%, rgba(139,92,246,.20), transparent 60%),
+  #0a0e1a}
+.grid{position:absolute;inset:0;opacity:.10;background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(760px 560px at 50% 38%,#000,transparent 78%)}
+.ringwrap{position:absolute;left:50%;top:54px;transform:translateX(-50%);width:284px;height:284px}
+.ring{position:absolute;inset:0;filter:drop-shadow(0 0 26px rgba(99,102,241,.45))}
+.shield{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:142px;height:142px;filter:drop-shadow(0 0 30px rgba(99,102,241,.55))}
+.ttl{position:absolute;left:50%;top:350px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;color:#c7d2fe;font-weight:600;font-size:24px;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.ttl svg{width:26px;height:26px}
+h1{position:absolute;left:0;right:0;top:394px;text-align:center;font-size:58px;font-weight:800;line-height:1.06;letter-spacing:-.02em}
+h1 .accent{background:linear-gradient(92deg,#818cf8,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chips{position:absolute;left:0;right:0;top:512px;display:flex;justify-content:center;gap:12px}
+.chip{display:flex;align-items:center;gap:7px;padding:8px 17px;border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#cbd5e1;font-size:17px;font-weight:500;background:rgba(255,255,255,.04)}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:#6366f1;box-shadow:0 0 8px #6366f1}
+.brand{position:absolute;left:0;right:0;bottom:20px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.brand .wm{display:flex;align-items:center;gap:10px}
+.brand .wm svg{width:26px;height:26px}
+.brand .wm span{color:#e7eaf3;font-weight:800;font-size:26px;letter-spacing:-.03em}
+.brand .url{color:#64748b;font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase}
+</style></head>
+<body>
+<div class="bg"></div><div class="grid"></div>
+<div class="ringwrap">
+  <svg class="ring" viewBox="0 0 300 300">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+    <circle cx="150" cy="150" r="134" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>
+    <circle cx="150" cy="150" r="134" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round" stroke-dasharray="790 842" transform="rotate(-90 150 150)"/>
+    <circle cx="150" cy="150" r="134" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="4" stroke-linecap="round" stroke-dasharray="40 100" transform="rotate(-90 150 150)"/>
+  </svg>
+  <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+</div>
+<div class="ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>21:38</div>
+<h1>Share a secret.<br><span class="accent">Once.</span></h1>
+<div class="chips"><span class="chip">Self-destructing</span><span class="chip">Zero-knowledge</span><span class="chip">E2E encrypted</span></div>
+<div class="brand">
+  <div class="wm">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+    <span>ooshare</span>
+  </div>
+  <div class="url">Only once · ooshare.io</div>
+</div>
+</body></html>

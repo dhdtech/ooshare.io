@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — Typography</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html" class="active">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Typography</p>
+        <h1 class="kk-h1">Inter + JetBrains Mono</h1>
+        <p class="kk-lede">
+          Two self-hosted faces do the whole job. <strong>Inter</strong> (400–700 variable)
+          carries all reading and UI copy; <strong>JetBrains Mono</strong> is reserved for the
+          cryptographic facts — IDs, links, counters, badges, field hints — so anything
+          that must read as "trust-level detail" is visually distinct.
+        </p>
+      </header>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Font source</h2>
+        <div class="kk-frame" style="padding:1.25rem 1.5rem">
+<pre class="kk-mono" style="margin:0;font-size:0.82rem;color:var(--text-secondary);white-space:pre-wrap;line-height:1.6">--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+--font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;</pre>
+        </div>
+        <p class="kk-note">Self-hosted at <code class="kk-mono">ui/public/fonts/</code> (Inter latin + latin-ext, JetBrains Mono latin) — also bundled in this kit at <code class="kk-mono">assets/fonts/</code>. System UI / ui-monospace are the fallback stacks.</p>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Inter weights</h2>
+        <p class="kk-h2-sub">The variable font renders any weight in 400–700. The site clamps to a few practical steps.</p>
+        <div class="kk-frame">
+          <div style="display:flex;flex-wrap:wrap;gap:0.35rem 1rem;align-items:baseline">
+            <span style="font-weight:400;font-size:1.4rem">400</span>
+            <span style="font-weight:500;font-size:1.4rem">500</span>
+            <span style="font-weight:600;font-size:1.4rem">600</span>
+            <span style="font-weight:700;font-size:1.4rem;color:var(--text)">700</span>
+            <span style="font-weight:800;font-size:1.4rem;opacity:.6">800</span>
+          </div>
+          <p class="kk-note" style="margin-top:1rem">Actually used: <span class="kk-pill">400</span> <span class="kk-pill">500</span> <span class="kk-pill">600</span> <span class="kk-pill">700</span></p>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Type scale</h2>
+        <p class="kk-h2-sub">Derived from the production stylesheet values (<code class="kk-mono">ui/src/styles/ui.css</code>). Sizes are px; line-height is a unitless multiplier.</p>
+
+        <div class="kk-type"><div class="kk-type-spec"><b>Page header</b>25–34px · 700 · 1.2<br />-0.02em</div><div class="kk-type-demo" style="font-size:clamp(25px,5vw,34px);font-weight:700;line-height:1.2;letter-spacing:-0.02em">Share a secret, once</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Section header</b>19px · 600 · 1.2<br />-0.02em</div><div class="kk-type-demo" style="font-size:19px;font-weight:600;line-height:1.2;letter-spacing:-0.02em">How it works</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>State title</b>18px · 600 · 1.3</div><div class="kk-type-demo" style="font-size:1.125rem;font-weight:600;line-height:1.3">Secret not found</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Card title</b>15px · 600 · 1.3<br />-0.01em</div><div class="kk-type-demo" style="font-size:15px;font-weight:600;line-height:1.3;letter-spacing:-0.01em">Zero-knowledge encryption</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Body / prose</b>15px · 400 · 1.7</div><div class="kk-type-demo" style="font-size:0.9375rem;font-weight:400;line-height:1.7;color:var(--text-secondary)">Your secret is encrypted on this device before it ever reaches our servers.</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Page sub</b>13.5px · 400 · 1.5</div><div class="kk-type-demo" style="font-size:13.5px;line-height:1.5;color:var(--text-secondary)">A short intro that sets up the page.</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Step body</b>13.5px · 400 · 1.55</div><div class="kk-type-demo" style="font-size:13.5px;line-height:1.55;color:var(--text-secondary)">Describe the step in one or two clear sentences.</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Primary button</b>16px · 600</div><div class="kk-type-demo" style="font-size:16px;font-weight:600;line-height:1">Create a secret link</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Secondary button</b>14px · 600</div><div class="kk-type-demo" style="font-size:14px;font-weight:600;line-height:1;color:var(--text-secondary)">Learn more</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Small</b>13px · 500</div><div class="kk-type-demo" style="font-size:13px;font-weight:500;line-height:1.4;color:var(--text-muted)">Field label, dropzone label, nav links.</div></div>
+        <div class="kk-type"><div class="kk-type-spec"><b>Mono badge</b>10.5px · mono · 600</div><div class="kk-type-demo" style="font-family:var(--font-mono);font-size:10.5px;line-height:1.4;color:var(--chip-text)">AES-256-GCM · ID: 8f3Kq2p</div></div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">JetBrains Mono</h2>
+        <p class="kk-h2-sub">Used for anything that is data, not prose: secret IDs, share links, animated counters, segmented-control labels, badge chips, and field character counts.</p>
+        <div class="kk-frame">
+          <div class="kk-frame-label">Mono vs. sans</div>
+          <div style="display:flex;flex-direction:column;gap:1rem">
+            <div style="font-family:var(--font-mono);font-size:14px;color:var(--text)">s/KcyT8QzO33MJlhvYXq0Q== (mono)</div>
+            <div style="font-size:14px;color:var(--text-secondary)">s/KcyT8QzO33MJlhvYXq0Q== (sans)</div>
+          </div>
+          <p class="kk-note" style="margin-top:1rem">Reserve mono for the technical layer. Never set body copy in mono — it reads slower and drifts from the brand.</p>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Usage notes</h2>
+        <div class="kk-grid cols-2">
+          <div class="kk-callout do"><span class="kk-callout-ico">✓</span><div><strong>Do</strong> — keep headings at 600–700 and body at 400. Set technical/ID detail in <code class="kk-mono">var(--font-mono)</code>. Use <code class="kk-mono">--text-secondary</code> for anything secondary.</div></div>
+          <div class="kk-callout dont"><span class="kk-callout-ico">✕</span><div><strong>Don't</strong> — introduce a third family, set body copy in mono, or force negative letter-spacing on body text.</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

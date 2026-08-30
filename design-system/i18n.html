@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — i18n</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="components.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html" class="active">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">i18n</p>
+        <h1 class="kk-h1">Internationalization</h1>
+        <p class="kk-lede">
+          The product is translated into <strong>six languages</strong> via i18next. Every
+          copy string lives in a JSON bundle per locale, and the language is detected
+          automatically. RTL layout hooks exist in the CSS but are not yet wired up to
+          auto-flip.
+        </p>
+      </header>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Languages</h2>
+        <p class="kk-h2-sub">Supported locales, with the shorthand code and native name.</p>
+        <table class="kk-table">
+          <thead><tr><th>Code</th><th>Native name</th><th>Direction</th></tr></thead>
+          <tbody>
+            <tr><td class="kk-var">en</td><td>English</td><td>LTR</td></tr>
+            <tr><td class="kk-var">zh</td><td>中文</td><td>LTR</td></tr>
+            <tr><td class="kk-var">es</td><td>Español</td><td>LTR</td></tr>
+            <tr><td class="kk-var">hi</td><td>हिन्दी</td><td>LTR</td></tr>
+            <tr><td class="kk-var">ar</td><td>العربية</td><td>RTL (default currently LTR)</td></tr>
+            <tr><td class="kk-var">pt</td><td>Português</td><td>LTR</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Layer</h2>
+        <p class="kk-h2-sub">i18next + <code class="kk-mono">i18next-browser-languagedetector</code>.</p>
+        <table class="kk-table">
+          <thead><tr><th>Concern</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>Detection order</td><td class="kk-val" style="white-space:normal">querystring → localStorage → navigator</td></tr>
+            <tr><td>Cache</td><td class="kk-val">localStorage (<code class="kk-mono">i18nextLng</code>)</td></tr>
+            <tr><td>Normalisation</td><td class="kk-val">lang → <code class="kk-mono">lng.split("-")[0]</code> (strips region)</td></tr>
+            <tr><td>Fallback</td><td class="kk-val">en</td></tr>
+            <tr><td>Locale files</td><td><code class="kk-mono">ui/src/i18n/locales/*.json</code></td></tr>
+            <tr><td>Blog content</td><td><code class="kk-mono">ui/src/content/blog/{ar,es,hi,pt,zh}.ts</code> (+ en)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Language switcher</h2>
+        <p class="kk-h2-sub">A circular 36px trigger with the flag, and a dropdown of the six options.</p>
+        <div class="kk-frame">
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+            <button class="ui-icon-btn" aria-label="Change language"><span style="font-size:1.05rem;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">🇬🇧</span></button>
+            <span style="font-size:13px;color:var(--text-secondary)">Selecting a language writes it to <code class="kk-mono">localStorage.i18nextLng</code>; the content re-renders without a reload.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">RTL (Arabic)</h2>
+        <p class="kk-h2-sub">
+          Arabic is an RTL script, and the design system reserves a <code class="kk-mono">[dir="rtl"]</code>
+          hook. Today only one rule uses it.
+        </p>
+        <div class="kk-frame" style="padding:1.25rem 1.5rem">
+<pre class="kk-mono" style="margin:0;font-size:0.82rem;color:var(--text-secondary);white-space:pre-wrap;line-height:1.6">/* ui.css — the only RTL-aware rule today */
+[dir="rtl"] .ui-toast-viewport { ... }</pre>
+        </div>
+        <div class="kk-callout note"><span class="kk-callout-ico">⚠️</span>
+          <div><strong>Known gap.</strong> The app does not currently set <code class="kk-mono">document.documentElement.dir = "rtl"</code> when Arabic is active, so Arabic renders left-to-right today. The <code class="kk-mono">[dir="rtl"]</code> class hooks are the groundwork — flipping the document direction (and auditing alignment/logical properties) is an open follow-up.</div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Design implications</h2>
+        <div class="kk-grid cols-2">
+          <div class="kk-callout do"><span class="kk-callout-ico">✓</span><div><strong>Logical properties.</strong> Components should use <code class="kk-mono">margin-inline</code> / <code class="kk-mono">padding-inline</code> / <code class="kk-mono">inset-inline</code> and <code class="kk-mono">text-align: start</code>, so a future RTL flip needs no per-component overrides. The kit's mono/label types rely on the same <code class="kk-mono">--font-sans</code> stack.</div></div>
+          <div class="kk-callout dont"><span class="kk-callout-ico">✕</span><div><strong>Don't</strong> — hard-code <code class="kk-mono">left</code>/<code class="kk-mono">right</code> in a new component when an inline/logical equivalent works; it breaks the moment RTL is enabled.</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

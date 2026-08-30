@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — Tokens</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html" class="active">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Tokens</p>
+        <h1 class="kk-h1">Design tokens</h1>
+        <p class="kk-lede">
+          Every CSS custom property in the system, mirrored verbatim from
+          <code class="kk-mono">ui/src/styles/tokens.css</code>. Grab
+          <code class="kk-mono">tokens.css</code> from this folder to consume them.
+        </p>
+      </header>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Fonts</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--font-sans</td><td class="kk-val" style="white-space:normal">"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif</td><td>All reading &amp; UI copy</td></tr>
+            <tr><td>--font-mono</td><td class="kk-val" style="white-space:normal">"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace</td><td>IDs, links, counters, badges, field hints</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Backgrounds &amp; surfaces</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--bg</td><td class="kk-val">#0b1020</td><td>Page canvas</td></tr>
+            <tr><td>--bg-soft</td><td class="kk-val">#0e1526</td><td>Segmented track, subtle wells</td></tr>
+            <tr><td>--surface</td><td class="kk-val">#111831</td><td>Cards, panels, modals</td></tr>
+            <tr><td>--surface-hover</td><td class="kk-val">#151d3a</td><td>Row/surface hover</td></tr>
+            <tr><td>--surface-elevated</td><td class="kk-val">#151d3a</td><td>Toasts, elevated surfaces</td></tr>
+            <tr><td>--field-bg</td><td class="kk-val">#0d1322</td><td>Input/dropzone background</td></tr>
+            <tr><td>--border</td><td class="kk-val">rgba(158,168,200,.14)</td><td>1px borders</td></tr>
+            <tr><td>--border-hover</td><td class="kk-val">rgba(158,168,200,.26)</td><td>Border on hover</td></tr>
+            <tr><td>--hairline-strong</td><td class="kk-val">rgba(158,168,200,.26)</td><td>Secondary border, focus-adjacent</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Brand / accent</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--primary</td><td class="kk-val">#6366f1</td><td>Brand accent, links, focus</td></tr>
+            <tr><td>--primary-hover</td><td class="kk-val">#818cf8</td><td>Accent on hover</td></tr>
+            <tr><td>--accent</td><td class="kk-val">#6366f1</td><td>Alias of primary</td></tr>
+            <tr><td>--accent-strong</td><td class="kk-val">#4f46e5</td><td>Segmented thumb, active fill</td></tr>
+            <tr><td>--accent-text</td><td class="kk-val">#a5b4fc</td><td>Accent text on dark</td></tr>
+            <tr><td>--chip-bg</td><td class="kk-val">rgba(99,102,241,.1)</td><td>Badges, icon tiles, hover fills</td></tr>
+            <tr><td>--chip-text</td><td class="kk-val">#a5b4fc</td><td>Badge / step text</td></tr>
+            <tr><td>--primary-glow</td><td class="kk-val">rgba(99,102,241,.1)</td><td>Focus ring, soft glows</td></tr>
+            <tr><td>--btn-gradient</td><td class="kk-val" style="white-space:normal">linear-gradient(180deg, #5a53ea, #4f46e5)</td><td>Primary CTA pill</td></tr>
+            <tr><td>--cta-shadow</td><td class="kk-val">0 12px 28px -10px rgba(79,70,229,.55)</td><td>Primary CTA drop shadow</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Status</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--success</td><td class="kk-val">#34d399</td><td>Confirmation, success buttons</td></tr>
+            <tr><td>--success-glow</td><td class="kk-val">rgba(52,211,153,.12)</td><td>Success background</td></tr>
+            <tr><td>--warning</td><td class="kk-val">#f59e0b</td><td>Warnings</td></tr>
+            <tr><td>--warning-light</td><td class="kk-val">#fcd34d</td><td>Warning text on dark</td></tr>
+            <tr><td>--warning-glow</td><td class="kk-val">rgba(245,158,11,.1)</td><td>Warning background</td></tr>
+            <tr><td>--error</td><td class="kk-val">#ef4444</td><td>Errors, destructive</td></tr>
+            <tr><td>--error-light</td><td class="kk-val">#fca5a5</td><td>Error text on dark</td></tr>
+            <tr><td>--error-glow</td><td class="kk-val">rgba(239,68,68,.1)</td><td>Error background</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Text</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--text</td><td class="kk-val">#e7eaf3</td><td>Primary text &amp; headings</td></tr>
+            <tr><td>--text-secondary</td><td class="kk-val">#aeb6cc</td><td>Secondary text</td></tr>
+            <tr><td>--text-muted</td><td class="kk-val">#828ba4</td><td>Tertiary text, hints, placeholders</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Radii</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--radius</td><td class="kk-val">16px</td><td>Cards, buttons, modals</td></tr>
+            <tr><td>--radius-lg</td><td class="kk-val">16px</td><td>Modal container</td></tr>
+            <tr><td>--radius-sm</td><td class="kk-val">10px</td><td>Segmented, inputs, chips</td></tr>
+            <tr><td>--radius-xs</td><td class="kk-val">6px</td><td>Small chips, badges</td></tr>
+            <tr><td>--radius-pill</td><td class="kk-val">999px</td><td>Buttons, pills, avatars</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Shadows &amp; motion</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--shadow</td><td class="kk-val">0 18px 44px -28px rgba(0,0,0,.65)</td><td>Elevated panels</td></tr>
+            <tr><td>--card-shadow</td><td class="kk-val">0 18px 44px -28px rgba(0,0,0,.65)</td><td>Cards</td></tr>
+            <tr><td>--transition</td><td class="kk-val">160ms ease</td><td>Standard colour/border/transform transition</td></tr>
+            <tr><td>--ease-out</td><td class="kk-val">cubic-bezier(0.23,1,0.32,1)</td><td>Releases, reveals, presses</td></tr>
+            <tr><td>--ease-in-out</td><td class="kk-val">cubic-bezier(0.77,0,0.175,1)</td><td>Panels, accordion</td></tr>
+            <tr><td>--dur-press</td><td class="kk-val">120ms</td><td>Press/active</td></tr>
+            <tr><td>--dur-popover</td><td class="kk-val">180ms</td><td>Popovers, nav underline</td></tr>
+            <tr><td>--dur-panel</td><td class="kk-val">260ms</td><td>Panels, accordions</td></tr>
+            <tr><td>--dur-modal</td><td class="kk-val">320ms</td><td>Modals</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Brand &amp; z-index</h2>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--brand-whatsapp</td><td class="kk-val">#25d366</td><td>WhatsApp share button hover</td></tr>
+            <tr><td>--z-dropdown</td><td class="kk-val">40</td><td>Dropdowns</td></tr>
+            <tr><td>--z-modal</td><td class="kk-val">50</td><td>Modals, overlays</td></tr>
+            <tr><td>--z-toast</td><td class="kk-val">60</td><td>Toasts</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">tokens.css</h2>
+        <div class="kk-frame" style="padding:1.25rem 1.5rem">
+<pre class="kk-mono" style="margin:0;font-size:0.78rem;color:var(--text-secondary);white-space:pre-wrap;line-height:1.55">:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bg: #0b1020;          --bg-soft: #0e1526;
+  --surface: #111831;     --surface-hover: #151d3a;  --surface-elevated: #151d3a;
+  --field-bg: #0d1322;    --border: rgba(158,168,200,.14);
+  --border-hover: rgba(158,168,200,.26);  --hairline-strong: rgba(158,168,200,.26);
+  --primary: #6366f1;     --primary-hover: #818cf8;  --accent: #6366f1;
+  --accent-strong: #4f46e5;   --accent-text: #a5b4fc;  --chip-bg: rgba(99,102,241,.1);
+  --chip-text: #a5b4fc;   --primary-glow: rgba(99,102,241,.1);
+  --btn-gradient: linear-gradient(180deg, #5a53ea, #4f46e5);
+  --cta-shadow: 0 12px 28px -10px rgba(79,70,229,.55);
+  --success: #34d399;     --warning: #f59e0b;  --warning-light: #fcd34d;
+  --error: #ef4444;       --error-light: #fca5a5;
+  --text: #e7eaf3;        --text-secondary: #aeb6cc;  --text-muted: #828ba4;
+  --radius: 16px;         --radius-sm: 10px;   --radius-lg: 16px;
+  --radius-xs: 6px;       --radius-pill: 999px;
+  --shadow: 0 18px 44px -28px rgba(0,0,0,.65);   --card-shadow: 0 18px 44px -28px rgba(0,0,0,.65);
+  --transition: 160ms ease;
+  --ease-out: cubic-bezier(.23,1,.32,1);  --ease-in-out: cubic-bezier(.77,0,.175,1);
+  --dur-press: 120ms;     --dur-popover: 180ms;  --dur-panel: 260ms;  --dur-modal: 320ms;
+  --brand-whatsapp: #25d366;
+  --z-dropdown: 40;       --z-modal: 50;       --z-toast: 60;
+}</pre>
+        </div>
+        <p class="kk-note">Full file in this folder: <a href="tokens.css" style="color:var(--primary)">tokens.css</a>.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

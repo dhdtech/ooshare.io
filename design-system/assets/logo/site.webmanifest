@@ -1,0 +1,15 @@
+{
+  "name": "Only Once Share",
+  "short_name": "ooshare",
+  "description": "Zero-knowledge one-time secret sharing with end-to-end AES-256 encryption and self-destructing links.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-256x256.png", "sizes": "256x256", "type": "image/png" },
+    { "src": "/android-chrome-384x384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — Logo</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html" class="active">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Logo</p>
+        <h1 class="kk-h1">The ooshare shield</h1>
+        <p class="kk-lede">
+          A single-stroke <strong>shield</strong> (the Lucide shield glyph) in a fixed indigo
+          <code class="kk-mono">#6366f1</code>, paired with the lowercase <strong>ooshare</strong> wordmark.
+          The stroke color never changes — it stands for trust, security, and continuity.
+        </p>
+      </header>
+
+      <!-- The mark & lockup -->
+      <section class="kk-section">
+        <h2 class="kk-h2">The mark</h2>
+        <div class="kk-grid cols-3">
+          <div class="kk-frame" style="padding:0">
+            <div class="kk-frame-label" style="padding:1rem 1.25rem 0">On dark (default)</div>
+            <div style="display:flex;align-items:center;justify-content:center;height:170px">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:110px;width:auto"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            </div>
+          </div>
+          <div class="kk-frame" style="padding:0;background:#fff;border-color:rgba(0,0,0,.1)">
+            <div class="kk-frame-label" style="padding:1rem 1.25rem 0;color:#828ba4">On light</div>
+            <div style="display:flex;align-items:center;justify-content:center;height:170px">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:110px;width:auto"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            </div>
+          </div>
+          <div class="kk-frame" style="padding:0">
+            <div class="kk-frame-label" style="padding:1rem 1.25rem 0">Wordmark only</div>
+            <div style="display:flex;align-items:center;justify-content:center;height:170px">
+              <span style="font-weight:700;letter-spacing:-0.02em;color:var(--text);font-size:2rem">ooshare</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="kk-h2" style="margin-top:3rem">Lockup</h2>
+        <div class="kk-frame" style="padding:2rem;display:flex;align-items:center;gap:0.9rem;justify-content:center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:44px;width:auto"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          <span style="font-size:1.6rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)">ooshare</span>
+        </div>
+      </section>
+
+      <!-- Vector assets -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Vector (SVG)</h2>
+        <p class="kk-h2-sub">Always prefer SVG. The mark is a single path; <code class="kk-mono">shield.svg</code> uses <code class="kk-mono">stroke="currentColor"</code> so it inherits text color.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-asset">
+            <div class="kk-asset-preview dark"><img src="assets/logo/shield.svg" alt="" style="max-height:56px" /></div>
+            <div class="kk-asset-name">Shield · tintable</div>
+            <div class="kk-asset-meta">SVG · currentColor · 24×24</div>
+            <a class="kk-dl" href="assets/logo/shield.svg" download>Download ⬇</a>
+          </div>
+          <div class="kk-asset">
+            <div class="kk-asset-preview dark"><img src="assets/logo/shield-accent.svg" alt="" style="max-height:56px" /></div>
+            <div class="kk-asset-name">Shield · accent</div>
+            <div class="kk-asset-meta">SVG · #6366f1 · 24×24</div>
+            <a class="kk-dl" href="assets/logo/shield-accent.svg" download>Download ⬇</a>
+          </div>
+          <div class="kk-asset">
+            <div class="kk-asset-preview dark"><img src="assets/logo/shield-white.svg" alt="" style="max-height:56px" /></div>
+            <div class="kk-asset-name">Shield · white</div>
+            <div class="kk-asset-meta">SVG · #ffffff · 24×24</div>
+            <a class="kk-dl" href="assets/logo/shield-white.svg" download>Download ⬇</a>
+          </div>
+          <div class="kk-asset">
+            <div class="kk-asset-preview dark"><img src="assets/logo/favicon.svg" alt="" style="max-height:56px" /></div>
+            <div class="kk-asset-name">Favicon</div>
+            <div class="kk-asset-meta">SVG · #6366f1 · 32×32</div>
+            <a class="kk-dl" href="assets/logo/favicon.svg" download>Download ⬇</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Raster + favicons -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Raster &amp; social</h2>
+        <p class="kk-h2-sub">The on-site favicon set and the Open Graph card.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-asset"><div class="kk-asset-preview dark"><img src="assets/logo/favicon-128.png" alt="" /></div><div class="kk-asset-name">Favicon 128</div><div class="kk-asset-meta">PNG · 128×128</div><a class="kk-dl" href="assets/logo/favicon-128.png" download>PNG ⬇</a></div>
+          <div class="kk-asset"><div class="kk-asset-preview dark"><img src="assets/logo/favicon-512.png" alt="" /></div><div class="kk-asset-name">Favicon 512</div><div class="kk-asset-meta">PNG · 512×512</div><a class="kk-dl" href="assets/logo/favicon-512.png" download>PNG ⬇</a></div>
+          <div class="kk-asset"><div class="kk-asset-preview dark"><img src="assets/logo/og-image.svg" alt="" /></div><div class="kk-asset-name">OG image</div><div class="kk-asset-meta">SVG · card</div><a class="kk-dl" href="assets/logo/og-image.svg" download>⬇</a></div>
+          <div class="kk-asset"><div class="kk-asset-preview dark"><img src="assets/logo/og-image.png" alt="" /></div><div class="kk-asset-name">OG image</div><div class="kk-asset-meta">PNG · 1200×630</div><a class="kk-dl" href="assets/logo/og-image.png" download>PNG ⬇</a></div>
+        </div>
+      </section>
+
+      <!-- Usage -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Usage rules</h2>
+        <div class="kk-grid cols-2">
+          <div class="kk-callout do"><span class="kk-callout-ico">✓</span>
+            <div><strong>Fixed stroke.</strong> The shield is always <code class="kk-mono">#6366f1</code> on dark, and the same indigo on light. Never recolor it to semantic colors.</div>
+          </div>
+          <div class="kk-callout do"><span class="kk-callout-ico">✓</span>
+            <div><strong>Minimum size.</strong> Keep the shield at or above <strong>20px</strong>; below that use the favicon. The wordmark is always lowercase, sans, 700.</div>
+          </div>
+          <div class="kk-callout dont"><span class="kk-callout-ico">✕</span>
+            <div><strong>Don't</strong> — recolor, fill, add a drop shadow, rotate, or skew the shield. Never stretch it out of the 24×24 aspect.</div>
+          </div>
+          <div class="kk-callout dont"><span class="kk-callout-ico">✕</span>
+            <div><strong>Don't</strong> — use a different glyph, a filled shield, or change the stroke weight. It's always outline, stroke-width 2, round caps.</div>
+          </div>
+        </div>
+        <p class="kk-note">The mark is the Lucide <code class="kk-mono">shield</code> glyph, inlined in the UI at <code class="kk-mono">ui/src/components/ui/Logo.tsx</code>. Keep <code class="kk-mono">shield.svg</code> (currentColor) as the default in UI; use <code class="kk-mono">shield-accent.svg</code>/<code class="kk-mono">shield-white.svg</code> only where a fixed tint is required.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — Motion</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="components.css" />
+  <style>
+    /* Live demo keyframes, mirroring production (ui/src/styles/tokens.css + ui.css). */
+    @keyframes demo-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes demo-pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes demo-slide { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .demo-box { display: inline-flex; align-items: center; justify-content: center; height: 64px; border-radius: 12px; background: var(--btn-gradient); color: #fff; font-size: 13px; font-weight: 600; padding: 0 18px; box-shadow: var(--cta-shadow); }
+    .demo-press { transition: transform var(--dur-press) var(--ease-out); }
+    .demo-press:active { transform: scale(0.97); }
+    .demo-ease { transition: transform 0.4s var(--ease-out); }
+    .demo-ease:hover { transform: translateX(10px); }
+    .demo-panel { transition: grid-template-rows var(--dur-panel) var(--ease-in-out), opacity var(--dur-panel) var(--ease-in-out); }
+  </style>
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html" class="active">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Motion</p>
+        <h1 class="kk-h1">Motion &amp; duration</h1>
+        <p class="kk-lede">
+          ooshare's motion is <strong>quiet and deliberate</strong>. It never decorates — it
+          confirms, reveals, or points at state. Two easings and four durations cover the
+          whole product, and every animation honours <code class="kk-mono">prefers-reduced-motion</code>.
+        </p>
+      </header>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Principles</h2>
+        <div class="kk-grid cols-2">
+          <div class="kk-callout note"><span class="kk-callout-ico">💡</span><div><strong>Point, don't play.</strong> Animate only where it tells the user something: a press, a reveal, a state swap. Never animate a whole page for spectacle.</div></div>
+          <div class="kk-callout note"><span class="kk-callout-ico">⏱</span><div><strong>Fast by default.</strong> Most bumps are 120–260ms. The 400ms+ "entrance" flourishes other sites use are intentionally avoided here.</div></div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Easings</h2>
+        <p class="kk-h2-sub"><code class="kk-mono">--ease-out</code> for releases and presses; <code class="kk-mono">--ease-in-out</code> for two-way panel transitions.</p>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--ease-out</td><td class="kk-val">cubic-bezier(0.23,1,0.32,1)</td><td>Press, reveal, nav underline, dropzone-in</td></tr>
+            <tr><td>--ease-in-out</td><td class="kk-val">cubic-bezier(0.77,0,0.175,1)</td><td>Accordion / panel expand-collapse</td></tr>
+          </tbody>
+        </table>
+        <div class="kk-frame" style="margin-top:1.25rem">
+          <div class="kk-frame-label">Hover me — <code class="kk-mono">--ease-out</code> translateX</div>
+          <span class="demo-box demo-ease">Slide</span>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Durations</h2>
+        <p class="kk-h2-sub">A small, opinionated set. Press is the fastest; modal is the slowest.</p>
+        <table class="kk-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>--dur-press</td><td class="kk-val">120ms</td><td>Button/icon active press</td></tr>
+            <tr><td>--transition</td><td class="kk-val">160ms ease</td><td>Default colour/border/transform</td></tr>
+            <tr><td>--dur-popover</td><td class="kk-val">180ms</td><td>Popovers, nav underline</td></tr>
+            <tr><td>--dur-panel</td><td class="kk-val">260ms</td><td>Panels, accordion</td></tr>
+            <tr><td>--dur-modal</td><td class="kk-val">320ms</td><td>Modal entrance</td></tr>
+          </tbody>
+        </table>
+        <div class="kk-frame" style="margin-top:1.25rem">
+          <div class="kk-frame-label">Press me — <code class="kk-mono">--dur-press</code> scale(0.97)</div>
+          <button class="demo-box demo-press" type="button">Press</button>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Shared keyframes</h2>
+        <p class="kk-h2-sub">Defined in <code class="kk-mono">tokens.css</code> (<code class="kk-mono">ui-rise-in</code>, <code class="kk-mono">ui-pop</code>) and the component sheet (<code class="kk-mono">ui-spin</code>, <code class="kk-mono">ui-fade-in</code>, <code class="kk-mono">ui-dropzone-in</code>, <code class="kk-mono">ui-fade-modal</code>).</p>
+        <div class="kk-grid cols-3">
+          <div class="kk-frame" style="padding:1.25rem;text-align:center">
+            <div class="kk-frame-label">ui-rise-in</div>
+            <span class="demo-box" style="animation:demo-rise 0.5s var(--ease-out)">Rise</span>
+            <p class="kk-note">12px up + fade. Shared page/state entrance.</p>
+          </div>
+          <div class="kk-frame" style="padding:1.25rem;text-align:center">
+            <div class="kk-frame-label">ui-pop</div>
+            <span class="demo-box" style="animation:demo-pop 0.4s var(--ease-out)">Pop</span>
+            <p class="kk-note">scale(0.8 → 1). State-swap icons.</p>
+          </div>
+          <div class="kk-frame" style="padding:1.25rem;text-align:center">
+            <div class="kk-frame-label">ui-fade-in</div>
+            <span class="demo-box" style="animation:demo-slide 0.3s ease">Fade</span>
+            <p class="kk-note">8px rise + fade. Cards on mount.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Accordion (panel)</h2>
+        <p class="kk-h2-sub">The expand-collapse uses <code class="kk-mono">grid-template-rows 0fr → 1fr</code> with <code class="kk-mono">--ease-in-out</code>.</p>
+        <div class="kk-frame">
+          <details class="ui-accordion" open>
+            <summary>How long does a link last? <span class="ui-accordion-chevron">＋</span></summary>
+            <div class="ui-accordion-answer"><div class="ui-accordion-answer-inner"><p>You pick a TTL at creation (1h–7d). The secret is also deleted the instant it's opened, whichever comes first.</p></div></div>
+          </details>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Reduced motion</h2>
+        <p class="kk-h2-sub">Every animated rule in the system is neutralised under <code class="kk-mono">prefers-reduced-motion: reduce</code> — no exceptions.</p>
+        <div class="kk-callout do"><span class="kk-callout-ico">✓</span>
+          <div><strong>Always respect it.</strong> The component sheet wraps <code class="kk-mono">.ui-btn</code>, <code class="kk-mono">.ui-icon-btn</code>, <code class="kk-mono">.ui-accordion-answer</code>, <code class="kk-mono">.ui-nav-link</code>, and <code class="kk-mono">.dropzone</code> animations in a <code class="kk-mono">@media (prefers-reduced-motion: reduce)</code> block that disables or shortens the transition.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

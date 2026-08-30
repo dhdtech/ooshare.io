@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="ooshare.io design system — brand, color, typography, components, and logo assets." />
+  <title>ooshare.io Design System — Overview</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html" class="active">Overview</a>
+        <a href="colors.html">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Design System</p>
+        <h1 class="kk-h1">ooshare.io — Only Once Share</h1>
+        <p class="kk-lede">
+          The design language behind <strong>ooshare.io</strong>: zero-knowledge, one-time
+          secret sharing. A calm, deep-nav dark system built around a fixed indigo
+          accent, a single sans face plus a mono for the cryptographic details, and
+          motion that only ever points at what matters.
+        </p>
+      </header>
+
+      <!-- Brand bar -->
+      <section class="kk-frame">
+        <div class="kk-frame-label">Brand at a glance</div>
+        <div class="kk-grid cols-4">
+          <div>
+            <p class="kk-note" style="margin:0 0 0.3rem;color:var(--text-secondary)">Primary accent</p>
+            <div style="width:56px;height:56px;border-radius:14px;background:var(--primary);box-shadow:0 8px 25px rgba(99,102,241,.35)"></div>
+            <p class="kk-note" style="margin:0.5rem 0 0">#6366f1</p>
+          </div>
+          <div>
+            <p class="kk-note" style="margin:0 0 0.3rem;color:var(--text-secondary)">Typeface</p>
+            <p style="font-size:1.6rem;font-weight:700;color:var(--text);margin:0;line-height:1">Inter</p>
+            <p class="kk-note" style="margin:0.4rem 0 0">+ JetBrains Mono</p>
+          </div>
+          <div>
+            <p class="kk-note" style="margin:0 0 0.3rem;color:var(--text-secondary)">Logo</p>
+            <img src="assets/logo/shield-white.svg" alt="ooshare shield" style="height:56px;width:auto" />
+            <p class="kk-note" style="margin:0.4rem 0 0">Indigo shield</p>
+          </div>
+          <div>
+            <p class="kk-note" style="margin:0 0 0.3rem;color:var(--text-secondary)">Feel</p>
+            <p style="font-size:1.4rem;color:var(--primary);margin:0;line-height:1.4">🔒 ⚙ ▤ 🛡</p>
+            <p class="kk-note" style="margin:0.4rem 0 0">Security-first</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Principles</h2>
+        <p class="kk-h2-sub">The choices that keep the product calm, legible, and trustworthy.</p>
+        <div class="kk-grid cols-2">
+          <div class="kk-callout note">
+            <span class="kk-callout-ico">🌑</span>
+            <div><strong>Deep dark.</strong> Everything lives on a near-navy canvas <code class="kk-mono">#0b1020</code>. Surfaces are layered blue-greys, so depth comes from elevation steps, not heavy shadow stacks.</div>
+          </div>
+          <div class="kk-callout note">
+            <span class="kk-callout-ico">🎨</span>
+            <div><strong>One accent.</strong> A fixed indigo (<code class="kk-mono">#6366f1</code>) carries the brand, the gradient CTA pill, links, and focus. Status greens/ambers/reds appear only as confirmation or error.</div>
+          </div>
+          <div class="kk-callout note">
+            <span class="kk-callout-ico">🅰️</span>
+            <div><strong>Two faces.</strong> Inter for everything human-readable; JetBrains Mono for the cryptographic facts — IDs, links, counters, badges — so trust-level details read distinctly.</div>
+          </div>
+          <div class="kk-callout note">
+            <span class="kk-callout-ico">🎞</span>
+            <div><strong>Quiet motion.</strong> Short rises, 120–320ms, with <code class="kk-mono">--ease-out</code> for releases and <code class="kk-mono">--ease-in-out</code> for panels. Reduced-motion is respected everywhere.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">What's in this kit</h2>
+        <p class="kk-h2-sub">Six core pages, two ooshare-specific extensions, and a token file you can hand to any consumer.</p>
+        <div class="kk-grid cols-3">
+          <a class="kk-asset" href="colors.html">
+            <div class="kk-asset-name">Color</div>
+            <div class="kk-asset-meta">Canvas, surfaces, text, brand, status</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="typography.html">
+            <div class="kk-asset-name">Typography</div>
+            <div class="kk-asset-meta">Inter + JetBrains Mono, type scale</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="components.html">
+            <div class="kk-asset-name">Components</div>
+            <div class="kk-asset-meta">Buttons, cards, badges, forms, states</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="logo.html">
+            <div class="kk-asset-name">Logo</div>
+            <div class="kk-asset-meta">Shield mark + wordmark + favicon</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="tokens.html">
+            <div class="kk-asset-name">Tokens</div>
+            <div class="kk-asset-meta">Full CSS custom-property reference</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="motion.html">
+            <div class="kk-asset-name">Motion</div>
+            <div class="kk-asset-meta">Easing, durations, keyframes</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <a class="kk-asset" href="i18n.html">
+            <div class="kk-asset-name">i18n</div>
+            <div class="kk-asset-meta">6 languages + RTL (Arabic)</div>
+            <span class="kk-dl">Open →</span>
+          </a>
+          <div class="kk-asset">
+            <div class="kk-asset-name">tokens.css</div>
+            <div class="kk-asset-meta">Canonical token bundle (source of truth)</div>
+            <span class="kk-dl">Package</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="kk-section">
+        <h2 class="kk-h2">Source of truth</h2>
+        <div class="kk-callout note">
+          <span class="kk-callout-ico">📄</span>
+          <div>
+            The production stylesheets that own these tokens and components are in
+            <code class="kk-mono">ui/src/styles/tokens.css</code>,
+            <code class="kk-mono">ui.css</code>, and
+            <code class="kk-mono">components.css</code>.
+            <code class="kk-mono">tokens.css</code> in this folder mirrors the <code class="kk-mono">:root</code>
+            block verbatim — keep them in sync when a token changes.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

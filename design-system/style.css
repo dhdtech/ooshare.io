@@ -1,0 +1,164 @@
+/* ============================================================================
+   ooshare.io Design System — Kit chrome
+   ============================================================================
+   This stylesheet drives the design-system documentation pages themselves.
+   It imports the canonical tokens (tokens.css) so every page uses the real
+   ooshare palette, then adds the kit's own layout + doc components.
+
+   It is deliberately separate from tokens.css: tokens.css is the spec,
+   style.css is just the doc site. Keep the production stylesheet
+   (ui/src/styles/tokens.css) authoritative.
+   ========================================================================== */
+
+@import url("tokens.css");
+
+/* --- Minimal reset + base. The production token module carries its own
+       reset/base; the kit mirrors just enough for the doc pages + component
+       demos to render consistently. --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- Kit identifiers use the `kk-` prefix so they never collide with the
+       production classes (ui-btn, ui-card, ui-badge, dropzone ...). --- */
+
+.kk-body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.kk-body a { color: inherit; text-decoration: none; }
+
+/* ---- Layout: sidebar + main ---- */
+.kk-layout {
+  display: grid;
+  grid-template-columns: 284px 1fr;
+  min-height: 100vh;
+}
+
+.kk-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.015);
+  border-right: 1px solid var(--border);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.kk-sidebar-brand { display: flex; align-items: center; gap: 0.85rem; }
+.kk-sidebar-logo { width: 40px; height: 40px; flex-shrink: 0; }
+.kk-sidebar-brand .kk-eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; color: var(--text-muted); text-transform: uppercase; margin: 0; }
+.kk-sidebar-brand .kk-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 0.1rem 0 0; line-height: 1.2; }
+
+.kk-sidebar-brand .kk-shield { width: 40px; height: 40px; display: grid; place-items: center; }
+
+.kk-nav { display: flex; flex-direction: column; gap: 2px; }
+.kk-nav a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+}
+.kk-nav a:hover { background: rgba(255, 255, 255, 0.04); color: var(--text); }
+.kk-nav a.active { background: var(--chip-bg); color: var(--text); }
+.kk-nav a .kk-nav-arrow { font-size: 0.7rem; color: var(--text-muted); }
+
+.kk-sidebar-foot { margin-top: auto; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+.kk-sidebar-foot code { color: var(--primary-hover); background: rgba(255, 255, 255, 0.04); padding: 1px 5px; border-radius: 5px; }
+
+.kk-main { padding: 3rem clamp(1.5rem, 4vw, 4rem) 5rem; max-width: 1080px; }
+
+/* ---- Page headers ---- */
+.kk-page-head { margin-bottom: 2.5rem; }
+.kk-kicker { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; }
+.kk-h1 { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 700; color: var(--text); line-height: 1.1; margin: 0 0 0.75rem; }
+.kk-lede { font-size: 1.1rem; color: var(--text-secondary); max-width: 60ch; margin: 0; line-height: 1.7; }
+
+.kk-section { margin: 3rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.kk-h2 { font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem; }
+.kk-h2-sub { color: var(--text-secondary); font-size: 0.98rem; margin: 0 0 1.5rem; max-width: 70ch; line-height: 1.7; }
+
+.kk-grid { display: grid; gap: 1rem; }
+.kk-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.kk-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.kk-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.kk-grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
+
+/* ---- Callouts (do / don't / note) ---- */
+.kk-callout { border-radius: var(--radius-sm); padding: 1.1rem 1.25rem; font-size: 0.9rem; line-height: 1.6; display: flex; gap: 0.75rem; align-items: flex-start; }
+.kk-callout .kk-callout-ico { flex-shrink: 0; margin-top: 1px; }
+.kk-callout.do { background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.22); color: #d1fae5; }
+.kk-callout.dont { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); color: #fecaca; }
+.kk-callout.note { background: var(--chip-bg); border: 1px solid var(--border); color: var(--text-secondary); }
+.kk-callout strong { color: var(--text); }
+
+/* ---- Live component frames ---- */
+.kk-frame { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+.kk-frame-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+/* ---- Swatches ---- */
+.kk-swatch { border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
+.kk-swatch-chip { height: 84px; border-bottom: 1px solid var(--border); }
+.kk-swatch-body { padding: 0.75rem 0.9rem; background: rgba(255, 255, 255, 0.015); }
+.kk-swatch-name { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 0.15rem; }
+.kk-swatch-meta { font-size: 0.78rem; color: var(--text-secondary); font-family: var(--font-mono, ui-monospace, Menlo, monospace); line-height: 1.5; }
+
+/* mono for tokens */
+.kk-mono { font-family: var(--font-mono, ui-monospace, Menlo, monospace); }
+
+/* ---- Token table ---- */
+.kk-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.kk-table th { text-align: left; color: var(--text); font-weight: 600; padding: 0.7rem 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); background: var(--chip-bg); }
+.kk-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary); vertical-align: top; }
+.kk-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+.kk-table td:first-child { color: var(--primary-hover); font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.82rem; white-space: nowrap; }
+.kk-table .kk-var { color: var(--primary-hover); font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.82rem; white-space: nowrap; }
+.kk-table .kk-val { font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.82rem; color: var(--text); white-space: nowrap; }
+
+/* ---- Type samples ---- */
+.kk-type { display: flex; gap: 1.5rem; align-items: baseline; padding: 1.1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.kk-type-spec { flex: 0 0 200px; font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono, ui-monospace, Menlo, monospace); }
+.kk-type-spec b { display: block; color: var(--text-secondary); font-family: var(--font-sans); font-weight: 600; margin-bottom: 0.15rem; font-size: 0.85rem; }
+.kk-type-demo { flex: 1; color: var(--text); line-height: 1.2; overflow-wrap: anywhere; }
+
+/* ---- Asset cards (logo page) ---- */
+.kk-asset { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; background: rgba(255, 255, 255, 0.015); display: flex; flex-direction: column; gap: 0.6rem; }
+.kk-asset-preview { height: 90px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-xs); overflow: hidden; }
+.kk-asset-preview.light { background: #fff; }
+.kk-asset-preview.dark { background: var(--bg); border: 1px solid var(--border); }
+.kk-asset-preview img, .kk-asset-preview svg { max-height: 72px; max-width: 90%; width: auto; height: auto; }
+.kk-asset-name { font-weight: 600; color: var(--text); font-size: 0.85rem; }
+.kk-asset-meta { font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono, ui-monospace, Menlo, monospace); }
+.kk-asset a.kk-dl { font-size: 0.78rem; color: var(--primary); font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; }
+.kk-asset a.kk-dl:hover { color: var(--primary-hover); }
+
+/* ---- Small utility ---- */
+.kk-pill { display: inline-block; padding: 0.2rem 0.7rem; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em; background: var(--chip-bg); color: var(--chip-text); border: 1px solid rgba(99, 102, 241, 0.25); }
+.kk-note { font-size: 0.85rem; color: var(--text-muted); margin: 1rem 0 0; }
+.kk-hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+@media (max-width: 860px) {
+  .kk-layout { grid-template-columns: 1fr; }
+  .kk-sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .kk-nav { flex-direction: row; flex-wrap: wrap; gap: 2px 4px; }
+  .kk-sidebar-foot { margin-top: 0; }
+  .kk-grid.cols-3, .kk-grid.cols-4, .kk-grid.cols-6 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .kk-grid.cols-2, .kk-grid.cols-3, .kk-grid.cols-4, .kk-grid.cols-6 { grid-template-columns: 1fr; }
+}

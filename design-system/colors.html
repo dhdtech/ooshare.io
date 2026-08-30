@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ooshare.io Design System — Color</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="kk-body">
+  <div class="kk-layout">
+    <aside class="kk-sidebar">
+      <div class="kk-sidebar-brand">
+        <img class="kk-sidebar-logo" src="assets/logo/shield-white.svg" alt="ooshare.io" />
+        <div>
+          <p class="kk-eyebrow">ooshare.io</p>
+          <h1 class="kk-title">Design System</h1>
+        </div>
+      </div>
+      <nav class="kk-nav">
+        <a href="index.html">Overview</a>
+        <a href="colors.html" class="active">Color</a>
+        <a href="typography.html">Typography</a>
+        <a href="components.html">Components</a>
+        <a href="logo.html">Logo</a>
+        <a href="tokens.html">Tokens</a>
+        <a href="motion.html">Motion</a>
+        <a href="i18n.html">i18n</a>
+      </nav>
+      <div class="kk-sidebar-foot">
+        <p><strong>ooshare.io</strong></p>
+        <p>v1.0 · sourced from <code>ui/src/styles/</code></p>
+      </div>
+    </aside>
+
+    <main class="kk-main">
+      <header class="kk-page-head">
+        <p class="kk-kicker">Color</p>
+        <h1 class="kk-h1">Palette</h1>
+        <p class="kk-lede">
+          A deep-navy canvas, three text tiers, one fixed indigo accent, and a
+          ternary status set. Most surfaces are solid blue-grey elevations — depth
+          comes from stacking lighter layers, not from shadow-heavy cards.
+        </p>
+      </header>
+
+      <!-- Core canvas -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Core canvas</h2>
+        <p class="kk-h2-sub">Background, surfaces, and borders. Surfaces ascend from the canvas toward interactive elements.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--bg);border-bottom:1px solid rgba(158,168,200,.14)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Canvas</div>
+              <div class="kk-swatch-meta">--bg<br />#0b1020</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--bg-soft)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Canvas soft</div>
+              <div class="kk-swatch-meta">--bg-soft<br />#0e1526</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--surface)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Surface</div>
+              <div class="kk-swatch-meta">--surface<br />#111831</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--surface-elevated)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Surface hover</div>
+              <div class="kk-swatch-meta">--surface-hover · --surface-elevated<br />#151d3a</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--field-bg)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Field</div>
+              <div class="kk-swatch-meta">--field-bg<br />#0d1322</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--border)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Border</div>
+              <div class="kk-swatch-meta">--border<br />rgba(158,168,200,.14)</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--hairline-strong)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Hairline</div>
+              <div class="kk-swatch-meta">--hairline-strong · --border-hover<br />rgba(158,168,200,.26)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Text -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Text</h2>
+        <p class="kk-h2-sub">Three tiers keep type legible on the dark canvas without turning the page noisy. Headlines are the brightest tier, not pure white.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#e7eaf3"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Body / headings</div>
+              <div class="kk-swatch-meta">--text<br />#e7eaf3</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#aeb6cc"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Secondary</div>
+              <div class="kk-swatch-meta">--text-secondary<br />#aeb6cc</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#828ba4"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Muted</div>
+              <div class="kk-swatch-meta">--text-muted<br />#828ba4</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#ffffff"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">On-accent (white)</div>
+              <div class="kk-swatch-meta">#ffffff<br />CTA / filled buttons</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Brand / accent -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Brand &amp; accent</h2>
+        <p class="kk-h2-sub">The indigo accent carries every interactive and priority element. Gradient is reserved for the primary CTA pill.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#6366f1"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Primary</div>
+              <div class="kk-swatch-meta">--primary · --accent<br />#6366f1</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#4f46e5"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Primary strong</div>
+              <div class="kk-swatch-meta">--accent-strong<br />#4f46e5</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#818cf8"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Primary hover</div>
+              <div class="kk-swatch-meta">--primary-hover<br />#818cf8</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:#a5b4fc"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Accent text</div>
+              <div class="kk-swatch-meta">--accent-text · --chip-text<br />#a5b4fc</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--chip-bg);border-bottom:1px solid rgba(99,102,241,.2)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Chip bg</div>
+              <div class="kk-swatch-meta">--chip-bg · --primary-glow<br />rgba(99,102,241,.1)</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--btn-gradient)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">CTA gradient</div>
+              <div class="kk-swatch-meta">--btn-gradient<br />#5a53ea → #4f46e5</div>
+            </div>
+          </div>
+          <div class="kk-callout note" style="align-self:start">
+            <span class="kk-callout-ico">☝️</span>
+            <div><strong>One accent.</strong> Keep indigo for interactive + focus. The gradient is only for the primary CTA pill, never for body decoration.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status -->
+      <section class="kk-section">
+        <h2 class="kk-h2">Status</h2>
+        <p class="kk-h2-sub">Success, warning, and error carry meaning, never brand. Each ships with a low-alpha glow for backgrounds.</p>
+        <div class="kk-grid cols-4">
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--success)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Success</div>
+              <div class="kk-swatch-meta">--success<br />#34d399</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--warning)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Warning</div>
+              <div class="kk-swatch-meta">--warning<br />#f59e0b</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--error)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">Error</div>
+              <div class="kk-swatch-meta">--error<br />#ef4444</div>
+            </div>
+          </div>
+          <div class="kk-swatch">
+            <div class="kk-swatch-chip" style="background:var(--brand-whatsapp)"></div>
+            <div class="kk-swatch-body">
+              <div class="kk-swatch-name">WhatsApp</div>
+              <div class="kk-swatch-meta">--brand-whatsapp<br />#25d366</div>
+            </div>
+          </div>
+        </div>
+        <p class="kk-note">Light variants <code class="kk-mono">--success-light</code> (#34d399), <code class="kk-mono">--warning-light</code> (#fcd34d), <code class="kk-mono">--error-light</code> (#fca5a5) are used for text on dark error/glow surfaces.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
