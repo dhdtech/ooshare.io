@@ -1,0 +1,38 @@
+# Gitea Actions deploy workflow.
+#
+# Copy this into each site repo as `.gitea/workflows/deploy.yml` (Gitea reads
+# .gitea/workflows first, then .github/workflows). On a push to the deploy branch
+# it runs `make deploy <project> && make up <project>` on the host runner, which
+# has the repos, the web-hosting dir, and the docker socket mounted.
+#
+# Set PROJECT to this repo's web-hosting project name (see the mapping in
+# scripts/deploy.sh: quotery, quotery-dev, ooshare, dhdtech, prwise, metabase,
+# patriciasilva, assadosdomestre, espacosol).
+
+name: deploy
+on:
+  push:
+    branches: [main]        # quotery.io also triggers on `dev` for quotery-dev
+
+jobs:
+  deploy:
+    runs-on: host           # runs in the act_runner container (host paths mounted)
+    env:
+      PROJECT: ooshare      # <-- set per repo, e.g. patriciasilva
+      WEBHOSTING: /Users/diogo/github-archive/repos/dhdtech/dhdtech-web-hosting
+      BWS_ACCESS_TOKEN: ${{ secrets.BWS_ACCESS_TOKEN }}
+    steps:
+      - name: Deploy ${{ env.PROJECT }}
+        run: |
+          set -euo pipefail
+          cd "$WEBHOSTING"
+          echo "::group::make deploy $PROJECT"
+          make deploy "$PROJECT"
+          echo "::endgroup::"
+          echo "::group::make up $PROJECT"
+          make up "$PROJECT"
+          echo "::endgroup::"
+          # static builds replace dist/ -> recreate nginx so the bind mount re-binds
+          docker compose -f docker-compose.yml -f compose/datastore.yml \
+            up -d --force-recreate nginx-a nginx-b
+          echo "Deployed $PROJECT."
