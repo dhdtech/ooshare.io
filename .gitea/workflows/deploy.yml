@@ -39,7 +39,8 @@ jobs:
           echo "::group::make up $PROJECT"
           make up "$PROJECT"
           echo "::endgroup::"
-          # static builds replace dist/ -> recreate nginx so the bind mount re-binds
-          docker compose -f docker-compose.yml -f compose/datastore.yml \
-            up -d --force-recreate nginx-a nginx-b
+          # static builds replace dist/ -> recreate ONLY nginx so the bind mount
+          # re-binds. Scope to the root compose (nginx-a/b live there); do NOT
+          # include datastore.yml so redis/postgres are never touched by a deploy.
+          docker compose -f docker-compose.yml up -d --force-recreate nginx-a nginx-b
           echo "Deployed $PROJECT."
