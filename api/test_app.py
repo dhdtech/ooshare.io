@@ -78,7 +78,7 @@ def test_generate_alias_is_alphanumeric():
 def test_health(client):
     res = client.get("/api/health")
     assert res.status_code == 200
-    assert res.get_json() == {"status": "ok"}
+    assert res.get_json() == {"status": "ok", "checks": {"redis": "ok"}}
 
 
 # --------------- POST /api/secrets ---------------

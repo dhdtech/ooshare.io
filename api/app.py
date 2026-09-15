@@ -57,10 +57,30 @@ except redis.ConnectionError as e:  # pragma: no cover
     log.error("Redis connection failed: %s", e)
 
 
+def _redis_check():
+    """Return ``"ok"`` if Redis answers, ``"error"`` otherwise."""
+    try:
+        r.ping()
+    except Exception:
+        log.exception("health: redis check failed")
+        return "error"
+    return "ok"
+
+
 @app.route("/api/health")
 def health():
-    log.info("Health check requested")
-    return jsonify({"status": "ok"})
+    """Liveness probe. Reflects Redis reachability, not just process liveness."""
+    redis_status = _redis_check()
+    ok = redis_status == "ok"
+    response = jsonify(
+        {
+            "status": "ok" if ok else "degraded",
+            "checks": {"redis": redis_status},
+        }
+    )
+    response.status_code = 200 if ok else 503
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @app.route("/api/secrets", methods=["POST"])
