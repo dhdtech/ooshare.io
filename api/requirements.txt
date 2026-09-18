@@ -3,3 +3,4 @@ flask-cors==5.0.1
 redis==5.2.1
 gunicorn==23.0.0
 posthog==3.24.0
+python-json-logger==4.1.0

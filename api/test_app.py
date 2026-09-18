@@ -1,8 +1,13 @@
+import base64
+import io
+import json
+import logging
 import uuid
 from unittest.mock import patch, MagicMock
 
 import pytest
 
+import logging_config
 from app import app, generate_alias, ALIAS_LENGTH
 
 
@@ -376,3 +381,100 @@ def test_main(client):
         from app import main
         main()
         mock_run.assert_called_once_with(host="0.0.0.0", port=5000)
+
+
+# --------------- JSON log body shape ---------------
+
+
+HOUSE_FIELDS = {
+    "levelname",
+    "asctime",
+    "name",
+    "message",
+    "tenant_id",
+    "tenant_name",
+    "user_id",
+    "user_email",
+    "request_id",
+    "task_id",
+}
+
+
+@pytest.fixture
+def json_log_stream():
+    """Capture what the configured JSON console handler writes."""
+    handler = next(
+        h
+        for h in logging.getLogger().handlers
+        if isinstance(h.formatter, logging_config.UtcJsonFormatter)
+    )
+    stream = io.StringIO()
+    original, handler.stream = handler.stream, stream
+    try:
+        yield stream
+    finally:
+        handler.stream = original
+
+
+def test_exception_logs_one_parseable_json_line(json_log_stream):
+    """A traceback must not shred into one Docker record per line."""
+    try:
+        raise ValueError("boom")
+    except ValueError:
+        logging.getLogger("test_logging").exception("traceback test")
+
+    lines = json_log_stream.getvalue().splitlines()
+    assert len(lines) == 1
+    body = json.loads(lines[0])
+    assert HOUSE_FIELDS <= set(body)
+    assert body["levelname"] == "ERROR"
+    assert body["message"] == "traceback test"
+    assert "Traceback (most recent call last)" in body["exc_info"]
+    assert "ValueError: boom" in body["exc_info"]
+
+
+def test_plain_line_carries_the_whole_house_shape(json_log_stream):
+    """Every key is present even when this app never populates it."""
+    logging.getLogger("test_logging").info("plain %s", "line")
+
+    body = json.loads(json_log_stream.getvalue().splitlines()[0])
+    assert HOUSE_FIELDS <= set(body)
+    assert body["message"] == "plain line"
+    for empty in ("tenant_id", "tenant_name", "user_id", "user_email", "task_id"):
+        assert body[empty] == ""
+
+
+def test_log_context_filter_never_raises(monkeypatch):
+    """A broken context must degrade to a log line, not crash the request."""
+    class ExplodingContext:
+        def get(self):
+            raise RuntimeError("context exploded")
+
+    monkeypatch.setattr(logging_config, "_request_id", ExplodingContext())
+
+    record = logging.LogRecord("x", logging.INFO, "f.py", 1, "msg", None, None)
+    assert logging_config.LogContextFilter().filter(record) is True
+
+
+def test_request_id_is_populated_then_cleared(client, json_log_stream):
+    """request_id is the one in-scope field; it must not outlive the request."""
+    client.post("/api/secrets", json={"ciphertext": "dGVzdA=="})
+
+    bodies = [
+        json.loads(line) for line in json_log_stream.getvalue().splitlines() if line.strip()
+    ]
+    in_request = [b for b in bodies if b["request_id"]]
+    assert in_request, "request_id was never populated during the request"
+
+    logging.getLogger("test_logging").info("outside a request")
+    after = json.loads(json_log_stream.getvalue().splitlines()[-1])
+    assert after["request_id"] == ""
+
+
+def test_ciphertext_never_reaches_the_log(client, json_log_stream):
+    """Zero-knowledge: the stored blob must not appear in any log line."""
+    payload = base64.b64encode(b"top-secret-material").decode()
+    res = client.post("/api/secrets", json={"ciphertext": payload})
+    assert res.status_code == 201
+
+    assert payload not in json_log_stream.getvalue()

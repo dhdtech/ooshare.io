@@ -11,11 +11,25 @@ from flask_cors import CORS
 import redis
 from posthog import Posthog
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+from logging_config import clear_log_context, configure_logging, set_request_id
+
+configure_logging()
 log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
+
+
+@app.before_request
+def _assign_request_id():
+    """Tag every request with a correlation id for the log body."""
+    set_request_id()
+
+
+@app.teardown_request
+def _drop_request_id(exc):
+    """Clear it, so lines logged outside a request carry no stale id."""
+    clear_log_context()
 
 POSTHOG_API_KEY = os.environ.get("POSTHOG_API_KEY")
 if POSTHOG_API_KEY:  # pragma: no cover
